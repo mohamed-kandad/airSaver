@@ -31,7 +31,21 @@ cd airsaver
 
 <img src="screenshots/1.png" alt="Home Screen" width="300" height="600">
 
-### 🏠 Home Screen
+### 🏠 Trips Screen
+
+<img src="screenshots/2.png" alt="Home Screen" width="300" height="600">
+
+### 🏠 New Trip Screen
+
+<img src="screenshots/3.png" alt="Home Screen" width="300" height="600">
+
+### 🏠 Expenses Screen
+
+<img src="screenshots/4.png" alt="Home Screen" width="300" height="600">
+
+### 🏠 New Expense Screen
+
+<img src="screenshots/5.png" alt="Home Screen" width="300" height="600">
 
 ## 🧑‍💻 About the Developer
 

@@ -26,3 +26,14 @@ git clone https://github.com/mohamedkandad/airsaver.git
 cd airsaver
 
 ```
+
+## 📸 Screenshots
+
+!(screenshots/1.png)
+
+### 🏠 Home Screen
+
+## 🧑‍💻 About the Developer
+
+Developed by Mohamed Kandad
+🔗 Portfolio | 👨‍💻 GitHub

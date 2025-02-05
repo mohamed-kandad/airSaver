@@ -29,7 +29,7 @@ cd airsaver
 
 ## 📸 Screenshots
 
-![Home Screen](screenshots/1.png)
+<img src="screenshots/1.png" alt="Home Screen" width="300" height="600">
 
 ### 🏠 Home Screen
 

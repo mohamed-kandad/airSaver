@@ -17,6 +17,7 @@ type Props = {};
 
 const Trips = (props: Props) => {
   const tripsData = useSelector((state: RootState) => state.trips);
+  const namedata = useSelector((stat: RootState) => stat.name);
   const {theme, isDark, toggleTheme} = useTheme();
 
   return (

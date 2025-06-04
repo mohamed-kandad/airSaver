@@ -3,8 +3,8 @@ import React, {FC} from 'react';
 import {COLORS, FONTS, IMAGES} from '../../constant';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../store';
-import {calculateTripBudget} from '../../store/tripSlice';
 import {useTheme} from '../providers/ThemeContext';
+import {calculateTripBudget} from '../../helpers/utils';
 
 type Props = {
   tripId: string;
@@ -14,7 +14,10 @@ const Header: FC<Props> = ({tripId}) => {
   const tripsData = useSelector((state: RootState) => state.trips).trips.filter(
     trip => trip.id === tripId,
   );
-  const budget = calculateTripBudget(tripsData[0]);
+  const budget = calculateTripBudget(
+    tripsData[0].expenses,
+    tripsData[0].budget,
+  );
   const {isDark, theme, toggleTheme} = useTheme();
 
   return (

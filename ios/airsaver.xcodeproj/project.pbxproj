@@ -7,25 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		003DBF95DF2E45CF98364361 /* Figtree-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FB0CC6A044DF454C8D48DA46 /* Figtree-ExtraBold.ttf */; };
 		00E356F31AD99517003FC87E /* airsaverTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* airsaverTests.m */; };
 		0C80B921A6F3F58F76C31292 /* libPods-airsaver.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-airsaver.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1EE913BB6CB4455FBD1C9177 /* Figtree-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B025849D5FA9451F8F8CB44D /* Figtree-Italic.ttf */; };
-		26D8EAF2B12743EEBC8848C8 /* Figtree-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 604D059303E64536A9B85CB2 /* Figtree-Black.ttf */; };
-		39693819470740CC9EB748C8 /* Figtree-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C22D52FEAAE4BFEABE136D9 /* Figtree-Bold.ttf */; };
-		57CB5810DE85916B142EFE52 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
-		588BEEE4B8774562AC409743 /* Figtree-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA061AB91CF4405A9F3086C9 /* Figtree-Regular.ttf */; };
-		5FEE8804718B4AA7874ED580 /* Figtree-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F6168E6C7E3D4B2184504056 /* Figtree-Light.ttf */; };
-		6E48089CB5F74A4796C85811 /* Figtree-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 75D2BC93553140C89F448FBD /* Figtree-SemiBold.ttf */; };
-		7699B88040F8A987B510C191 /* libPods-airsaver-airsaverTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-airsaver-airsaverTests.a */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		8F4E247120A2483DADAB4236 /* Figtree-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26E4C033305F41FE84E446D3 /* Figtree-Medium.ttf */; };
 		4265ADB669A149B6A2F75A1E /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AEED86B68CE94D1FB0A34E50 /* BootSplash.storyboard */; };
 		494A74AC3BB54844AF7E0B77 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A759E75AA68483890C95F33 /* Colors.xcassets */; };
-		50C18E850E03406BBA8CB8FE /* DelaRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EFA79AAE21C54B009C1BCF13 /* DelaRegular.ttf */; };
+		57CB5810DE85916B142EFE52 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		7699B88040F8A987B510C191 /* libPods-airsaver-airsaverTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-airsaver-airsaverTests.a */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		B040257FAE7D4DC398E5AD55 /* ClashDisplay-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B2ECD28F680C4202AB62E170 /* ClashDisplay-Bold.otf */; };
+		27B711B132724CB6B2870C84 /* ClashDisplay-Extralight.otf in Resources */ = {isa = PBXBuildFile; fileRef = AE27BB1F4BC9459081E29BCC /* ClashDisplay-Extralight.otf */; };
+		34BB3B69C007448A9024455A /* ClashDisplay-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 735902FC01DB4335A095DC56 /* ClashDisplay-Light.otf */; };
+		640A51C4996D435DA83CA6CD /* ClashDisplay-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = B3ADA388BAF6427898363BC6 /* ClashDisplay-Medium.otf */; };
+		99EDFA46D5A54569B3E166DF /* ClashDisplay-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7E65AB25EE2942D484B0ADD0 /* ClashDisplay-Regular.otf */; };
+		5D452BA5CDCB4695AD373A8B /* ClashDisplay-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CF2ED9AE2E5245F48EBD672C /* ClashDisplay-Semibold.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,24 +47,21 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = airsaver/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = airsaver/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-airsaver-airsaverTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-airsaver-airsaverTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		26E4C033305F41FE84E446D3 /* Figtree-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Figtree-Medium.ttf"; path = "../assets/fonts/Figtree-Medium.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-airsaver.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-airsaver.debug.xcconfig"; path = "Target Support Files/Pods-airsaver/Pods-airsaver.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-airsaver.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-airsaver.release.xcconfig"; path = "Target Support Files/Pods-airsaver/Pods-airsaver.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-airsaver-airsaverTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-airsaver-airsaverTests.debug.xcconfig"; path = "Target Support Files/Pods-airsaver-airsaverTests/Pods-airsaver-airsaverTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-airsaver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-airsaver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		604D059303E64536A9B85CB2 /* Figtree-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Figtree-Black.ttf"; path = "../assets/fonts/Figtree-Black.ttf"; sourceTree = "<group>"; };
-		75D2BC93553140C89F448FBD /* Figtree-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Figtree-SemiBold.ttf"; path = "../assets/fonts/Figtree-SemiBold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = airsaver/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-airsaver-airsaverTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-airsaver-airsaverTests.release.xcconfig"; path = "Target Support Files/Pods-airsaver-airsaverTests/Pods-airsaver-airsaverTests.release.xcconfig"; sourceTree = "<group>"; };
-		8C22D52FEAAE4BFEABE136D9 /* Figtree-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Figtree-Bold.ttf"; path = "../assets/fonts/Figtree-Bold.ttf"; sourceTree = "<group>"; };
-		B025849D5FA9451F8F8CB44D /* Figtree-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Figtree-Italic.ttf"; path = "../assets/fonts/Figtree-Italic.ttf"; sourceTree = "<group>"; };
-		DA061AB91CF4405A9F3086C9 /* Figtree-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Figtree-Regular.ttf"; path = "../assets/fonts/Figtree-Regular.ttf"; sourceTree = "<group>"; };
+		9A759E75AA68483890C95F33 /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = airsaver/Colors.xcassets; sourceTree = "<group>"; };
+		AEED86B68CE94D1FB0A34E50 /* BootSplash.storyboard */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = BootSplash.storyboard; path = airsaver/BootSplash.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F6168E6C7E3D4B2184504056 /* Figtree-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Figtree-Light.ttf"; path = "../assets/fonts/Figtree-Light.ttf"; sourceTree = "<group>"; };
-		FB0CC6A044DF454C8D48DA46 /* Figtree-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Figtree-ExtraBold.ttf"; path = "../assets/fonts/Figtree-ExtraBold.ttf"; sourceTree = "<group>"; };
-		AEED86B68CE94D1FB0A34E50 /* BootSplash.storyboard */ = {isa = PBXFileReference; name = "BootSplash.storyboard"; path = "airsaver/BootSplash.storyboard"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		9A759E75AA68483890C95F33 /* Colors.xcassets */ = {isa = PBXFileReference; name = "Colors.xcassets"; path = "airsaver/Colors.xcassets"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = folder.assetcatalog; explicitFileType = undefined; includeInIndex = 0; };
-		EFA79AAE21C54B009C1BCF13 /* DelaRegular.ttf */ = {isa = PBXFileReference; name = "DelaRegular.ttf"; path = "../assets/fonts/DelaRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B2ECD28F680C4202AB62E170 /* ClashDisplay-Bold.otf */ = {isa = PBXFileReference; name = "ClashDisplay-Bold.otf"; path = "../assets/fonts/ClashDisplay-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		AE27BB1F4BC9459081E29BCC /* ClashDisplay-Extralight.otf */ = {isa = PBXFileReference; name = "ClashDisplay-Extralight.otf"; path = "../assets/fonts/ClashDisplay-Extralight.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		735902FC01DB4335A095DC56 /* ClashDisplay-Light.otf */ = {isa = PBXFileReference; name = "ClashDisplay-Light.otf"; path = "../assets/fonts/ClashDisplay-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B3ADA388BAF6427898363BC6 /* ClashDisplay-Medium.otf */ = {isa = PBXFileReference; name = "ClashDisplay-Medium.otf"; path = "../assets/fonts/ClashDisplay-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7E65AB25EE2942D484B0ADD0 /* ClashDisplay-Regular.otf */ = {isa = PBXFileReference; name = "ClashDisplay-Regular.otf"; path = "../assets/fonts/ClashDisplay-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CF2ED9AE2E5245F48EBD672C /* ClashDisplay-Semibold.otf */ = {isa = PBXFileReference; name = "ClashDisplay-Semibold.otf"; path = "../assets/fonts/ClashDisplay-Semibold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,15 +130,12 @@
 		5A88C3DE86E5429A97308DC5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				604D059303E64536A9B85CB2 /* Figtree-Black.ttf */,
-				8C22D52FEAAE4BFEABE136D9 /* Figtree-Bold.ttf */,
-				FB0CC6A044DF454C8D48DA46 /* Figtree-ExtraBold.ttf */,
-				B025849D5FA9451F8F8CB44D /* Figtree-Italic.ttf */,
-				F6168E6C7E3D4B2184504056 /* Figtree-Light.ttf */,
-				26E4C033305F41FE84E446D3 /* Figtree-Medium.ttf */,
-				DA061AB91CF4405A9F3086C9 /* Figtree-Regular.ttf */,
-				75D2BC93553140C89F448FBD /* Figtree-SemiBold.ttf */,
-				EFA79AAE21C54B009C1BCF13 /* DelaRegular.ttf */,
+				B2ECD28F680C4202AB62E170 /* ClashDisplay-Bold.otf */,
+				AE27BB1F4BC9459081E29BCC /* ClashDisplay-Extralight.otf */,
+				735902FC01DB4335A095DC56 /* ClashDisplay-Light.otf */,
+				B3ADA388BAF6427898363BC6 /* ClashDisplay-Medium.otf */,
+				7E65AB25EE2942D484B0ADD0 /* ClashDisplay-Regular.otf */,
+				CF2ED9AE2E5245F48EBD672C /* ClashDisplay-Semibold.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -288,17 +279,14 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				57CB5810DE85916B142EFE52 /* PrivacyInfo.xcprivacy in Resources */,
-				26D8EAF2B12743EEBC8848C8 /* Figtree-Black.ttf in Resources */,
-				39693819470740CC9EB748C8 /* Figtree-Bold.ttf in Resources */,
-				003DBF95DF2E45CF98364361 /* Figtree-ExtraBold.ttf in Resources */,
-				1EE913BB6CB4455FBD1C9177 /* Figtree-Italic.ttf in Resources */,
-				5FEE8804718B4AA7874ED580 /* Figtree-Light.ttf in Resources */,
-				8F4E247120A2483DADAB4236 /* Figtree-Medium.ttf in Resources */,
-				588BEEE4B8774562AC409743 /* Figtree-Regular.ttf in Resources */,
-				6E48089CB5F74A4796C85811 /* Figtree-SemiBold.ttf in Resources */,
 				4265ADB669A149B6A2F75A1E /* BootSplash.storyboard in Resources */,
 				494A74AC3BB54844AF7E0B77 /* Colors.xcassets in Resources */,
-				50C18E850E03406BBA8CB8FE /* DelaRegular.ttf in Resources */,
+				B040257FAE7D4DC398E5AD55 /* ClashDisplay-Bold.otf in Resources */,
+				27B711B132724CB6B2870C84 /* ClashDisplay-Extralight.otf in Resources */,
+				34BB3B69C007448A9024455A /* ClashDisplay-Light.otf in Resources */,
+				640A51C4996D435DA83CA6CD /* ClashDisplay-Medium.otf in Resources */,
+				99EDFA46D5A54569B3E166DF /* ClashDisplay-Regular.otf in Resources */,
+				5D452BA5CDCB4695AD373A8B /* ClashDisplay-Semibold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

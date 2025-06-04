@@ -9,11 +9,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {COLORS, FONTS} from '../constant';
 import {Button, Input} from '../components/common';
-import {
-  addExpenseToTrip,
-  categories,
-  updateExpenseInTrip,
-} from '../store/tripSlice';
+import {addExpenseToTrip, updateExpenseInTrip} from '../store/tripSlice';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
@@ -23,6 +19,7 @@ import {useTheme} from '../components/providers/ThemeContext';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import Toast from 'react-native-toast-message';
 import TextAnimated from '../components/common/TextAnimated';
+import {categories} from '../helpers/utils';
 
 type Props = {};
 type NewExpenseRouteProp = RouteProp<RootStackParamList, 'NewExpense'>;

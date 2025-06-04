@@ -1,7 +1,7 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
 import React, {FC} from 'react';
 import {COLORS, FONTS, ICONS} from '../../constant';
-import {categories, deleteExpenseFromTrip} from '../../store/tripSlice';
+import {deleteExpenseFromTrip} from '../../store/tripSlice';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import ContextMenu from 'react-native-context-menu-view';
 import {
@@ -15,6 +15,7 @@ import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../store';
 import {useTheme} from '../providers/ThemeContext';
 import moment from 'moment';
+import {categories} from '../../helpers/utils';
 
 type Props = {
   id: string;

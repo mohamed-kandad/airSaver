@@ -7,13 +7,16 @@ import {
 } from '@react-navigation/native';
 import Navigation from './navigation';
 import {Provider, useDispatch} from 'react-redux';
-import store, {AppDispatch} from './store';
+import store, {AppDispatch, persistor} from './store';
 import {HoldMenuProvider} from 'react-native-cli-hold-menu';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import BootSplash from 'react-native-bootsplash';
 import {ThemeProvider, useTheme} from './components/providers/ThemeContext';
 import Toast from 'react-native-toast-message';
 import {getFromStorageName, getName} from './store/nameSlice';
+import {PersistGate} from 'redux-persist/integration/react';
+import {I18nextProvider} from 'react-i18next';
+import i18next from './languages';
 
 type Props = {};
 
@@ -33,10 +36,14 @@ const App = (props: Props) => {
   return (
     <ThemeProvider>
       <Provider store={store}>
-        <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
-          <Navigation />
-          <Toast />
-        </NavigationContainer>
+        <PersistGate loading={null} persistor={persistor}>
+          <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
+            <I18nextProvider i18n={i18next}>
+              <Navigation />
+              <Toast />
+            </I18nextProvider>
+          </NavigationContainer>
+        </PersistGate>
       </Provider>
     </ThemeProvider>
   );

@@ -49,15 +49,12 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Figtree-Black.ttf</string>
-		<string>Figtree-Bold.ttf</string>
-		<string>Figtree-ExtraBold.ttf</string>
-		<string>Figtree-Italic.ttf</string>
-		<string>Figtree-Light.ttf</string>
-		<string>Figtree-Medium.ttf</string>
-		<string>Figtree-Regular.ttf</string>
-		<string>Figtree-SemiBold.ttf</string>
-		<string>DelaRegular.ttf</string>
+		<string>ClashDisplay-Bold.otf</string>
+		<string>ClashDisplay-Extralight.otf</string>
+		<string>ClashDisplay-Light.otf</string>
+		<string>ClashDisplay-Medium.otf</string>
+		<string>ClashDisplay-Regular.otf</string>
+		<string>ClashDisplay-Semibold.otf</string>
 	</array>
 </dict>
 </plist>

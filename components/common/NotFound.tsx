@@ -17,7 +17,8 @@ const NotFound = ({text}: Props) => {
         style={{
           textAlign: 'center',
           fontFamily: 'DelaRegular',
-          color: theme.TEXT1,
+          color: theme.PRIMARY,
+          fontWeight: 'bold',
           fontSize: 20,
         }}>
         {text}

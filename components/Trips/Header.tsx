@@ -15,9 +15,7 @@ import {setLang} from '../../store/langSlice';
 type HeaderNavigationProp = NavigationProp<RootStackParamList, 'Trips'>;
 
 const Header = () => {
-  const {navigate} = useNavigation<HeaderNavigationProp>();
-  const namedata = useSelector((stat: RootState) => stat.name);
-  const {theme, isDark, toggleTheme} = useTheme();
+  const {theme} = useTheme();
   const lang = useSelector((state: RootState) => state.lang);
   const dispatch: AppDispatch = useDispatch();
 
@@ -32,16 +30,7 @@ const Header = () => {
         styles.headerContainer,
 
         {flexDirection: getFlexDirectionStyle(lang.lang)},
-        // {flexDirection: 'row-reverse'},
       ]}>
-      {/* <View style={styles.headerWelcome}>
-        <Text style={[styles.welcomeText, {color: theme.TEXT}]}>Welcome</Text>
-        <Text style={[styles.nameText, {color: theme.TEXT1}]}>
-          {namedata.name.length > 10
-            ? namedata.name.slice(0, 10)
-            : namedata.name}
-        </Text>
-      </View> */}
       <Pressable
         style={[
           styles.addTripButton,
@@ -59,22 +48,6 @@ const Header = () => {
 export default Header;
 
 const styles = StyleSheet.create({
-  // addTripButton: {
-  //   display: 'flex',
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  //   alignItems: 'center',
-  //   borderRadius: 50,
-  //   paddingHorizontal: 18,
-  //   paddingVertical: 14,
-  //   shadowOffset: {width: 0, height: 5},
-  //   shadowOpacity: 0.2,
-  //   shadowRadius: 4,
-
-  //   borderWidth: 1,
-  //   // Android shadow property
-  //   elevation: 10,
-  // },
   addTripButton: {
     width: 40,
     height: 40,

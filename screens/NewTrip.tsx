@@ -28,7 +28,7 @@ const NewTrip = (props: Props) => {
   const navigation = useNavigation<TripNavigationProps>();
   const {tripId} = useRoute<TripRouteProps>().params;
   const tripData = useSelector((state: RootState) => state.trips);
-  const {theme, isDark, toggleTheme} = useTheme();
+  const {theme, isDark} = useTheme();
 
   useEffect(() => {
     if (tripId != '') {
@@ -58,39 +58,39 @@ const NewTrip = (props: Props) => {
   });
 
   const handlePress = () => {
-    if (
-      tripInfo.name ||
-      tripInfo.budget ||
-      selectedRange.startDate ||
-      selectedRange.endDate
-    ) {
-      if (tripId === '') {
-        dispatch(
-          createTrip({
-            ...tripInfo,
-            ...selectedRange,
-            id: Date.now().toString(),
-            expenses: [],
-          }),
-        );
-      } else {
-        dispatch(
-          updateTrip({
-            ...tripInfo,
-            ...selectedRange,
-            id: tripId,
-          }),
-        );
-      }
-      navigation.goBack();
-    } else {
+    const isValid =
+      tripInfo.name &&
+      tripInfo.budget &&
+      selectedRange.startDate &&
+      selectedRange.endDate;
+
+    if (!isValid)
       Toast.show({
         type: 'error',
         text1: 'Missing Fields',
         text2: 'Please fill in all fields before submitting.',
         position: 'top',
       });
+
+    if (tripId === '') {
+      dispatch(
+        createTrip({
+          ...tripInfo,
+          ...selectedRange,
+          id: Date.now().toString(),
+          expenses: [],
+        }),
+      );
+    } else {
+      dispatch(
+        updateTrip({
+          ...tripInfo,
+          ...selectedRange,
+          id: tripId,
+        }),
+      );
     }
+    navigation.goBack();
   };
   return (
     <>

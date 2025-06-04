@@ -3,6 +3,7 @@ import i18next from 'i18next';
 
 import ar from './locals/ar.json';
 import en from './locals/en.json';
+import {I18nManager} from 'react-native';
 
 const resources = {
   en: {translation: en},

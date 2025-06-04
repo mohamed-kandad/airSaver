@@ -38,7 +38,6 @@ const Expenses = () => {
   const tripsData = useSelector((state: RootState) => state.trips).trips.filter(
     trip => trip.id === tripId,
   );
-  console.log('🚀 ~ Expenses ~ tripsData:', tripsData[0].expenses);
   const transformExpenses = (expenses: Expense[]): GroupedExpense[] => {
     // Group expenses by date
     const grouped = expenses.reduce((acc, expense) => {

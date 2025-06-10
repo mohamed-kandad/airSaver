@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     fontSize: 16,
-    fontFamily: FONTS.REGULAR,
+    fontFamily: FONTS.ClashDisplay.Regular,
   },
   inputWithLeftIcon: {
     paddingLeft: 8,

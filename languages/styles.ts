@@ -1,7 +1,10 @@
-export const getFlexDirectionStyle = (lang: string) =>
-  lang !== 'ar' ? 'row-reverse' : 'row';
-export const getTextStyle = (lang: string) => ({
+import {TextStyle, ViewStyle} from 'react-native';
+
+export const getFlexDirectionStyle = (lang: string): ViewStyle => ({
   flexDirection: lang == 'ar' ? 'row-reverse' : 'row',
+});
+export const getTextStyle = (lang: string): TextStyle => ({
+  textAlign: lang === 'ar' ? 'right' : 'left',
 });
 
 // English strings

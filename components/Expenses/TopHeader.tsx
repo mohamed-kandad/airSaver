@@ -38,8 +38,10 @@ const TopHeader = ({
 
   const toggleLang = () => {
     i18next.changeLanguage(i18next.language === 'en' ? 'ar' : 'en');
-    dispatch(setLang(i18next.language === 'en' ? 'ar' : 'en'));
+    dispatch(setLang(i18next.language));
     toggleTheme();
+    console.log(lang);
+    console.log(i18next.language);
   };
 
   return (

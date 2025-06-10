@@ -2,17 +2,23 @@ import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import {useTheme} from '../components/providers/ThemeContext';
 import {Button, Input} from '../components/common';
-import {COLORS} from '../constant';
-import {useDispatch} from 'react-redux';
-import {AppDispatch} from '../store';
+import {COLORS, FONTS} from '../constant';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../store';
 import {setName} from '../store/nameSlice';
+import {useTranslation} from 'react-i18next';
+import {setLang} from '../store/langSlice';
+import i18next from 'i18next';
+import {getTextStyle} from '../languages/styles';
 
 type Props = {};
 
 const EnterName = (props: Props) => {
   const [userName, setUserName] = useState('Mohamed kandad');
-  const {theme, isDark} = useTheme();
+  const {theme, isDark, toggleTheme} = useTheme();
   const dispatch: AppDispatch = useDispatch();
+  const {t} = useTranslation();
+  const lang = useSelector((state: RootState) => state.lang.lang);
 
   const handleAddName = async () => {
     if (userName != '') {
@@ -32,8 +38,15 @@ const EnterName = (props: Props) => {
             flex: 1,
           }}>
           <View>
-            <Text style={[styles.enterNameText, {color: theme.TEXT}]}>
-              Enter your name
+            <Text
+              style={[
+                styles.enterNameText,
+                {
+                  color: theme.TEXT,
+                  ...getTextStyle(lang),
+                },
+              ]}>
+              {t('generale.enter.name')}
             </Text>
             <Input
               placeholder="Name"
@@ -41,18 +54,7 @@ const EnterName = (props: Props) => {
               onChangeText={(name: string) => setUserName(name)}
             />
           </View>
-          <Button
-            onPress={handleAddName}
-            title="Next"
-            style={{
-              backgroundColor: isDark
-                ? COLORS.light.background
-                : COLORS.light.PRIMARY,
-            }}
-            textStyle={{
-              color: isDark ? COLORS.light.PRIMARY : COLORS.light.background,
-            }}
-          />
+          <Button onPress={handleAddName} title={t('generale.save')} />
         </View>
       </View>
     </SafeAreaView>
@@ -63,14 +65,14 @@ export default EnterName;
 
 const styles = StyleSheet.create({
   logoName: {
-    fontSize: 30,
+    fontSize: 40,
     textAlign: 'center',
     fontWeight: 'bold',
-    fontFamily: 'SpaceGrotes',
+    fontFamily: FONTS.ClashDisplay.Bold,
   },
   enterNameText: {
-    fontSize: 20,
-    fontFamily: 'Space Grotes',
+    fontSize: FONTS.SIZES.LARGE,
+    fontFamily: 'LotaGrotesque-Regular',
     marginBottom: 20,
   },
 });

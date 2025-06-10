@@ -17,8 +17,10 @@ import {RootStackParamList} from '../../navigation/MainNavigation';
 import {AppDispatch, RootState} from '../../store';
 import {useTheme} from '../providers/ThemeContext';
 import {calculatePercentage, calculateTripBudget} from '../../helpers/utils';
+import {getFlexDirectionStyle} from '../../languages/styles';
 
 type TripItemScreenNavigationProp = NavigationProp<RootStackParamList, 'Trips'>;
+
 const TripItem: FC<Trip> = ({
   budget,
   endDate,
@@ -31,7 +33,7 @@ const TripItem: FC<Trip> = ({
   const navigation = useNavigation<TripItemScreenNavigationProp>();
   const dispatch: AppDispatch = useDispatch();
   const {t} = useTranslation();
-  const lang = useSelector((state: RootState) => state.lang);
+  const lang = useSelector((state: RootState) => state.lang.lang);
 
   const handleDeleteTrip = () => {
     dispatch(deleteTrip(id));
@@ -45,18 +47,8 @@ const TripItem: FC<Trip> = ({
       <Pressable
         style={styles.tripItemDetails}
         onPress={() => navigation.navigate('Expenses', {tripId: id})}>
-        <View
-          style={[
-            styles.header,
-            {
-              flexDirection: lang.lang == 'ar' ? 'row-reverse' : 'row',
-            },
-          ]}>
-          <Text
-            style={[
-              styles.tripItemBudget,
-              {color: theme.PRIMARY, fontFamily: 'ClashDisplay-Bold'},
-            ]}>
+        <View style={[styles.header, getFlexDirectionStyle(lang)]}>
+          <Text style={[styles.tripItemBudget, {color: theme.PRIMARY}]}>
             {name.length > 25 ? `${name.slice(0, 35)}...` : name}
           </Text>
           <Pressable>
@@ -65,29 +57,18 @@ const TripItem: FC<Trip> = ({
         </View>
 
         <View style={styles.body}>
-          <View
-            style={[
-              styles.expenseRow,
-              {
-                flexDirection: lang.lang == 'ar' ? 'row-reverse' : 'row',
-              },
-            ]}>
-            <Text
-              style={[
-                styles.expenseAmount,
-                {color: theme.PRIMARY, fontFamily: 'ClashDisplay-SemiBold'},
-              ]}>
-              {totalExpenses}
+          <View style={[styles.expenseRow, getFlexDirectionStyle(lang)]}>
+            <Text style={[styles.expenseAmount, {color: theme.PRIMARY}]}>
+              {totalExpenses} MAD
             </Text>
             <Text
               style={[
                 styles.expenseLabel,
                 {
                   color: theme.PRIMARY,
-                  fontFamily: 'LotaGrotesque-Regular',
                 },
               ]}>
-              {t('generale.spent.from')} {budget}
+              {t('generale.spent.from')} {budget} MAD
             </Text>
           </View>
 
@@ -102,43 +83,24 @@ const TripItem: FC<Trip> = ({
             unfilledColor={'transparent'}
           />
 
-          <View
-            style={[
-              styles.dateRow,
-              {
-                flexDirection: lang.lang == 'ar' ? 'row-reverse' : 'row',
-                alignItems: 'center',
-              },
-            ]}>
+          <View style={[styles.dateRow, getFlexDirectionStyle(lang)]}>
             <FontAwesomeIcon icon={faCalendarDays} color={theme.PRIMARY} />
             <View
               style={[
+                getFlexDirectionStyle(lang),
                 {
-                  flexDirection: lang.lang == 'ar' ? 'row-reverse' : 'row',
                   flex: 1,
                   gap: 5,
                   justifyContent: 'flex-start',
                 },
               ]}>
-              <Text
-                style={[
-                  styles.tripItemDate,
-                  {color: theme.PRIMARY, fontFamily: 'LotaGrotesque-Regular'},
-                ]}>
+              <Text style={[styles.tripItemDate, {color: theme.PRIMARY}]}>
                 {moment(startDate).format('DD-MM-YYYY')}
               </Text>
-              <Text
-                style={[
-                  styles.tripItemDate,
-                  {color: theme.PRIMARY, fontFamily: 'LotaGrotesque-Regular'},
-                ]}>
+              <Text style={[styles.tripItemDate, {color: theme.PRIMARY}]}>
                 {t('generale.to')}
               </Text>
-              <Text
-                style={[
-                  styles.tripItemDate,
-                  {color: theme.PRIMARY, fontFamily: 'LotaGrotesque-Regular'},
-                ]}>
+              <Text style={[styles.tripItemDate, {color: theme.PRIMARY}]}>
                 {moment(endDate).format('DD-MM-YYYY')}
               </Text>
             </View>
@@ -167,14 +129,14 @@ const styles = StyleSheet.create({
   },
   tripItemBudget: {
     fontSize: 16,
-    fontFamily: FONTS.LIGHT,
+    fontFamily: FONTS.ClashDisplay.Bold,
     fontWeight: 'bold',
     borderRadius: 6,
     paddingBottom: 10,
   },
   tripItemDate: {
     fontSize: 13,
-    fontFamily: FONTS.REGULAR,
+    fontFamily: FONTS.LotaGrotesque.Regular,
   },
   header: {
     borderColor: 'gray',
@@ -185,7 +147,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   expenseRow: {
-    display: 'flex',
+    flexDirection: 'row',
     gap: 5,
     alignItems: 'center',
     marginBottom: 20,
@@ -193,15 +155,16 @@ const styles = StyleSheet.create({
   expenseAmount: {
     fontWeight: 'bold',
     fontSize: 16,
+    fontFamily: FONTS.ClashDisplay.Bold,
   },
   expenseLabel: {
     fontSize: 14,
+    fontFamily: FONTS.LotaGrotesque.Regular,
   },
   progressBar: {
     marginBottom: 20,
   },
   dateRow: {
-    display: 'flex',
     flexDirection: 'row',
     gap: 5,
     alignItems: 'center',

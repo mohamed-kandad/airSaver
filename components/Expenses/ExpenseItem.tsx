@@ -16,6 +16,7 @@ import {AppDispatch, RootState} from '../../store';
 import {useTheme} from '../providers/ThemeContext';
 import moment from 'moment';
 import {categories} from '../../helpers/utils';
+import {getFlexDirectionStyle, getTextStyle} from '../../languages/styles';
 
 type Props = {
   id: string;
@@ -50,15 +51,11 @@ const ExpenseItem: FC<Props> = ({name, amount, id, category, date}) => {
           // handleDeleteTrip();
         }
       }}>
-      <View
-        style={[
-          styles.expenseItem,
-          {flexDirection: lang === 'ar' ? 'row-reverse' : 'row'},
-        ]}>
+      <View style={[styles.expenseItem, getFlexDirectionStyle(lang)]}>
         <View
           style={{
             display: 'flex',
-            flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
+            ...getFlexDirectionStyle(lang),
             alignItems: 'center',
           }}>
           <View
@@ -79,7 +76,7 @@ const ExpenseItem: FC<Props> = ({name, amount, id, category, date}) => {
                 styles.expenseItemDate,
                 {
                   color: theme.PRIMARY,
-                  textAlign: lang === 'ar' ? 'right' : 'left',
+                  ...getTextStyle(lang),
                 },
               ]}>
               {moment(date).format('HH:mm')}
@@ -111,7 +108,7 @@ const styles = StyleSheet.create({
   },
   expenseItemTitle: {
     fontSize: 14,
-    fontFamily: '',
+    fontFamily: FONTS.LotaGrotesque.Regular,
     fontWeight: '700',
     marginBottom: 5,
   },
@@ -121,7 +118,7 @@ const styles = StyleSheet.create({
   expenseItemAmount: {
     fontWeight: '600',
     fontSize: 18,
-    fontFamily: 'ClashDisplay-Bold',
+    fontFamily: FONTS.ClashDisplay.Bold,
   },
   IconContainer: {
     padding: 6,

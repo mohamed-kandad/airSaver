@@ -7,15 +7,12 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {BlurView} from '@react-native-community/blur';
 import {
   NavigationProp,
   RouteProp,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import Header from '../components/NewTrip/Header';
-import Footer from '../components/NewTrip/Footer';
 import NewTripFrom from '../components/NewTrip/NewTripFrom';
 import {useDispatch, useSelector} from 'react-redux';
 import {createTrip, updateTrip} from '../store/tripSlice';
@@ -27,6 +24,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faArrowLeft, faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import Toast from 'react-native-toast-message';
 import {useTranslation} from 'react-i18next';
+import {getFlexDirectionStyle, getTextStyle} from '../languages/styles';
 
 type Props = {};
 type TripNavigationProps = NavigationProp<RootStackParamList, 'AddTrip'>;
@@ -39,6 +37,19 @@ const NewTrip = (props: Props) => {
   const lang = useSelector((state: RootState) => state.lang.lang);
   const {theme, isDark} = useTheme();
   const {t} = useTranslation();
+  const dispatch: AppDispatch = useDispatch();
+
+  const [tripInfo, setTripInfo] = useState({
+    name: '',
+    budget: 0,
+  });
+  const [selectedRange, setSelectedRange] = useState<{
+    startDate: string;
+    endDate: string | null;
+  }>({
+    startDate: '',
+    endDate: null,
+  });
 
   useEffect(() => {
     if (tripId != '') {
@@ -54,19 +65,6 @@ const NewTrip = (props: Props) => {
     }
   }, [tripId]);
 
-  const dispatch: AppDispatch = useDispatch();
-  const [tripInfo, setTripInfo] = useState({
-    name: '',
-    budget: 0,
-  });
-  const [selectedRange, setSelectedRange] = useState<{
-    startDate: string;
-    endDate: string | null;
-  }>({
-    startDate: '',
-    endDate: null,
-  });
-
   const handlePress = () => {
     const isValid =
       tripInfo.name &&
@@ -81,7 +79,6 @@ const NewTrip = (props: Props) => {
         text2: 'Please fill in all fields before submitting.',
         position: 'top',
       });
-
       return;
     }
 
@@ -107,72 +104,72 @@ const NewTrip = (props: Props) => {
   };
 
   return (
-    <>
-      <SafeAreaView
-        style={{
-          flex: 1,
-          paddingTop: 30,
-          backgroundColor: theme.background,
-        }}>
-        <View
-          style={{
-            flex: 1,
-            paddingHorizontal: 20,
-            paddingVertical: 20,
-          }}>
-          <View
-            style={{
-              justifyContent: 'flex-start',
-              flexDirection: lang == 'ar' ? 'row-reverse' : 'row',
-            }}>
-            <Pressable
-              style={{
+    <SafeAreaView
+      style={[styles.safeArea, {backgroundColor: theme.background}]}>
+      <View style={styles.container}>
+        <View style={[styles.backButtonContainer, getFlexDirectionStyle(lang)]}>
+          <Pressable
+            style={[
+              styles.backButton,
+              {
+                backgroundColor: theme.orange,
                 borderColor: theme.PRIMARY,
-                width: 40,
-                height: 40,
-                borderRadius: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#ff5a5f',
-                borderWidth: 2,
-              }}
-              onPress={() => navigation.goBack()}>
-              <FontAwesomeIcon
-                icon={lang == 'ar' ? faArrowRight : faArrowLeft}
-                color={COLORS.light.PRIMARY}
-                size={21}
-              />
-            </Pressable>
-          </View>
-          <Text
-            style={{
-              color: theme.PRIMARY,
-              marginTop: 20,
-              fontSize: 35,
-              fontFamily: 'ClashDisplay-SemiBold',
-              fontWeight: 'bold',
-              textAlign: lang == 'ar' ? 'right' : 'left',
-            }}>
-            {tripId === '' ? t('trips.add.heading') : t('trips.update.heading')}
-          </Text>
-          <NewTripFrom
-            onSelectedRangeChange={setSelectedRange}
-            onTripInfoChange={setTripInfo}
-            selectedRange={selectedRange}
-            tripInfo={tripInfo}
-            isUpdate={tripId !== ''}
-            onPress={handlePress}
-          />
+              },
+            ]}
+            onPress={() => navigation.goBack()}>
+            <FontAwesomeIcon
+              icon={lang === 'ar' ? faArrowRight : faArrowLeft}
+              color={COLORS.light.PRIMARY}
+              size={21}
+            />
+          </Pressable>
         </View>
-        {/* <Footer onPress={handlePress} isUpdate={tripId !== ''} /> */}
-      </SafeAreaView>
-    </>
+        <Text
+          style={[styles.heading, {color: theme.PRIMARY}, getTextStyle(lang)]}>
+          {tripId === '' ? t('trips.add.heading') : t('trips.update.heading')}
+        </Text>
+        <NewTripFrom
+          onSelectedRangeChange={setSelectedRange}
+          onTripInfoChange={setTripInfo}
+          selectedRange={selectedRange}
+          tripInfo={tripInfo}
+          isUpdate={tripId !== ''}
+          onPress={handlePress}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
 export default NewTrip;
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    paddingTop: 30,
+  },
+  container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  backButtonContainer: {
+    justifyContent: 'flex-start',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+  },
+  heading: {
+    marginTop: 20,
+    fontSize: 35,
+    fontFamily: 'ClashDisplay-SemiBold',
+    fontWeight: 'bold',
+  },
   absolute: {
     position: 'absolute',
     top: 0,

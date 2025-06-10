@@ -1,58 +1,31 @@
-import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import MainNavigation from '../navigation/MainNavigation';
-import {Button} from '../components/common';
-import {COLORS, FONTS} from '../constant';
 import Header from '../components/Trips/Header';
 import TripItem from '../components/Trips/TripItem';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {RootState} from '../store';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faSadCry, faSadTear} from '@fortawesome/free-solid-svg-icons';
 import {useTheme} from '../components/providers/ThemeContext';
 import NotFound from '../components/common/NotFound';
+import {useTranslation} from 'react-i18next';
 
-type Props = {};
-
-const Trips = (props: Props) => {
+const Trips = () => {
   const tripsData = useSelector((state: RootState) => state.trips);
-  const namedata = useSelector((stat: RootState) => stat.name);
-  const {theme, isDark, toggleTheme} = useTheme();
+  const {theme} = useTheme();
+  const {t} = useTranslation();
 
   return (
     <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: theme.background,
-      }}>
-      <View
-        style={{
-          flex: 1,
-          paddingVertical: 10,
-          paddingHorizontal: 24,
-        }}>
+      style={[styles.safeArea, {backgroundColor: theme.background}]}>
+      <View style={styles.container}>
         <Header />
-        <View
-          style={{
-            marginTop: 35,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 20,
-            flex: 1,
-          }}>
+        <View style={styles.listWrapper}>
           <FlatList
             data={tripsData.trips}
             renderItem={({item}) => <TripItem {...item} />}
-            contentContainerStyle={{gap: 25}}
+            contentContainerStyle={styles.flatListContent}
             ListEmptyComponent={() => (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <NotFound text="No Trip Found" />
+              <View style={styles.emptyContainer}>
+                <NotFound text={t('trips.no.trips.found')} />
               </View>
             )}
           />
@@ -64,4 +37,27 @@ const Trips = (props: Props) => {
 
 export default Trips;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+  },
+  listWrapper: {
+    marginTop: 35,
+    flex: 1,
+    flexDirection: 'column',
+    gap: 20,
+  },
+  flatListContent: {
+    gap: 25,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

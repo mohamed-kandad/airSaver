@@ -6,32 +6,19 @@ import {RootStackParamList} from '../../navigation/MainNavigation';
 import {useTheme} from '../providers/ThemeContext';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, RootState} from '../../store';
-import i18Next from '../../languages';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../store';
 import {getFlexDirectionStyle} from '../../languages/styles';
-import {setLang} from '../../store/langSlice';
 
 type HeaderNavigationProp = NavigationProp<RootStackParamList, 'Trips'>;
 
 const Header = () => {
-  const {theme, toggleTheme} = useTheme();
-  const lang = useSelector((state: RootState) => state.lang);
-  const dispatch: AppDispatch = useDispatch();
+  const {theme} = useTheme();
+  const lang = useSelector((state: RootState) => state.lang.lang);
   const navigate = useNavigation<HeaderNavigationProp>();
 
-  const toggleLang = () => {
-    i18Next.changeLanguage(i18Next.language === 'en' ? 'ar' : 'en');
-    dispatch(setLang(i18Next.language === 'en' ? 'ar' : 'en'));
-  };
-
   return (
-    <View
-      style={[
-        styles.headerContainer,
-
-        {flexDirection: lang.lang == 'ar' ? 'row-reverse' : 'row'},
-      ]}>
+    <View style={[styles.headerContainer, getFlexDirectionStyle(lang)]}>
       <Pressable
         style={[
           styles.addTripButton,

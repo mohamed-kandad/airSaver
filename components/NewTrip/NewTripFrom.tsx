@@ -1,6 +1,6 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {FC, useState, useCallback} from 'react';
-import {Button, CardItem, Input} from '../common';
+import {Button, Input} from '../common';
 import {COLORS, FONTS} from '../../constant';
 import {useTheme} from '../providers/ThemeContext';
 import DateRangeCalendar from '../calendar/';
@@ -29,16 +29,6 @@ interface NewTripFormProps {
   onSelectedRangeChange: (range: DateRange) => void;
 }
 
-const INPUT_LABELS = {
-  TRIP_NAME: 'Trip Name',
-  BUDGET: 'Budget',
-} as const;
-
-const PLACEHOLDERS = {
-  TRIP_NAME: 'Enter your trip name',
-  BUDGET: 'How much is your budget?',
-} as const;
-
 const isValidBudgetInput = (input: string): boolean => /^\d*$/.test(input);
 
 const NewTripForm: FC<NewTripFormProps> = ({
@@ -50,10 +40,7 @@ const NewTripForm: FC<NewTripFormProps> = ({
   onPress,
 }) => {
   const [focusedInput, setFocusedInput] = useState<number>(-1);
-  const {theme, toggleTheme} = useTheme();
-  const dispatch: AppDispatch = useDispatch();
   const {t} = useTranslation();
-  const lang = useSelector((state: RootState) => state.lang.lang);
 
   const handleTripNameChange = useCallback(
     (name: string) => onTripInfoChange({...tripInfo, name}),
@@ -69,17 +56,10 @@ const NewTripForm: FC<NewTripFormProps> = ({
     [onTripInfoChange, tripInfo],
   );
 
-  const toggleLang = () => {
-    i18next.changeLanguage(i18next.language === 'en' ? 'ar' : 'en');
-    dispatch(setLang(i18next.language === 'en' ? 'ar' : 'en'));
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.formContainer}>
         <Input
-          style={{textAlign: lang == 'ar' ? 'right' : 'left'}}
-          label={INPUT_LABELS.TRIP_NAME}
           placeholder={t('generale.name')}
           value={tripInfo.name}
           onChangeText={handleTripNameChange}
@@ -87,9 +67,6 @@ const NewTripForm: FC<NewTripFormProps> = ({
         />
 
         <Input
-          style={{textAlign: lang == 'ar' ? 'right' : 'left'}}
-          label={INPUT_LABELS.BUDGET}
-          placeholder={PLACEHOLDERS.BUDGET}
           keyboardType="number-pad"
           value={tripInfo.budget.toString()}
           onChangeText={handleBudgetChange}

@@ -2,7 +2,6 @@ import {
   Alert,
   FlatList,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -19,17 +18,14 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/MainNavigation';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faSadTear} from '@fortawesome/free-solid-svg-icons';
-import {HoldItem} from 'react-native-cli-hold-menu';
 import moment from 'moment';
 import {COLORS, FONTS} from '../constant';
 import {Expense} from '../store/tripSlice';
 import {useTheme} from '../components/providers/ThemeContext';
 import NotFound from '../components/common/NotFound';
 import TopHeader from '../components/Expenses/TopHeader';
-import i18next from 'i18next';
 import {useTranslation} from 'react-i18next';
+import {getFlexDirectionStyle} from '../languages/styles';
 
 type GroupedExpense = {
   date: string;
@@ -44,18 +40,20 @@ type ExpensesScreenNavigationProp = NavigationProp<
 >;
 
 const Expenses = () => {
-  const {isDark, theme, toggleTheme} = useTheme();
   const {navigate, goBack} = useNavigation<ExpensesScreenNavigationProp>();
   const {t} = useTranslation();
   const {tripId} = useRoute<ExpensesScreenRouteProp>().params;
+
+  const {theme} = useTheme();
+
   const tripsData = useSelector((state: RootState) => state.trips).trips.filter(
     trip => trip.id === tripId,
   );
   const lang = useSelector((state: RootState) => state.lang.lang);
+
   const transformExpenses = (expenses: Expense[]): GroupedExpense[] => {
-    // Group expenses by date
     const grouped = expenses.reduce((acc, expense) => {
-      const dateKey = moment(expense.date).format('YYYY-MM-DD'); // Format date
+      const dateKey = moment(expense.date).format('YYYY-MM-DD');
       if (!acc[dateKey]) {
         acc[dateKey] = [];
       }
@@ -63,7 +61,6 @@ const Expenses = () => {
       return acc;
     }, {} as Record<string, Expense[]>);
 
-    // Transform grouped data into the desired format
     return Object.keys(grouped).map(date => {
       const dailyExpenses = grouped[date];
       const total = dailyExpenses.reduce((sum, exp) => sum + exp.amount, 0);
@@ -75,81 +72,54 @@ const Expenses = () => {
     });
   };
 
+  const renderDateHeader = (
+    isToday: boolean,
+    tripDate: string,
+    total: number,
+  ) => (
+    <View style={[styles.dateHeader, getFlexDirectionStyle(lang)]}>
+      <Text style={[styles.dateText, {color: theme.PRIMARY}]}>
+        {isToday
+          ? t('expenses.date.today')
+          : moment(tripDate).format('YYYY-MM-DD')}
+      </Text>
+      <Text style={[styles.totalText, {color: theme.PRIMARY}]}>{total}DH</Text>
+    </View>
+  );
+
   return (
     <SafeAreaView
-      style={{
-        backgroundColor: theme.background,
-        flex: 1,
-      }}>
+      style={[styles.safeArea, {backgroundColor: theme.background}]}>
       <TopHeader
         onBack={() => goBack()}
         onAdd={() => navigate('NewExpense', {tripId, expenseId: ''})}
       />
-      <View
-        style={{
-          // marginTop: 40,
-          paddingVertical: 10,
-          paddingHorizontal: 20,
-        }}>
+      <View style={styles.content}>
         <Header tripId={tripId} />
         {tripsData[0].expenses && tripsData[0].expenses.length ? (
           transformExpenses(tripsData[0].expenses).map(trip => {
             const isToday = moment(trip.date).isSame(moment(), 'day');
 
             return (
-              <View>
-                <View
-                  style={{
-                    flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: 10,
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      fontFamily: 'ClashDisplay-Bold',
-                      fontWeight: 'bold',
-                      color: theme.PRIMARY,
-                    }}>
-                    {' '}
-                    {isToday
-                      ? t('expenses.date.today')
-                      : moment(trip.date).format('YYYY-MM-DD')}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontFamily: 'LotaGrotesque-Regular',
-                      color: theme.PRIMARY,
-                    }}>
-                    {trip.total}DH
-                  </Text>
-                </View>
-                <View style={{gap: 10}}>
-                  {trip.expenses &&
-                    trip.expenses.map((t: any) => (
-                      <ExpenseItem
-                        date={t.date}
-                        key={t.id}
-                        name={t.name}
-                        amount={t.amount}
-                        id={t.id}
-                        category={t.category}
-                      />
-                    ))}
+              <View key={trip.date}>
+                {renderDateHeader(isToday, trip.date, trip.total)}
+                <View style={styles.expenseGroup}>
+                  {trip.expenses.map((t: any) => (
+                    <ExpenseItem
+                      date={t.date}
+                      key={t.id}
+                      name={t.name}
+                      amount={t.amount}
+                      id={t.id}
+                      category={t.category}
+                    />
+                  ))}
                 </View>
               </View>
             );
           })
         ) : (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 100,
-            }}>
+          <View style={styles.notFoundWrapper}>
             <NotFound text="No Expense Found" />
           </View>
         )}
@@ -160,4 +130,34 @@ const Expenses = () => {
 
 export default Expenses;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+  content: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  dateHeader: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  dateText: {
+    fontSize: FONTS.SIZES.MEDIUM,
+    fontFamily: FONTS.ClashDisplay.Regular,
+  },
+  totalText: {
+    fontSize: FONTS.SIZES.SMALL,
+    fontFamily: FONTS.LotaGrotesque.Regular,
+  },
+  expenseGroup: {
+    gap: 10,
+  },
+  notFoundWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 100,
+  },
+});

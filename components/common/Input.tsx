@@ -5,6 +5,7 @@ import {FONTS} from '../../constant';
 import {useTheme} from '../providers/ThemeContext';
 import {RootState} from '../../store';
 import {useSelector} from 'react-redux';
+import {getTextStyle} from '../../languages/styles';
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -24,7 +25,7 @@ const Input: React.FC<InputProps> = ({
   ...props
 }) => {
   const isError = error && touched;
-  const {theme, isDark, toggleTheme} = useTheme();
+  const {theme} = useTheme();
   const lang = useSelector((state: RootState) => state.lang.lang);
 
   return (
@@ -42,11 +43,9 @@ const Input: React.FC<InputProps> = ({
         <TextInput
           style={[
             styles.input,
-            // leftIcon && styles.inputWithLeftIcon,
-            // rightIcon && styles.inputWithRightIcon,
             style,
             {
-              textAlign: lang === 'ar' ? 'right' : 'left',
+              ...getTextStyle(lang),
               color: theme.BUTTON_HEADER,
               fontFamily: 'LotaGrotesque-Regular',
             },

@@ -1,8 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {useTheme} from '../providers/ThemeContext';
-import Lottie from 'lottie-react-native';
-import animation from '../../assets/animation.json';
 
 type Props = {
   text: string;

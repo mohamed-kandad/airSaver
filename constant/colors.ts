@@ -7,6 +7,7 @@ export type color = {
   cards: string;
   BUTTON_HEADER: string;
   button_border: string;
+  orange: string;
 };
 
 export type theme = {
@@ -24,6 +25,7 @@ export const COLORS: theme = {
     TEXT1: '#E74D4D',
     BUTTON_HEADER: 'black',
     button_border: 'black',
+    orange: '#ff5a5f',
   },
   dark: {
     button_border: 'white',
@@ -34,5 +36,6 @@ export const COLORS: theme = {
     cards: 'rgba(255, 255, 255, 0.3)',
     TEXT1: '#F5EADD',
     BUTTON_HEADER: 'white',
+    orange: '#ff5a5f',
   },
 };

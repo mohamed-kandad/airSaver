@@ -7,7 +7,6 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {COLORS, FONTS} from '../constant';
 import {Button, Input} from '../components/common';
 import {addExpenseToTrip, updateExpenseInTrip} from '../store/tripSlice';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -16,19 +15,16 @@ import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/MainNavigation';
 import {RootState} from '../store';
 import {useTheme} from '../components/providers/ThemeContext';
-import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import Toast from 'react-native-toast-message';
-import TextAnimated from '../components/common/TextAnimated';
 import {categories} from '../helpers/utils';
 import TopHeader from '../components/Expenses/TopHeader';
 import {useTranslation} from 'react-i18next';
 
-type Props = {};
 type NewExpenseRouteProp = RouteProp<RootStackParamList, 'NewExpense'>;
 
 const NewExpense = () => {
   const {tripId, expenseId} = useRoute<NewExpenseRouteProp>().params;
-  const {theme, isDark, toggleTheme} = useTheme();
+  const {theme} = useTheme();
   const navigation = useNavigation();
   const tripData = useSelector((state: RootState) => state.trips);
   const dispatch = useDispatch();
@@ -44,15 +40,15 @@ const NewExpense = () => {
   useEffect(() => {
     if (expenseId) {
       const expense = tripData.trips
-        .filter((trip: any) => trip.id === tripId)[0]
-        .expenses?.filter((expense: any) => expense.id === expenseId)[0];
+        .find(trip => trip.id === tripId)
+        ?.expenses?.find(exp => exp.id === expenseId);
       if (expense) {
         setExpenseInfo({
           id: expense.id,
-          name: expense?.name,
-          amount: expense?.amount,
-          category: expense?.category,
-          date: expense?.date,
+          name: expense.name,
+          amount: expense.amount,
+          category: expense.category,
+          date: expense.date,
         });
       }
     }
@@ -60,20 +56,11 @@ const NewExpense = () => {
 
   const handleAddExpense = () => {
     if (expenseInfo.name && expenseInfo.amount && expenseInfo.category) {
+      const payload = {...expenseInfo, date: Date().toString()};
       if (expenseId) {
-        dispatch(
-          updateExpenseInTrip({
-            tripId,
-            expense: {...expenseInfo},
-          }),
-        );
+        dispatch(updateExpenseInTrip({tripId, expense: expenseInfo}));
       } else {
-        dispatch(
-          addExpenseToTrip({
-            tripId,
-            expense: {...expenseInfo, date: Date().toString()},
-          }),
-        );
+        dispatch(addExpenseToTrip({tripId, expense: payload}));
       }
       navigation.goBack();
     } else {
@@ -88,71 +75,45 @@ const NewExpense = () => {
 
   return (
     <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: theme.background,
-      }}>
+      style={[styles.safeArea, {backgroundColor: theme.background}]}>
       <TopHeader showBack />
-      <View
-        style={{
-          backgroundColor: theme.background,
-          minHeight: '88%',
-          width: '100%',
-          borderRadius: 23,
-          paddingHorizontal: 20,
-          paddingVertical: 20,
-          justifyContent: 'space-between',
-        }}>
+      <View style={[styles.formContainer, {backgroundColor: theme.background}]}>
         <View>
-          <Text
-            style={{
-              color: theme.PRIMARY,
-              marginTop: 20,
-              fontSize: 35,
-              fontFamily: 'ClashDisplay-Bold',
-            }}>
+          <Text style={[styles.heading, {color: theme.PRIMARY}]}>
             {t('expenses.new.heading')}
           </Text>
+
           <FlatList
             data={categories}
-            renderItem={({item}) => (
-              <Pressable
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: 4,
-                  backgroundColor:
-                    item.id === expenseInfo.category
-                      ? '#ff5a5f'
-                      : 'transparent',
-                  padding: 5,
-                  borderRadius: 50,
-                  width: 40,
-                  height: 40,
-                  borderWidth: item.id === expenseInfo.category ? 2 : 0,
-                  borderColor: theme.PRIMARY,
-                }}
-                onPress={() =>
-                  setExpenseInfo({...expenseInfo, category: item.id})
-                }>
-                <FontAwesomeIcon
-                  icon={item.icon}
-                  size={20}
-                  color={
-                    item.id === expenseInfo.category ? 'white' : theme.TEXT1
-                  }
-                />
-              </Pressable>
-            )}
+            renderItem={({item}) => {
+              const isSelected = item.id === expenseInfo.category;
+              return (
+                <Pressable
+                  style={[
+                    styles.categoryButton,
+                    isSelected && {
+                      backgroundColor: theme.orange,
+                      borderWidth: 2,
+                      borderColor: theme.PRIMARY,
+                    },
+                  ]}
+                  onPress={() =>
+                    setExpenseInfo({...expenseInfo, category: item.id})
+                  }>
+                  <FontAwesomeIcon
+                    icon={item.icon}
+                    size={20}
+                    color={isSelected ? 'white' : theme.TEXT1}
+                  />
+                </Pressable>
+              );
+            }}
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              gap: 20,
-              height: 40,
-              marginTop: 20,
-            }}
+            contentContainerStyle={styles.categoryList}
           />
-          <View style={{marginTop: 40, gap: 20}}>
+
+          <View style={styles.inputGroup}>
             <Input
               placeholder="Enter budget"
               value={expenseInfo.amount.toString()}
@@ -169,7 +130,7 @@ const NewExpense = () => {
               }
               value={expenseInfo.name}
               numberOfLines={10}
-              style={{height: 200, paddingVertical: 20}}
+              style={styles.descriptionInput}
               textAlignVertical="top"
               multiline={true}
             />
@@ -189,4 +150,43 @@ const NewExpense = () => {
 
 export default NewExpense;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+  formContainer: {
+    minHeight: '88%',
+    width: '100%',
+    borderRadius: 23,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    justifyContent: 'space-between',
+  },
+  heading: {
+    marginTop: 20,
+    fontSize: 35,
+    fontFamily: 'ClashDisplay-Bold',
+  },
+  categoryList: {
+    gap: 20,
+    height: 40,
+    marginTop: 20,
+  },
+  categoryButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 4,
+    padding: 5,
+    borderRadius: 50,
+    width: 40,
+    height: 40,
+  },
+  inputGroup: {
+    marginTop: 40,
+    gap: 20,
+  },
+  descriptionInput: {
+    height: 200,
+    paddingVertical: 20,
+  },
+});

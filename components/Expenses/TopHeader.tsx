@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Pressable, Image, Text} from 'react-native';
+import {View, Pressable, StyleSheet} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faArrowLeft,
@@ -7,11 +7,11 @@ import {
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import {useTheme} from '../providers/ThemeContext';
-import {FONTS} from '../../constant';
 import {AppDispatch, RootState} from '../../store';
 import {useDispatch, useSelector} from 'react-redux';
 import i18next from 'i18next';
 import {setLang} from '../../store/langSlice';
+import {getFlexDirectionStyle} from '../../languages/styles';
 
 type HeaderProps = {
   title?: string;
@@ -46,28 +46,14 @@ const TopHeader = ({
 
   return (
     <View
-      style={{
-        height: 60,
-
-        flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 15,
-        backgroundColor: theme.background, // or transparent if you want
-      }}>
-      <View style={{width: 50}}>
+      style={[
+        styles.container,
+        {backgroundColor: theme.background, ...getFlexDirectionStyle(lang)},
+      ]}>
+      <View style={styles.iconContainer}>
         <Pressable
           onPress={toggleLang}
-          style={{
-            padding: 8,
-            width: 40,
-            height: 40,
-            borderRadius: 50,
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderWidth: 1,
-            borderColor: theme.PRIMARY,
-          }}>
+          style={[styles.iconButton, {borderColor: theme.PRIMARY}]}>
           <FontAwesomeIcon
             icon={lang === 'en' ? faArrowLeft : faArrowRight}
             size={23}
@@ -75,20 +61,12 @@ const TopHeader = ({
           />
         </Pressable>
       </View>
+
       {showAdd && onAdd && (
-        <View style={{width: 50, alignItems: 'flex-end'}}>
+        <View style={[styles.iconContainer, styles.alignEnd]}>
           <Pressable
             onPress={onAdd}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 50,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#ff5a5f',
-              borderWidth: 1,
-              borderColor: theme.PRIMARY,
-            }}>
+            style={[styles.addButton, {borderColor: theme.PRIMARY}]}>
             <FontAwesomeIcon icon={faPlus} color={theme.PRIMARY} />
           </Pressable>
         </View>
@@ -98,3 +76,42 @@ const TopHeader = ({
 };
 
 export default TopHeader;
+
+const styles = StyleSheet.create({
+  container: {
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  rowReverse: {
+    flexDirection: 'row-reverse',
+  },
+  iconContainer: {
+    width: 50,
+  },
+  alignEnd: {
+    alignItems: 'flex-end',
+  },
+  iconButton: {
+    padding: 8,
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+  },
+  addButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ff5a5f',
+    borderWidth: 1,
+  },
+});

@@ -32,13 +32,15 @@ const Button: React.FC<ButtonProps> = ({
         styles.button,
         disabled && styles.disabledButton,
         {
-          backgroundColor: COLORS.light.PRIMARY,
+          backgroundColor: theme.PRIMARY,
         },
         style,
       ]}
       onPress={onPress}
       disabled={disabled}>
-      <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+      <Text style={[styles.buttonText, textStyle, {color: theme.background}]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };

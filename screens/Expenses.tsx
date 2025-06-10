@@ -12,7 +12,12 @@ import Header from '../components/Expenses/Header';
 import ExpenseItem from '../components/Expenses/ExpenseItem';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store';
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/MainNavigation';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faSadTear} from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +27,7 @@ import {COLORS, FONTS} from '../constant';
 import {Expense} from '../store/tripSlice';
 import {useTheme} from '../components/providers/ThemeContext';
 import NotFound from '../components/common/NotFound';
+import TopHeader from '../components/Expenses/TopHeader';
 
 type GroupedExpense = {
   date: string;
@@ -30,9 +36,14 @@ type GroupedExpense = {
 };
 
 type ExpensesScreenRouteProp = RouteProp<RootStackParamList, 'Expenses'>;
+type ExpensesScreenNavigationProp = NavigationProp<
+  RootStackParamList,
+  'Expenses'
+>;
 
 const Expenses = () => {
   const {isDark, theme, toggleTheme} = useTheme();
+  const {navigate, goBack} = useNavigation<ExpensesScreenNavigationProp>();
 
   const {tripId} = useRoute<ExpensesScreenRouteProp>().params;
   const tripsData = useSelector((state: RootState) => state.trips).trips.filter(
@@ -62,12 +73,21 @@ const Expenses = () => {
   };
 
   return (
-    <SafeAreaView style={{backgroundColor: theme.background, flex: 1}}>
-      <Header tripId={tripId} />
+    <SafeAreaView
+      style={{
+        backgroundColor: theme.background,
+        flex: 1,
+      }}>
+      <TopHeader
+        onBack={() => goBack()}
+        onAdd={() => navigate('NewExpense', {tripId, expenseId: ''})}
+      />
+      {/* <Header tripId={tripId} /> */}
       <View
         style={{
-          paddingHorizontal: 20,
           marginTop: 40,
+          paddingVertical: 10,
+          paddingHorizontal: 20,
         }}>
         {/* <FlatList
           data={tripsData[0].expenses}
@@ -89,18 +109,19 @@ const Expenses = () => {
                   }}>
                   <Text
                     style={{
-                      fontSize: 14,
-                      fontFamily: 'DelaRegular',
-                      color: theme.TEXT1,
+                      fontSize: 18,
+                      fontFamily: 'ClashDisplay-Bold',
+                      fontWeight: 'bold',
+                      color: theme.PRIMARY,
                     }}>
                     {' '}
                     {isToday ? 'Today' : moment(trip.date).format('YYYY-MM-DD')}
                   </Text>
                   <Text
                     style={{
-                      fontSize: 14,
+                      fontSize: 16,
                       fontFamily: FONTS.REGULAR,
-                      color: isDark ? theme.TEXT1 : 'black',
+                      color: theme.PRIMARY,
                     }}>
                     {trip.total}DH
                   </Text>

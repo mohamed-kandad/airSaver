@@ -7,11 +7,13 @@ interface ThemeContextType {
   theme: color;
   isDark: boolean;
   toggleTheme: () => void;
+  systemColorScheme: any;
 }
 const ThemeContext = createContext<ThemeContextType>({
   theme: COLORS.light,
   isDark: false,
   toggleTheme: () => {},
+  systemColorScheme: 'light',
 });
 
 export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
@@ -28,7 +30,8 @@ export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
   };
 
   return (
-    <ThemeContext.Provider value={{theme, isDark, toggleTheme}}>
+    <ThemeContext.Provider
+      value={{theme, isDark, toggleTheme, systemColorScheme}}>
       {children}
     </ThemeContext.Provider>
   );

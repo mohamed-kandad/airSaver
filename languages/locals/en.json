@@ -1,7 +1,14 @@
 {
     "generale.enter.name": "Enter your name",
-    "generale.name": "Name",
+    "generale.name": "Trip Name",
     "generale.save": "Save",
     "generale.spent.from": "spent from",
-    "generale.to": "to"
+    "generale.to": "to",
+    "trips.add.heading": "Let`s add your trip!",
+    "trips.update.heading": "Let`s update your trip!",
+    "trips.add.trip.name": "Trip name",
+    "trips.add.trip.start": "Trip start",
+    "trips.add.trip.end": "Trip end",
+    "trips.add.trip.budget": "Trip budget",
+    "trips.add.trip.save": "Save trip"
 }

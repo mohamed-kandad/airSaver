@@ -48,27 +48,28 @@ const ExpenseItem: FC<Props> = ({name, amount, id, category, date}) => {
           // handleDeleteTrip();
         }
       }}>
-      <View style={[styles.expenseItem, {borderColor: theme.TEXT1}]}>
+      <View style={[styles.expenseItem]}>
         <View
           style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-          <View style={[styles.IconContainer, {backgroundColor: theme.TEXT1}]}>
+          <View
+            style={[styles.IconContainer, {backgroundColor: theme.PRIMARY}]}>
             <FontAwesomeIcon
               icon={Icon}
               style={styles.expenseItemIcon}
               size={18}
-              color={isDark ? theme.PRIMARY : 'white'}
+              color={theme.background}
             />
           </View>
-          <View style={{marginLeft: 10}}>
-            <Text style={[styles.expenseItemTitle, {color: theme.TEXT1}]}>
+          <View style={{marginLeft: 15}}>
+            <Text style={[styles.expenseItemTitle, {color: theme.PRIMARY}]}>
               {name.length > 30 ? name.slice(0, 30) : name}
             </Text>
-            <Text style={[styles.expenseItemDate, {color: theme.TEXT}]}>
+            <Text style={[styles.expenseItemDate, {color: theme.PRIMARY}]}>
               {moment(date).format('HH:mm')}
             </Text>
           </View>
         </View>
-        <Text style={[styles.expenseItemAmount, {color: theme.TEXT1}]}>
+        <Text style={[styles.expenseItemAmount, {color: theme.PRIMARY}]}>
           {amount} MAD
         </Text>
       </View>
@@ -85,10 +86,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderColor: COLORS.light.PRIMARY,
-    borderWidth: 1,
-    borderRadius: 10,
   },
   expenseItemIcon: {
     width: 30,
@@ -99,18 +96,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: '',
     fontWeight: '700',
+    marginBottom: 5,
   },
   expenseItemDate: {
     fontSize: 10,
   },
   expenseItemAmount: {
     fontWeight: '600',
+    fontSize: 18,
   },
   IconContainer: {
     padding: 6,
     borderRadius: 100,
-    width: 35,
-    height: 35,
+    width: 45,
+    height: 45,
     justifyContent: 'center',
     alignItems: 'center',
   },

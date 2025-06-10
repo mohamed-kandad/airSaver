@@ -34,55 +34,10 @@ const MainNavigation = (props: Props) => {
       <Main.Screen
         name="Expenses"
         component={Expenses}
-        options={({navigation, route}) => {
-          const tripId = route.params?.tripId;
-          return {
-            headerTransparent: true,
-            headerRightContainerStyle: {paddingHorizontal: 10},
-            headerLeftContainerStyle: {paddingHorizontal: 10},
-            headerTitle: '',
-            headerLeft: () => (
-              <Pressable
-                onPress={() => navigation.goBack()}
-                style={{
-                  height: 35,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <FontAwesomeIcon
-                  icon={faArrowLeft}
-                  color={theme.TEXT1}
-                  size={25}
-                />
-              </Pressable>
-            ),
-            headerRight: () => (
-              <Pressable
-                onPress={() =>
-                  navigation.navigate('NewExpense', {tripId, expenseId: ''})
-                }
-                style={{
-                  backgroundColor: theme.BUTTON_HEADER,
-                  padding: 8,
-                  borderRadius: 12,
-                  width: 35,
-                  height: 35,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  color={isDark ? theme.PRIMARY : 'white'}
-                />
-              </Pressable>
-            ),
-          };
-        }}
+        options={{headerShown: false}}
       />
       <Main.Screen
         options={({navigation}) => ({
-          presentation: 'modal',
-          headerTransparent: true,
           headerTitle: 'New Expense',
           headerTitleAlign: 'center',
           headerShown: false,
@@ -105,8 +60,6 @@ const MainNavigation = (props: Props) => {
         name="AddTrip"
         component={NewTrip}
         options={({navigation}) => ({
-          presentation: 'transparentModal',
-          headerTransparent: true,
           // headerTitle: 'Add Trip',
           headerTitleAlign: 'center',
           headerTitleStyle: {

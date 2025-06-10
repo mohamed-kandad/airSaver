@@ -55,6 +55,11 @@
 		<string>ClashDisplay-Medium.otf</string>
 		<string>ClashDisplay-Regular.otf</string>
 		<string>ClashDisplay-Semibold.otf</string>
+		<string>LotaGrotesque-Bold.otf</string>
+		<string>LotaGrotesque-ExtraLight.otf</string>
+		<string>LotaGrotesque-ExtraLightItalic.otf</string>
+		<string>LotaGrotesque-Regular.otf</string>
+		<string>LotaGrotesque-SemiBold.otf</string>
 	</array>
 </dict>
 </plist>

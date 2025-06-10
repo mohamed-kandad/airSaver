@@ -44,6 +44,7 @@ const Input: React.FC<InputProps> = ({
             style,
             {
               color: theme.BUTTON_HEADER,
+              fontFamily: 'LotaGrotesque-Regular',
             },
           ]}
           placeholderTextColor={theme.BUTTON_HEADER}

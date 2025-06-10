@@ -14,6 +14,9 @@ const Header: FC<Props> = ({tripId}) => {
   const tripsData = useSelector((state: RootState) => state.trips).trips.filter(
     trip => trip.id === tripId,
   );
+
+  const lang = useSelector((state: RootState) => state.lang.lang);
+
   const budget = calculateTripBudget(
     tripsData[0].expenses,
     tripsData[0].budget,

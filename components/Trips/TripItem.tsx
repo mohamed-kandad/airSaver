@@ -49,10 +49,14 @@ const TripItem: FC<Trip> = ({
           style={[
             styles.header,
             {
-              flexDirection: lang.lang !== 'ar' ? 'row-reverse' : 'row',
+              flexDirection: lang.lang == 'ar' ? 'row-reverse' : 'row',
             },
           ]}>
-          <Text style={[styles.tripItemBudget, {color: theme.PRIMARY}]}>
+          <Text
+            style={[
+              styles.tripItemBudget,
+              {color: theme.PRIMARY, fontFamily: 'ClashDisplay-Bold'},
+            ]}>
             {name.length > 25 ? `${name.slice(0, 35)}...` : name}
           </Text>
           <Pressable>
@@ -65,13 +69,24 @@ const TripItem: FC<Trip> = ({
             style={[
               styles.expenseRow,
               {
-                flexDirection: lang.lang !== 'ar' ? 'row-reverse' : 'row',
+                flexDirection: lang.lang == 'ar' ? 'row-reverse' : 'row',
               },
             ]}>
-            <Text style={[styles.expenseAmount, {color: theme.PRIMARY}]}>
+            <Text
+              style={[
+                styles.expenseAmount,
+                {color: theme.PRIMARY, fontFamily: 'ClashDisplay-SemiBold'},
+              ]}>
               {totalExpenses}
             </Text>
-            <Text style={[styles.expenseLabel, {color: theme.PRIMARY}]}>
+            <Text
+              style={[
+                styles.expenseLabel,
+                {
+                  color: theme.PRIMARY,
+                  fontFamily: 'LotaGrotesque-Regular',
+                },
+              ]}>
               {t('generale.spent.from')} {budget}
             </Text>
           </View>
@@ -80,7 +95,7 @@ const TripItem: FC<Trip> = ({
             progress={totalExpensesPercent}
             width={300}
             color={theme.PRIMARY}
-            borderColor="black"
+            borderColor={theme.PRIMARY}
             borderRadius={20}
             height={13}
             style={styles.progressBar}
@@ -91,8 +106,7 @@ const TripItem: FC<Trip> = ({
             style={[
               styles.dateRow,
               {
-                flex: 1,
-                flexDirection: lang.lang !== 'ar' ? 'row-reverse' : 'row',
+                flexDirection: lang.lang == 'ar' ? 'row-reverse' : 'row',
                 alignItems: 'center',
               },
             ]}>
@@ -100,20 +114,31 @@ const TripItem: FC<Trip> = ({
             <View
               style={[
                 {
-                  flexDirection: lang.lang !== 'ar' ? 'row-reverse' : 'row',
+                  flexDirection: lang.lang == 'ar' ? 'row-reverse' : 'row',
                   flex: 1,
                   gap: 5,
-                  // alignItems: 'center',
                   justifyContent: 'flex-start',
                 },
               ]}>
-              <Text style={[styles.tripItemDate, {color: theme.PRIMARY}]}>
+              <Text
+                style={[
+                  styles.tripItemDate,
+                  {color: theme.PRIMARY, fontFamily: 'LotaGrotesque-Regular'},
+                ]}>
                 {moment(startDate).format('DD-MM-YYYY')}
               </Text>
-              <Text style={[styles.tripItemDate, {color: theme.PRIMARY}]}>
+              <Text
+                style={[
+                  styles.tripItemDate,
+                  {color: theme.PRIMARY, fontFamily: 'LotaGrotesque-Regular'},
+                ]}>
                 {t('generale.to')}
               </Text>
-              <Text style={[styles.tripItemDate, {color: theme.PRIMARY}]}>
+              <Text
+                style={[
+                  styles.tripItemDate,
+                  {color: theme.PRIMARY, fontFamily: 'LotaGrotesque-Regular'},
+                ]}>
                 {moment(endDate).format('DD-MM-YYYY')}
               </Text>
             </View>
@@ -131,7 +156,7 @@ const styles = StyleSheet.create({
     height: 170,
     width: '100%',
     borderRadius: 20,
-    borderWidth: 2,
+    borderWidth: 1,
   },
   tripItemDetails: {
     paddingVertical: 15,

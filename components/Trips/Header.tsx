@@ -15,9 +15,10 @@ import {setLang} from '../../store/langSlice';
 type HeaderNavigationProp = NavigationProp<RootStackParamList, 'Trips'>;
 
 const Header = () => {
-  const {theme} = useTheme();
+  const {theme, toggleTheme} = useTheme();
   const lang = useSelector((state: RootState) => state.lang);
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigation<HeaderNavigationProp>();
 
   const toggleLang = () => {
     i18Next.changeLanguage(i18Next.language === 'en' ? 'ar' : 'en');
@@ -29,16 +30,14 @@ const Header = () => {
       style={[
         styles.headerContainer,
 
-        {flexDirection: getFlexDirectionStyle(lang.lang)},
+        {flexDirection: lang.lang == 'ar' ? 'row-reverse' : 'row'},
       ]}>
       <Pressable
         style={[
           styles.addTripButton,
           {borderColor: theme.button_border, backgroundColor: '#ff5a5f'},
         ]}
-        onPress={toggleLang}
-        // onPress={() => navigate('AddTrip', {tripId: ''})}
-      >
+        onPress={() => navigate.navigate('AddTrip', {tripId: ''})}>
         <FontAwesomeIcon icon={faPlus} color={theme.button_border} />
       </Pressable>
     </View>

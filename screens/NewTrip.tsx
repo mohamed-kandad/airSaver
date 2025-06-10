@@ -1,4 +1,11 @@
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {BlurView} from '@react-native-community/blur';
 import {
@@ -17,8 +24,9 @@ import {RootStackParamList} from '../navigation/MainNavigation';
 import {useTheme} from '../components/providers/ThemeContext';
 import {COLORS} from '../constant';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import {faArrowLeft, faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import Toast from 'react-native-toast-message';
+import {useTranslation} from 'react-i18next';
 
 type Props = {};
 type TripNavigationProps = NavigationProp<RootStackParamList, 'AddTrip'>;
@@ -28,7 +36,9 @@ const NewTrip = (props: Props) => {
   const navigation = useNavigation<TripNavigationProps>();
   const {tripId} = useRoute<TripRouteProps>().params;
   const tripData = useSelector((state: RootState) => state.trips);
+  const lang = useSelector((state: RootState) => state.lang.lang);
   const {theme, isDark} = useTheme();
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (tripId != '') {
@@ -64,13 +74,16 @@ const NewTrip = (props: Props) => {
       selectedRange.startDate &&
       selectedRange.endDate;
 
-    if (!isValid)
+    if (!isValid) {
       Toast.show({
         type: 'error',
         text1: 'Missing Fields',
         text2: 'Please fill in all fields before submitting.',
         position: 'top',
       });
+
+      return;
+    }
 
     if (tripId === '') {
       dispatch(
@@ -92,40 +105,55 @@ const NewTrip = (props: Props) => {
     }
     navigation.goBack();
   };
+
   return (
     <>
-      <View
+      <SafeAreaView
         style={{
           flex: 1,
-          backgroundColor: COLORS.light.PRIMARY,
           paddingTop: 30,
+          backgroundColor: theme.background,
         }}>
         <View
           style={{
-            backgroundColor: isDark
-              ? COLORS.light.SECONDARY
-              : COLORS.light.background,
-            height: '88%',
-            width: '100%',
-            borderRadius: 23,
+            flex: 1,
             paddingHorizontal: 20,
             paddingVertical: 20,
           }}>
-          <Pressable onPress={() => navigation.goBack()}>
-            <FontAwesomeIcon
-              icon={faArrowLeft}
-              color={COLORS.light.PRIMARY}
-              size={25}
-            />
-          </Pressable>
+          <View
+            style={{
+              justifyContent: 'flex-start',
+              flexDirection: lang == 'ar' ? 'row-reverse' : 'row',
+            }}>
+            <Pressable
+              style={{
+                borderColor: theme.PRIMARY,
+                width: 40,
+                height: 40,
+                borderRadius: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#ff5a5f',
+                borderWidth: 2,
+              }}
+              onPress={() => navigation.goBack()}>
+              <FontAwesomeIcon
+                icon={lang == 'ar' ? faArrowRight : faArrowLeft}
+                color={COLORS.light.PRIMARY}
+                size={21}
+              />
+            </Pressable>
+          </View>
           <Text
             style={{
-              color: COLORS.light.PRIMARY,
+              color: theme.PRIMARY,
               marginTop: 20,
               fontSize: 35,
-              fontFamily: 'DelaRegular',
+              fontFamily: 'ClashDisplay-SemiBold',
+              fontWeight: 'bold',
+              textAlign: lang == 'ar' ? 'right' : 'left',
             }}>
-            {tripId === '' ? 'Let`s add your trip!' : 'Let`s update your trip!'}
+            {tripId === '' ? t('trips.add.heading') : t('trips.update.heading')}
           </Text>
           <NewTripFrom
             onSelectedRangeChange={setSelectedRange}
@@ -137,7 +165,7 @@ const NewTrip = (props: Props) => {
           />
         </View>
         {/* <Footer onPress={handlePress} isUpdate={tripId !== ''} /> */}
-      </View>
+      </SafeAreaView>
     </>
   );
 };

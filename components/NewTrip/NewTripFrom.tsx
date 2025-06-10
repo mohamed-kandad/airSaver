@@ -1,30 +1,47 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {FC, useState} from 'react';
+import React, {FC, useState, useCallback} from 'react';
 import {Button, CardItem, Input} from '../common';
 import {COLORS, FONTS} from '../../constant';
-import moment from 'moment';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import {useTheme} from '../providers/ThemeContext';
+import DateRangeCalendar from '../calendar/';
+import i18next from 'i18next';
+import {setLang} from '../../store/langSlice';
+import {AppDispatch, RootState} from '../../store';
+import {useDispatch, useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 
-type NewTripFormProps = {
+interface TripInfo {
+  name: string;
+  budget: number;
+}
+
+interface DateRange {
+  startDate: string;
+  endDate: string | null;
+}
+
+interface NewTripFormProps {
   isUpdate: boolean;
   onPress(): void;
-  tripInfo: {
-    name: string;
-    budget: number;
-  };
-  selectedRange: {
-    startDate: string;
-    endDate: string | null;
-  };
-  onTripInfoChange: ({name, budget}: {name: string; budget: number}) => void;
-  onSelectedRangeChange: (range: {
-    startDate: string;
-    endDate: string | null;
-  }) => void;
-};
+  tripInfo: TripInfo;
+  selectedRange: DateRange;
+  onTripInfoChange: (tripInfo: TripInfo) => void;
+  onSelectedRangeChange: (range: DateRange) => void;
+}
 
-const NewTripFrom: FC<NewTripFormProps> = ({
+const INPUT_LABELS = {
+  TRIP_NAME: 'Trip Name',
+  BUDGET: 'Budget',
+} as const;
+
+const PLACEHOLDERS = {
+  TRIP_NAME: 'Enter your trip name',
+  BUDGET: 'How much is your budget?',
+} as const;
+
+const isValidBudgetInput = (input: string): boolean => /^\d*$/.test(input);
+
+const NewTripForm: FC<NewTripFormProps> = ({
   onSelectedRangeChange,
   onTripInfoChange,
   selectedRange,
@@ -32,149 +49,73 @@ const NewTripFrom: FC<NewTripFormProps> = ({
   isUpdate,
   onPress,
 }) => {
-  const [isOpen, setIsOpen] = useState(-1);
-  const {theme, isDark, toggleTheme} = useTheme();
+  const [focusedInput, setFocusedInput] = useState<number>(-1);
+  const {theme, toggleTheme} = useTheme();
+  const dispatch: AppDispatch = useDispatch();
+  const {t} = useTranslation();
+  const lang = useSelector((state: RootState) => state.lang.lang);
 
-  const onDayPress = (day: {dateString: string}) => {
-    const {startDate, endDate} = selectedRange;
+  const handleTripNameChange = useCallback(
+    (name: string) => onTripInfoChange({...tripInfo, name}),
+    [onTripInfoChange, tripInfo],
+  );
 
-    if (!startDate || (startDate && endDate)) {
-      // Start a new range when there's no start date or both start and end exist
-      onSelectedRangeChange({startDate: day.dateString, endDate: null});
-    } else if (!endDate) {
-      setIsOpen(2);
-      // Update only the end date when selecting a second date
-      const isAfterStartDate = day.dateString > startDate; // Ensure end date is after start date
-      if (isAfterStartDate) {
-        onSelectedRangeChange({startDate, endDate: day.dateString});
-      } else {
-        // If the selected end date is before the start date, reset the range
-        onSelectedRangeChange({startDate: day.dateString, endDate: null});
+  const handleBudgetChange = useCallback(
+    (budget: string) => {
+      if (isValidBudgetInput(budget)) {
+        onTripInfoChange({...tripInfo, budget: Number(budget)});
       }
-    }
+    },
+    [onTripInfoChange, tripInfo],
+  );
+
+  const toggleLang = () => {
+    i18next.changeLanguage(i18next.language === 'en' ? 'ar' : 'en');
+    dispatch(setLang(i18next.language === 'en' ? 'ar' : 'en'));
   };
 
-  const getMarkedDates = () => {
-    const {startDate, endDate} = selectedRange;
-    const markedDates: Record<string, any> = {};
-
-    if (startDate) {
-      markedDates[startDate] = {
-        startingDay: true,
-        color: theme.PRIMARY,
-        textColor: 'white',
-
-        customStyles: {
-          container: {backgroundColor: theme.PRIMARY, borderRadius: 50},
-          text: {color: 'white', fontWeight: 'bold'},
-        },
-      };
-
-      if (endDate) {
-        let currentDate = new Date(
-          new Date(startDate).setDate(new Date(startDate).getDate() + 1),
-        )
-          .toISOString()
-          .split('T')[0];
-        while (currentDate < endDate) {
-          markedDates[currentDate] = {
-            color: theme.PRIMARY,
-            customStyles: {
-              container: {backgroundColor: '#EEEEEE'},
-              text: {color: 'black', fontWeight: 'bold'},
-            },
-            textColor: '#000',
-          };
-          currentDate = new Date(
-            new Date(currentDate).setDate(new Date(currentDate).getDate() + 1),
-          )
-            .toISOString()
-            .split('T')[0];
-        }
-
-        markedDates[endDate] = {
-          endingDay: true,
-          color: theme.PRIMARY,
-          textColor: 'white',
-          customStyles: {
-            container: {backgroundColor: theme.PRIMARY, borderRadius: 50},
-            text: {color: 'white', fontWeight: 'bold'},
-          },
-        };
-      }
-    }
-
-    return markedDates;
-  };
   return (
-    <ScrollView>
-      <View
-        style={{
-          display: 'flex',
-          gap: 30,
-          flex: 1,
-          marginTop: 30,
-          marginBottom: 20,
-        }}>
+    <View style={styles.container}>
+      <View style={styles.formContainer}>
         <Input
-          onSubmitEditing={() => setIsOpen(1)}
-          label="Email"
-          placeholder="Enter your trip name"
+          style={{textAlign: lang == 'ar' ? 'right' : 'left'}}
+          label={INPUT_LABELS.TRIP_NAME}
+          placeholder={t('generale.name')}
           value={tripInfo.name}
-          onChangeText={(name: string) => {
-            onTripInfoChange({...tripInfo, name});
-          }}
+          onChangeText={handleTripNameChange}
+          onSubmitEditing={() => setFocusedInput(1)}
         />
+
         <Input
-          label=""
-          placeholder="How much is your budget?"
+          style={{textAlign: lang == 'ar' ? 'right' : 'left'}}
+          label={INPUT_LABELS.BUDGET}
+          placeholder={PLACEHOLDERS.BUDGET}
           keyboardType="number-pad"
           value={tripInfo.budget.toString()}
-          onChangeText={(budget: string) => {
-            if (/^\d*$/.test(budget)) {
-              onTripInfoChange({...tripInfo, budget: +budget});
-            }
-          }}
+          onChangeText={handleBudgetChange}
         />
-        <Calendar
-          markingType="custom"
-          markedDates={getMarkedDates()}
-          onDayPress={onDayPress}
-          minDate={moment().format('YYYY-MM-DD')}
-          theme={{
-            backgroundColor: 'red',
-            calendarBackground: 'trasparent',
-            textSectionTitleColor: '#F5EADD',
-            textSectionTitleDisabledColor: '#d9e1e8',
-            selectedDayBackgroundColor: '#70d7c7',
-            selectedDayTextColor: theme.PRIMARY,
-            todayTextColor: theme.PRIMARY,
-            dayTextColor: COLORS.light.PRIMARY,
-            textDisabledColor: '#d3d3d3',
-            dotColor: 'blue',
-            selectedDotColor: 'gray',
-            arrowColor: 'white',
-            disabledArrowColor: 'black',
-            monthTextColor: COLORS.light.PRIMARY,
 
-            indicatorColor: '#70d7c7',
-
-            textDayFontFamily: FONTS.REGULAR, // Replace with your custom font
-            textDayFontWeight: '700', // Replace with your custom font
-            textMonthFontFamily: 'DelaRegular', // Replace with your custom font
-            textDayHeaderFontFamily: FONTS.REGULAR,
-            textDayFontSize: 16,
-            textMonthFontSize: 18,
-            textDayHeaderFontSize: 14,
-          }}
+        <DateRangeCalendar
+          selectedRange={selectedRange}
+          onSelectedRangeChange={onSelectedRangeChange}
         />
       </View>
 
       <Button title={isUpdate ? 'Update' : 'Add Trip'} onPress={onPress} />
-    </ScrollView>
+    </View>
   );
 };
 
-export default NewTripFrom;
+export default NewTripForm;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  formContainer: {
+    flex: 1,
+    marginTop: 30,
+    marginBottom: 20,
+    gap: 30,
+  },
+});

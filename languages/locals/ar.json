@@ -1,7 +1,14 @@
 {
     "generale.enter.name": "أدخل اسمك",
-    "generale.name": "الاسم",
+    "generale.name": "الاسم الرحلة",
     "generale.save": "حفظ",
     "generale.spent.from": "تم الإنفاق من",
-    "generale.to": "الى"
+    "generale.to": "الى",
+    "trips.add.heading": "دعونا نضيف رحلتك!",
+    "trips.update.heading": "دعونا نعدل رحلتك!",
+    "trips.add.trip.name": "اسم الرحلة",
+    "trips.add.trip.start": "بدء الرحلة",
+    "trips.add.trip.end": "نهاية الرحلة",
+    "trips.add.trip.budget": "ميزانية الرحلة",
+    "trips.add.trip.save": "حفظ الرحلة"
 }

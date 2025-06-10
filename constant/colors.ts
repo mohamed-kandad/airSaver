@@ -33,6 +33,6 @@ export const COLORS: theme = {
     TEXT: 'white',
     cards: 'rgba(255, 255, 255, 0.3)',
     TEXT1: '#F5EADD',
-    BUTTON_HEADER: 'black',
+    BUTTON_HEADER: 'white',
   },
 };

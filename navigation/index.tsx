@@ -10,7 +10,6 @@ const Stack = createStackNavigator();
 const index = () => {
   const namedata = useSelector((stat: RootState) => stat.name);
   const lang = useSelector((stat: RootState) => stat.lang);
-  console.log('🚀 ~ index ~ lang:', lang);
 
   useEffect(() => {
     i18next.changeLanguage(lang.lang);

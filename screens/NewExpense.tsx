@@ -20,6 +20,8 @@ import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import Toast from 'react-native-toast-message';
 import TextAnimated from '../components/common/TextAnimated';
 import {categories} from '../helpers/utils';
+import TopHeader from '../components/Expenses/TopHeader';
+import {useTranslation} from 'react-i18next';
 
 type Props = {};
 type NewExpenseRouteProp = RouteProp<RootStackParamList, 'NewExpense'>;
@@ -37,6 +39,7 @@ const NewExpense = () => {
     category: '',
     date: Date().toString(),
   });
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (expenseId) {
@@ -84,12 +87,12 @@ const NewExpense = () => {
   };
 
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: COLORS.light.PRIMARY,
-        paddingTop: 30,
+        backgroundColor: theme.background,
       }}>
+      <TopHeader showBack />
       <View
         style={{
           backgroundColor: theme.background,
@@ -101,21 +104,14 @@ const NewExpense = () => {
           justifyContent: 'space-between',
         }}>
         <View>
-          <Pressable onPress={() => navigation.goBack()}>
-            <FontAwesomeIcon
-              icon={faArrowLeft}
-              color={COLORS.light.PRIMARY}
-              size={25}
-            />
-          </Pressable>
           <Text
             style={{
-              color: COLORS.light.PRIMARY,
+              color: theme.PRIMARY,
               marginTop: 20,
               fontSize: 35,
-              fontFamily: 'DelaRegular',
+              fontFamily: 'ClashDisplay-Bold',
             }}>
-            Let's expand your expense!
+            {t('expenses.new.heading')}
           </Text>
           <FlatList
             data={categories}
@@ -127,12 +123,14 @@ const NewExpense = () => {
                   gap: 4,
                   backgroundColor:
                     item.id === expenseInfo.category
-                      ? COLORS.light.PRIMARY
+                      ? '#ff5a5f'
                       : 'transparent',
                   padding: 5,
                   borderRadius: 50,
                   width: 40,
                   height: 40,
+                  borderWidth: item.id === expenseInfo.category ? 2 : 0,
+                  borderColor: theme.PRIMARY,
                 }}
                 onPress={() =>
                   setExpenseInfo({...expenseInfo, category: item.id})
@@ -165,13 +163,13 @@ const NewExpense = () => {
               }}
             />
             <Input
-              placeholder="Description"
+              placeholder={t('expenses.new.desc')}
               onChangeText={text =>
                 setExpenseInfo({...expenseInfo, name: text})
               }
               value={expenseInfo.name}
               numberOfLines={10}
-              style={{height: 200}}
+              style={{height: 200, paddingVertical: 20}}
               textAlignVertical="top"
               multiline={true}
             />
@@ -179,11 +177,13 @@ const NewExpense = () => {
         </View>
 
         <Button
-          title={expenseId ? 'Update' : 'Add Expense'}
+          title={
+            expenseId ? t('expenses.update.button') : t('expenses.new.button')
+          }
           onPress={handleAddExpense}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

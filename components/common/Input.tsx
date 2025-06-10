@@ -3,6 +3,8 @@ import React from 'react';
 import {TextInput, View, Text, StyleSheet, TextInputProps} from 'react-native';
 import {FONTS} from '../../constant';
 import {useTheme} from '../providers/ThemeContext';
+import {RootState} from '../../store';
+import {useSelector} from 'react-redux';
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -23,6 +25,7 @@ const Input: React.FC<InputProps> = ({
 }) => {
   const isError = error && touched;
   const {theme, isDark, toggleTheme} = useTheme();
+  const lang = useSelector((state: RootState) => state.lang.lang);
 
   return (
     <View style={styles.container}>
@@ -43,6 +46,7 @@ const Input: React.FC<InputProps> = ({
             // rightIcon && styles.inputWithRightIcon,
             style,
             {
+              textAlign: lang === 'ar' ? 'right' : 'left',
               color: theme.BUTTON_HEADER,
               fontFamily: 'LotaGrotesque-Regular',
             },

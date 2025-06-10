@@ -11,8 +11,8 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import {RootStackParamList} from '../../navigation/MainNavigation';
-import {useDispatch} from 'react-redux';
-import {AppDispatch} from '../../store';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../store';
 import {useTheme} from '../providers/ThemeContext';
 import moment from 'moment';
 import {categories} from '../../helpers/utils';
@@ -33,6 +33,8 @@ const ExpenseItem: FC<Props> = ({name, amount, id, category, date}) => {
   const dispatch: AppDispatch = useDispatch();
   const {isDark, theme, toggleTheme} = useTheme();
 
+  const lang = useSelector((state: RootState) => state.lang.lang);
+
   const Icon = categories.filter(cat => cat.id === category)[0].icon;
 
   return (
@@ -48,9 +50,17 @@ const ExpenseItem: FC<Props> = ({name, amount, id, category, date}) => {
           // handleDeleteTrip();
         }
       }}>
-      <View style={[styles.expenseItem]}>
+      <View
+        style={[
+          styles.expenseItem,
+          {flexDirection: lang === 'ar' ? 'row-reverse' : 'row'},
+        ]}>
         <View
-          style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+          style={{
+            display: 'flex',
+            flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
+            alignItems: 'center',
+          }}>
           <View
             style={[styles.IconContainer, {backgroundColor: theme.PRIMARY}]}>
             <FontAwesomeIcon
@@ -60,11 +70,18 @@ const ExpenseItem: FC<Props> = ({name, amount, id, category, date}) => {
               color={theme.background}
             />
           </View>
-          <View style={{marginLeft: 15}}>
+          <View style={{marginHorizontal: 15}}>
             <Text style={[styles.expenseItemTitle, {color: theme.PRIMARY}]}>
               {name.length > 30 ? name.slice(0, 30) : name}
             </Text>
-            <Text style={[styles.expenseItemDate, {color: theme.PRIMARY}]}>
+            <Text
+              style={[
+                styles.expenseItemDate,
+                {
+                  color: theme.PRIMARY,
+                  textAlign: lang === 'ar' ? 'right' : 'left',
+                },
+              ]}>
               {moment(date).format('HH:mm')}
             </Text>
           </View>
@@ -104,6 +121,7 @@ const styles = StyleSheet.create({
   expenseItemAmount: {
     fontWeight: '600',
     fontSize: 18,
+    fontFamily: 'ClashDisplay-Bold',
   },
   IconContainer: {
     padding: 6,

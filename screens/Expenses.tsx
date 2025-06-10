@@ -28,6 +28,8 @@ import {Expense} from '../store/tripSlice';
 import {useTheme} from '../components/providers/ThemeContext';
 import NotFound from '../components/common/NotFound';
 import TopHeader from '../components/Expenses/TopHeader';
+import i18next from 'i18next';
+import {useTranslation} from 'react-i18next';
 
 type GroupedExpense = {
   date: string;
@@ -44,11 +46,12 @@ type ExpensesScreenNavigationProp = NavigationProp<
 const Expenses = () => {
   const {isDark, theme, toggleTheme} = useTheme();
   const {navigate, goBack} = useNavigation<ExpensesScreenNavigationProp>();
-
+  const {t} = useTranslation();
   const {tripId} = useRoute<ExpensesScreenRouteProp>().params;
   const tripsData = useSelector((state: RootState) => state.trips).trips.filter(
     trip => trip.id === tripId,
   );
+  const lang = useSelector((state: RootState) => state.lang.lang);
   const transformExpenses = (expenses: Expense[]): GroupedExpense[] => {
     // Group expenses by date
     const grouped = expenses.reduce((acc, expense) => {
@@ -82,18 +85,13 @@ const Expenses = () => {
         onBack={() => goBack()}
         onAdd={() => navigate('NewExpense', {tripId, expenseId: ''})}
       />
-      {/* <Header tripId={tripId} /> */}
       <View
         style={{
-          marginTop: 40,
+          // marginTop: 40,
           paddingVertical: 10,
           paddingHorizontal: 20,
         }}>
-        {/* <FlatList
-          data={tripsData[0].expenses}
-          renderItem={({item}) => <ExpenseItem {...item} />}
-          contentContainerStyle={{gap: 15, marginTop: 40}}
-        /> */}
+        <Header tripId={tripId} />
         {tripsData[0].expenses && tripsData[0].expenses.length ? (
           transformExpenses(tripsData[0].expenses).map(trip => {
             const isToday = moment(trip.date).isSame(moment(), 'day');
@@ -102,7 +100,7 @@ const Expenses = () => {
               <View>
                 <View
                   style={{
-                    flexDirection: 'row',
+                    flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     marginBottom: 10,
@@ -115,12 +113,14 @@ const Expenses = () => {
                       color: theme.PRIMARY,
                     }}>
                     {' '}
-                    {isToday ? 'Today' : moment(trip.date).format('YYYY-MM-DD')}
+                    {isToday
+                      ? t('expenses.date.today')
+                      : moment(trip.date).format('YYYY-MM-DD')}
                   </Text>
                   <Text
                     style={{
                       fontSize: 16,
-                      fontFamily: FONTS.REGULAR,
+                      fontFamily: 'LotaGrotesque-Regular',
                       color: theme.PRIMARY,
                     }}>
                     {trip.total}DH

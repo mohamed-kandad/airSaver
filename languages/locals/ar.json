@@ -10,5 +10,12 @@
     "trips.add.trip.start": "بدء الرحلة",
     "trips.add.trip.end": "نهاية الرحلة",
     "trips.add.trip.budget": "ميزانية الرحلة",
-    "trips.add.trip.save": "حفظ الرحلة"
+    "trips.add.trip.save": "حفظ الرحلة",
+    "expenses.total.expenses": "مجموع المصروفات",
+    "budget.still.available": "متبقى الميزانية",
+    "expenses.date.today": "اليوم",
+    "expenses.new.heading": "دعونا نتوسيع مصروفاتك!",
+    "expenses.new.button": "اضافة مصروف جديد",
+    "expenses.update.button": "تحديث المصروف",
+    "expenses.new.desc": "وصف المصروف"
 }

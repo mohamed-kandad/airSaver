@@ -5,12 +5,15 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../store';
 import {useTheme} from '../providers/ThemeContext';
 import {calculateTripBudget} from '../../helpers/utils';
+import {useTranslation} from 'react-i18next';
+import i18next from 'i18next';
 
 type Props = {
   tripId: string;
 };
 
 const Header: FC<Props> = ({tripId}) => {
+  const {t} = useTranslation();
   const tripsData = useSelector((state: RootState) => state.trips).trips.filter(
     trip => trip.id === tripId,
   );
@@ -24,45 +27,51 @@ const Header: FC<Props> = ({tripId}) => {
   const {isDark, theme, toggleTheme} = useTheme();
 
   return (
-    <View style={styles.headerContainer}>
-      {/* <Image source={IMAGES.default} style={styles.headerImage} /> */}
-      <Text style={[styles.headerTitle, {color: theme.TEXT1}]}>
-        Available Budget
-      </Text>
-
-      <Text style={[styles.headerDetailsItemValue, {color: theme.TEXT}]}>
-        {budget.remainingBalance} MAD
-      </Text>
-
-      <Pressable
+    <View
+      style={[
+        styles.headerContainer,
+        {flexDirection: lang === 'ar' ? 'row-reverse' : 'row'},
+      ]}>
+      <View
         style={{
-          backgroundColor: 'pink',
-          paddingHorizontal: 10,
-          borderRadius: 10,
-          padding: 4,
-          borderColor: 'red',
           borderWidth: 1,
-          alignSelf: 'flex-start',
-          marginTop: 10,
+          height: 110,
+          width: '43%',
+          paddingHorizontal: 10,
+          borderRadius: 20,
+          marginBottom: 20,
+          paddingVertical: 10,
+          borderColor: theme.PRIMARY,
+          backgroundColor: theme.PRIMARY,
         }}>
-        <Text style={{fontSize: 12, color: theme.PRIMARY}}>
+        <Text style={[styles.headerTitle, {color: theme.background}]}>
+          {t('expenses.total.expenses')}
+        </Text>
+
+        <Text
+          style={[styles.headerDetailsItemValue, {color: theme.background}]}>
           {budget.totalExpenses} MAD
         </Text>
-      </Pressable>
-      {/* <View style={styles.headerDetails}>
-        <View style={[styles.headerDetailsItem, {borderColor: 'red'}]}>
-          <Text style={styles.headerDetailsItemTitle}>Available Budget</Text>
-          <Text style={[styles.headerDetailsItemValue, {color: 'green'}]}>
-            Mad {budget.remainingBalance}
-          </Text>
-        </View>
-        <View style={styles.headerDetailsItem}>
-          <Text style={styles.headerDetailsItemTitle}>Total Spendings</Text>
-          <Text style={[styles.headerDetailsItemValue, {color: 'red'}]}>
-            Mad {budget.totalExpenses}
-          </Text>
-        </View>
-      </View> */}
+      </View>
+      <View
+        style={{
+          borderWidth: 1,
+          height: 110,
+          width: '43%',
+          paddingHorizontal: 10,
+          borderRadius: 20,
+          marginBottom: 20,
+          paddingVertical: 14,
+          borderColor: theme.PRIMARY,
+        }}>
+        <Text style={[styles.headerTitle, {color: theme.TEXT1}]}>
+          {t('budget.still.available')}
+        </Text>
+
+        <Text style={[styles.headerDetailsItemValue, {color: theme.TEXT}]}>
+          {budget.remainingBalance} MAD
+        </Text>
+      </View>
     </View>
   );
 };
@@ -72,12 +81,17 @@ export default Header;
 const styles = StyleSheet.create({
   headerContainer: {
     // backgroundColor: 'green',
-    marginTop: 50,
-    paddingHorizontal: 20,
+    height: 170,
+    width: '100%',
+    marginBottom: 20,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   headerTitle: {
-    fontFamily: 'DelaRegular',
-    fontSize: 24,
+    fontFamily: 'LotaGrotesque-Regular',
+    fontSize: 18,
   },
   headerImage: {
     width: '100%',
@@ -102,10 +116,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   headerDetailsItemValue: {
-    fontSize: 40,
+    fontSize: 20,
     marginTop: 10,
     textAlign: 'left',
-    fontFamily: FONTS.BOLD,
+    fontFamily: 'ClashDisplay-SemiBold',
     fontWeight: '600',
   },
 });

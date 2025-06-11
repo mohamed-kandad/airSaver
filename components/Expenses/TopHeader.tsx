@@ -52,7 +52,7 @@ const TopHeader = ({
       ]}>
       <View style={styles.iconContainer}>
         <Pressable
-          onPress={toggleLang}
+          onPress={onBack}
           style={[styles.iconButton, {borderColor: theme.PRIMARY}]}>
           <FontAwesomeIcon
             icon={lang === 'en' ? faArrowLeft : faArrowRight}

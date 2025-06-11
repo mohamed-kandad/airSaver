@@ -76,7 +76,7 @@ const NewExpense = () => {
   return (
     <SafeAreaView
       style={[styles.safeArea, {backgroundColor: theme.background}]}>
-      <TopHeader showBack />
+      <TopHeader showBack onBack={() => navigation.goBack()} />
       <View style={[styles.formContainer, {backgroundColor: theme.background}]}>
         <View>
           <Text style={[styles.heading, {color: theme.PRIMARY}]}>

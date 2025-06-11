@@ -1,23 +1,4 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// const saveTripsToStorage = async (trips: Trip[]) => {
-//   try {
-//     await AsyncStorage.setItem('@trips', JSON.stringify(trips));
-//   } catch (e) {
-//     console.error('Error saving trips to AsyncStorage', e);
-//   }
-// };
-
-// const loadTripsFromStorage = async () => {
-//   try {
-//     const trips = await AsyncStorage.getItem('@trips');
-//     return trips ? JSON.parse(trips) : [];
-//   } catch (e) {
-//     console.error('Error loading trips from AsyncStorage', e);
-//     return [];
-//   }
-// };
 
 export interface Expense {
   id: string;
@@ -50,11 +31,9 @@ const tripSlice = createSlice({
   reducers: {
     createTrip(state, action: PayloadAction<Trip>) {
       state.trips.unshift(action.payload);
-      // saveTripsToStorage(state.trips);
     },
     deleteTrip(state, action: PayloadAction<string>) {
       state.trips = state.trips.filter(trip => trip.id !== action.payload);
-      // saveTripsToStorage(state.trips);
     },
     updateTrip(state, action: PayloadAction<Trip>) {
       const index = state.trips.findIndex(
@@ -62,7 +41,6 @@ const tripSlice = createSlice({
       );
       if (index !== -1) {
         state.trips[index] = action.payload;
-        // saveTripsToStorage(state.trips);
       }
     },
 

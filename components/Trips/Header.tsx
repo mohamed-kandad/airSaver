@@ -5,7 +5,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../navigation/MainNavigation';
 import {useTheme} from '../providers/ThemeContext';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {faGear, faPlus, faSadCry} from '@fortawesome/free-solid-svg-icons';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../store';
 import {getFlexDirectionStyle} from '../../languages/styles';
@@ -19,6 +19,14 @@ const Header = () => {
 
   return (
     <View style={[styles.headerContainer, getFlexDirectionStyle(lang)]}>
+      <View style={styles.iconContainer}>
+        <Pressable
+          onPress={() => navigate.navigate('Settings')}
+          style={[styles.iconButton, {borderColor: theme.PRIMARY}]}>
+          <FontAwesomeIcon icon={faGear} size={23} color={theme.PRIMARY} />
+        </Pressable>
+      </View>
+
       <Pressable
         style={[
           styles.addTripButton,
@@ -47,7 +55,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   headerWelcome: {},
@@ -59,5 +67,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'DelaRegular',
     color: COLORS.light.PRIMARY,
+  },
+
+  iconContainer: {
+    width: 50,
+  },
+  alignEnd: {
+    alignItems: 'flex-end',
+  },
+  iconButton: {
+    padding: 8,
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
   },
 });

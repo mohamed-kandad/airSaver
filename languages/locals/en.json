@@ -18,5 +18,7 @@
     "expenses.new.heading": "Let's expand your expense!",
     "expenses.update.button": "Update expense",
     "expenses.new.button": "Add new expense",
-    "expenses.new.desc": "Expense description"
+    "expenses.new.desc": "Expense description",
+    "settings.dark.mode": "Dark mode",
+    "settings.arabic.language": "Arabic language"
 }

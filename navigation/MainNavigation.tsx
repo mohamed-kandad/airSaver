@@ -10,6 +10,7 @@ import NewExpense from '../screens/NewExpense';
 import {useTheme} from '../components/providers/ThemeContext';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faArrowLeft, faPlus} from '@fortawesome/free-solid-svg-icons';
+import Settings from '../screens/Settings';
 
 type Props = {};
 export type RootStackParamList = {
@@ -18,6 +19,7 @@ export type RootStackParamList = {
   NewExpense: {tripId: string; expenseId: string};
   Expenses: {tripId: string};
   Entername: undefined;
+  Settings: undefined;
 };
 
 const Main = createStackNavigator<RootStackParamList>();
@@ -42,7 +44,7 @@ const MainNavigation = (props: Props) => {
           headerTitleAlign: 'center',
           headerShown: false,
           headerTitleStyle: {
-            fontFamily: FONTS.REGULAR,
+            fontFamily: FONTS.ClashDisplay.Bold,
             fontWeight: '700',
             fontSize: 16,
           },
@@ -60,34 +62,20 @@ const MainNavigation = (props: Props) => {
         name="AddTrip"
         component={NewTrip}
         options={({navigation}) => ({
-          // headerTitle: 'Add Trip',
           headerTitleAlign: 'center',
           headerTitleStyle: {
-            fontFamily: FONTS.BOLD,
+            fontFamily: FONTS.ClashDisplay.Bold,
             fontWeight: '700',
             fontSize: 16,
-            // color: theme.TEXT_DARK,
           },
           headerLeftContainerStyle: {paddingLeft: 10},
           headerShown: false,
-          // headerLeft: () => (
-          //   <Pressable
-          //     onPress={() => navigation.goBack()}
-          //     style={{
-          //       borderWidth: 1,
-          //       // borderColor: theme.GRAY[200],
-          //       // backgroundColor: !isDark ? '#21242D' : theme.TEXT_DARK,
-          //       padding: 8,
-          //       borderRadius: 50,
-          //     }}>
-          //     <Image
-          //       source={ICONS.x}
-          //       style={{width: 10, height: 10}}
-          //       tintColor={!isDark ? 'white' : 'black'}
-          //     />
-          //   </Pressable>
-          // ),
         })}
+      />
+      <Main.Screen
+        name="Settings"
+        component={Settings}
+        options={{headerShown: false}}
       />
     </Main.Navigator>
   );

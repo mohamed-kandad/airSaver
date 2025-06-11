@@ -10,7 +10,7 @@ import {calendarAR, calendarEN} from '../../languages';
 
 interface DateRange {
   startDate: string;
-  endDate: string | null;
+  endDate: string;
 }
 
 interface DateRangeCalendarProps {
@@ -77,7 +77,7 @@ const DateRangeCalendar: FC<DateRangeCalendarProps> = ({
       const selectedDate = day.dateString;
 
       if (!startDate || (startDate && endDate)) {
-        onSelectedRangeChange({startDate: selectedDate, endDate: null});
+        onSelectedRangeChange({startDate: selectedDate, endDate: ''});
         return;
       }
 
@@ -85,7 +85,7 @@ const DateRangeCalendar: FC<DateRangeCalendarProps> = ({
         if (selectedDate > startDate) {
           onSelectedRangeChange({startDate, endDate: selectedDate});
         } else {
-          onSelectedRangeChange({startDate: selectedDate, endDate: null});
+          onSelectedRangeChange({startDate: selectedDate, endDate: ''});
         }
       }
     },

@@ -10,8 +10,7 @@ import {
   faGasPump,
   faMoneyBillAlt,
 } from '@fortawesome/free-solid-svg-icons';
-
-import {Expense} from '../store/tripSlice';
+import {Expense} from '../types/expense';
 
 export const calculateTripBudget = (
   expenses: Expense[] | undefined,

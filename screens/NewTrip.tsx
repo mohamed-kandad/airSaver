@@ -25,6 +25,7 @@ import {faArrowLeft, faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import Toast from 'react-native-toast-message';
 import {useTranslation} from 'react-i18next';
 import {getFlexDirectionStyle, getTextStyle} from '../languages/styles';
+import {TripModel} from '../database/models/trips';
 
 type Props = {};
 type TripNavigationProps = NavigationProp<RootStackParamList, 'AddTrip'>;
@@ -35,7 +36,7 @@ const NewTrip = (props: Props) => {
   const {tripId} = useRoute<TripRouteProps>().params;
   const tripData = useSelector((state: RootState) => state.trips);
   const lang = useSelector((state: RootState) => state.lang.lang);
-  const {theme, isDark} = useTheme();
+  const {theme} = useTheme();
   const {t} = useTranslation();
   const dispatch: AppDispatch = useDispatch();
 
@@ -45,27 +46,27 @@ const NewTrip = (props: Props) => {
   });
   const [selectedRange, setSelectedRange] = useState<{
     startDate: string;
-    endDate: string | null;
+    endDate: string;
   }>({
     startDate: '',
-    endDate: null,
+    endDate: '',
   });
 
   useEffect(() => {
     if (tripId != '') {
-      const tripExists = tripData.trips.filter(trip => trip.id == tripId);
-      setSelectedRange({
-        endDate: tripExists[0].endDate,
-        startDate: tripExists[0].startDate,
-      });
-      setTripInfo({
-        name: tripExists[0].name,
-        budget: tripExists[0].budget,
-      });
+      // const tripExists = tripData.trips.filter(trip => trip.id == tripId);
+      // setSelectedRange({
+      //   endDate: tripExists[0].endDate,
+      //   startDate: tripExists[0].startDate,
+      // });
+      // setTripInfo({
+      //   name: tripExists[0].name,
+      //   budget: tripExists[0].budget,
+      // });
     }
   }, [tripId]);
 
-  const handlePress = () => {
+  const handlePress = async () => {
     const isValid =
       tripInfo.name &&
       tripInfo.budget &&
@@ -83,14 +84,12 @@ const NewTrip = (props: Props) => {
     }
 
     if (tripId === '') {
-      dispatch(
-        createTrip({
-          ...tripInfo,
-          ...selectedRange,
-          id: Date.now().toString(),
-          expenses: [],
-        }),
-      );
+      await TripModel.create({
+        name: tripInfo.name,
+        start_date: selectedRange.startDate,
+        end_date: selectedRange.endDate!,
+        budget: tripInfo.budget,
+      });
     } else {
       dispatch(
         updateTrip({

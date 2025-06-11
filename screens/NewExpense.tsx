@@ -19,6 +19,8 @@ import Toast from 'react-native-toast-message';
 import {categories} from '../helpers/utils';
 import TopHeader from '../components/Expenses/TopHeader';
 import {useTranslation} from 'react-i18next';
+import {ExpenseModel} from '../database/models/expense';
+import {Expense} from '../types/expense';
 
 type NewExpenseRouteProp = RouteProp<RootStackParamList, 'NewExpense'>;
 
@@ -54,13 +56,19 @@ const NewExpense = () => {
     }
   }, [expenseId, tripId]);
 
-  const handleAddExpense = () => {
+  const handleAddExpense = async () => {
     if (expenseInfo.name && expenseInfo.amount && expenseInfo.category) {
-      const payload = {...expenseInfo, date: Date().toString()};
+      const payload: Expense = {
+        amount: expenseInfo.amount,
+        categorie_id: +expenseInfo.category,
+        trip_id: +tripId,
+        desc: expenseInfo.name,
+        date: Date().toString(),
+      };
       if (expenseId) {
         dispatch(updateExpenseInTrip({tripId, expense: expenseInfo}));
       } else {
-        dispatch(addExpenseToTrip({tripId, expense: payload}));
+        await ExpenseModel.create(payload);
       }
       navigation.goBack();
     } else {

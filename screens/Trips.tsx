@@ -1,17 +1,24 @@
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import React from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import Header from '../components/Trips/Header';
 import TripItem from '../components/Trips/TripItem';
-import {useSelector} from 'react-redux';
-import {RootState} from '../store';
 import {useTheme} from '../components/providers/ThemeContext';
 import NotFound from '../components/common/NotFound';
 import {useTranslation} from 'react-i18next';
+import {TripModel} from '../database/models/trips';
+import {Trip} from '../types/trip';
 
 const Trips = () => {
-  const tripsData = useSelector((state: RootState) => state.trips);
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const [trips, setTrips] = useState<Trip[]>([]);
+
+  useLayoutEffect(() => {
+    (async () => {
+      const trips = await TripModel.getAll();
+      setTrips(trips);
+    })();
+  }, []);
 
   return (
     <SafeAreaView
@@ -20,7 +27,7 @@ const Trips = () => {
         <Header />
         <View style={styles.listWrapper}>
           <FlatList
-            data={tripsData.trips}
+            data={trips}
             renderItem={({item}) => <TripItem {...item} />}
             contentContainerStyle={styles.flatListContent}
             ListEmptyComponent={() => (

@@ -1,8 +1,8 @@
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, useLayoutEffect, useState} from 'react';
 import moment from 'moment';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faCalendarDays,
@@ -12,32 +12,36 @@ import * as Progress from 'react-native-progress';
 import {useTranslation} from 'react-i18next';
 
 import {FONTS} from '../../constant';
-import {deleteTrip, Trip} from '../../store/tripSlice';
 import {RootStackParamList} from '../../navigation/MainNavigation';
-import {AppDispatch, RootState} from '../../store';
+import {RootState} from '../../store';
 import {useTheme} from '../providers/ThemeContext';
 import {calculatePercentage, calculateTripBudget} from '../../helpers/utils';
 import {getFlexDirectionStyle} from '../../languages/styles';
+import {Trip} from '../../types/trip';
+import {Expense} from '../../types/expense';
+import {ExpenseModel} from '../../database/models/expense';
 
 type TripItemScreenNavigationProp = NavigationProp<RootStackParamList, 'Trips'>;
 
-const TripItem: FC<Trip> = ({
-  budget,
-  endDate,
-  id,
-  name,
-  startDate,
-  expenses,
-}) => {
+const TripItem: FC<Trip> = ({budget, end_date, id, name, start_date}) => {
   const {theme} = useTheme();
   const navigation = useNavigation<TripItemScreenNavigationProp>();
-  const dispatch: AppDispatch = useDispatch();
   const {t} = useTranslation();
   const lang = useSelector((state: RootState) => state.lang.lang);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
 
-  const handleDeleteTrip = () => {
-    dispatch(deleteTrip(id));
-  };
+  // const handleDeleteTrip = () => {
+  //   dispatch(deleteTrip(id));
+  // };
+
+  useLayoutEffect(() => {
+    (async () => {
+      if (id) {
+        const expenses = await ExpenseModel.getByTripId(id);
+        setExpenses(expenses);
+      }
+    })();
+  }, []);
 
   const totalExpenses = calculateTripBudget(expenses, budget).totalExpenses;
   const totalExpensesPercent = calculatePercentage(budget, totalExpenses) / 100;
@@ -46,7 +50,9 @@ const TripItem: FC<Trip> = ({
     <View style={[styles.tripItem, {borderColor: theme.PRIMARY}]}>
       <Pressable
         style={styles.tripItemDetails}
-        onPress={() => navigation.navigate('Expenses', {tripId: id})}>
+        onPress={() =>
+          navigation.navigate('Expenses', {tripId: id.toString()})
+        }>
         <View style={[styles.header, getFlexDirectionStyle(lang)]}>
           <Text style={[styles.tripItemBudget, {color: theme.PRIMARY}]}>
             {name.length > 25 ? `${name.slice(0, 35)}...` : name}
@@ -95,13 +101,13 @@ const TripItem: FC<Trip> = ({
                 },
               ]}>
               <Text style={[styles.tripItemDate, {color: theme.PRIMARY}]}>
-                {moment(startDate).format('DD-MM-YYYY')}
+                {moment(start_date).format('DD-MM-YYYY')}
               </Text>
               <Text style={[styles.tripItemDate, {color: theme.PRIMARY}]}>
                 {t('generale.to')}
               </Text>
               <Text style={[styles.tripItemDate, {color: theme.PRIMARY}]}>
-                {moment(endDate).format('DD-MM-YYYY')}
+                {moment(end_date).format('DD-MM-YYYY')}
               </Text>
             </View>
           </View>

@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import Header from '../components/Expenses/Header';
 import ExpenseItem from '../components/Expenses/ExpenseItem';
 import {useSelector} from 'react-redux';
@@ -20,12 +20,14 @@ import {
 import {RootStackParamList} from '../navigation/MainNavigation';
 import moment from 'moment';
 import {COLORS, FONTS} from '../constant';
-import {Expense} from '../store/tripSlice';
 import {useTheme} from '../components/providers/ThemeContext';
 import NotFound from '../components/common/NotFound';
 import TopHeader from '../components/Expenses/TopHeader';
 import {useTranslation} from 'react-i18next';
 import {getFlexDirectionStyle} from '../languages/styles';
+import {ExpenseModel} from '../database/models/expense';
+import {Expense} from '../types/expense';
+import {TripModel} from '../database/models/trips';
 
 type GroupedExpense = {
   date: string;
@@ -45,11 +47,10 @@ const Expenses = () => {
   const {tripId} = useRoute<ExpensesScreenRouteProp>().params;
 
   const {theme} = useTheme();
-
-  const tripsData = useSelector((state: RootState) => state.trips).trips.filter(
-    trip => trip.id === tripId,
-  );
   const lang = useSelector((state: RootState) => state.lang.lang);
+
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [budget, setBudget] = useState<number>(0);
 
   const transformExpenses = (expenses: Expense[]): GroupedExpense[] => {
     const grouped = expenses.reduce((acc, expense) => {
@@ -71,6 +72,16 @@ const Expenses = () => {
       };
     });
   };
+
+  useLayoutEffect(() => {
+    (async () => {
+      const expenses = await ExpenseModel.getByTripId(+tripId);
+      setExpenses(expenses);
+
+      const trip = await TripModel.getById(+tripId);
+      if (trip) setBudget(trip.budget);
+    })();
+  }, []);
 
   const renderDateHeader = (
     isToday: boolean,
@@ -95,23 +106,23 @@ const Expenses = () => {
         onAdd={() => navigate('NewExpense', {tripId, expenseId: ''})}
       />
       <View style={styles.content}>
-        <Header tripId={tripId} />
-        {tripsData[0].expenses && tripsData[0].expenses.length ? (
-          transformExpenses(tripsData[0].expenses).map(trip => {
+        <Header expenses={expenses} budget={budget} />
+        {expenses && expenses.length ? (
+          transformExpenses(expenses).map(trip => {
             const isToday = moment(trip.date).isSame(moment(), 'day');
 
             return (
               <View key={trip.date}>
                 {renderDateHeader(isToday, trip.date, trip.total)}
                 <View style={styles.expenseGroup}>
-                  {trip.expenses.map((t: any) => (
+                  {trip.expenses.map((t: Expense) => (
                     <ExpenseItem
                       date={t.date}
                       key={t.id}
-                      name={t.name}
+                      name={t.desc}
                       amount={t.amount}
-                      id={t.id}
-                      category={t.category}
+                      id={t.id.toString()}
+                      category={t.categorie_id.toString()}
                     />
                   ))}
                 </View>

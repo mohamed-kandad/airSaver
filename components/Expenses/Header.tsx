@@ -7,21 +7,17 @@ import {calculateTripBudget} from '../../helpers/utils';
 import {useTranslation} from 'react-i18next';
 import {getFlexDirectionStyle} from '../../languages/styles';
 import {FONTS} from '../../constant';
+import {Expense} from '../../types/expense';
 
 type Props = {
-  tripId: string;
+  expenses: Expense[];
+  budget: number;
 };
 
-const Header: FC<Props> = ({tripId}) => {
+const Header: FC<Props> = ({budget, expenses}) => {
   const {t} = useTranslation();
-  const tripsData = useSelector((state: RootState) => state.trips).trips.filter(
-    trip => trip.id === tripId,
-  );
   const lang = useSelector((state: RootState) => state.lang.lang);
-  const budget = calculateTripBudget(
-    tripsData[0].expenses,
-    tripsData[0].budget,
-  );
+  const tripBudget = calculateTripBudget(expenses, budget);
   const {theme} = useTheme();
 
   return (
@@ -39,7 +35,7 @@ const Header: FC<Props> = ({tripId}) => {
         </Text>
         <Text
           style={[styles.headerDetailsItemValue, {color: theme.background}]}>
-          {budget.totalExpenses} MAD
+          {tripBudget.totalExpenses} MAD
         </Text>
       </View>
 
@@ -55,7 +51,7 @@ const Header: FC<Props> = ({tripId}) => {
           {t('budget.still.available')}
         </Text>
         <Text style={[styles.headerDetailsItemValue, {color: theme.TEXT}]}>
-          {budget.remainingBalance} MAD
+          {tripBudget.remainingBalance} MAD
         </Text>
       </View>
     </View>

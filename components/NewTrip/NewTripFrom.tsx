@@ -17,7 +17,7 @@ interface TripInfo {
 
 interface DateRange {
   startDate: string;
-  endDate: string | null;
+  endDate: string;
 }
 
 interface NewTripFormProps {

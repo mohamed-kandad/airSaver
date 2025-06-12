@@ -33,17 +33,6 @@ type Props = {};
 const App = (props: Props) => {
   const {isDark} = useTheme();
 
-  const [notificationTitle, setNotificationTitle] =
-    useState('Test Notification');
-  const [notificationMessage, setNotificationMessage] = useState(
-    'This is a test message',
-  );
-  const [scheduleDate, setScheduleDate] = useState(
-    new Date(Date.now() + 60000),
-  ); // 1 minute from now
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const [scheduledNotifications, setScheduledNotifications] = useState([]);
-
   const requestNotificationPermission = async () => {
     if (Platform.OS === 'android') {
       const granted = await PermissionsAndroid.request(
@@ -77,13 +66,6 @@ const App = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    // Initialize push notifications
-    // Service is already initialized when imported
-    // Check permissions on app start
-    // LocalNotificationService.checkPermissions(permissions => {
-    //   console.log('Permissions:', permissions);
-    // });
-
     PushNotification.createChannel({
       channelId: 'custom-channel',
       channelName: 'Custom Channel',
@@ -96,27 +78,6 @@ const App = (props: Props) => {
     });
   }, []);
 
-  const showLocalNotification = () => {
-    pushNotificationService.showLocalNotification(
-      'Local Notification',
-      'This is a local notification!',
-    );
-  };
-
-  const scheduleNotification = () => {
-    const date = new Date();
-    date.setSeconds(date.getSeconds() + 10); // 10 seconds from now
-
-    pushNotificationService.scheduleLocalNotification(
-      'Scheduled Notification',
-      'This notification was scheduled!',
-      date,
-    );
-  };
-
-  const cancelNotifications = () => {
-    pushNotificationService.cancelAllLocalNotifications();
-  };
   return (
     <ThemeProvider>
       <Provider store={store}>
@@ -125,7 +86,6 @@ const App = (props: Props) => {
             <I18nextProvider i18n={i18next}>
               <Navigation />
               <Toast />
-              <Button title="Toggle Theme" onPress={showLocalNotification} />
             </I18nextProvider>
           </NavigationContainer>
         </PersistGate>

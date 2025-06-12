@@ -16,20 +16,25 @@ import {RootStackParamList} from '../navigation/MainNavigation';
 import {RootState} from '../store';
 import {useTheme} from '../components/providers/ThemeContext';
 import Toast from 'react-native-toast-message';
-import {categories} from '../helpers/utils';
+import {
+  calculateTripBudget,
+  categories,
+  loadNotifiedThresholds,
+  saveNotifiedThresholds,
+} from '../helpers/utils';
 import TopHeader from '../components/Expenses/TopHeader';
 import {useTranslation} from 'react-i18next';
 import {ExpenseModel} from '../database/models/expense';
-import {Expense} from '../types/expense';
+import {Expense, IExpense} from '../types/expense';
+import {TripModel} from '../database/models/trips';
+import {Trip} from '../types/trip';
+import pushNotificationService from '../services/LocalNotificationService';
 
 type NewExpenseRouteProp = RouteProp<RootStackParamList, 'NewExpense'>;
 
 const NewExpense = () => {
-  const {tripId, expenseId} = useRoute<NewExpenseRouteProp>().params;
-  const {theme} = useTheme();
   const navigation = useNavigation();
-  const tripData = useSelector((state: RootState) => state.trips);
-  const dispatch = useDispatch();
+  const {tripId, expenseId} = useRoute<NewExpenseRouteProp>().params;
   const [expenseInfo, setExpenseInfo] = useState({
     id: Date.now().toString(),
     name: '',
@@ -39,46 +44,66 @@ const NewExpense = () => {
   });
   const {t} = useTranslation();
 
-  useEffect(() => {
+  const {theme} = useTheme();
+  const [trip, setTrip] = useState<Trip>();
+  const [expenses, setExpenses] = useState<any>([]);
+  const [thresholds, setThresholds] = useState<number[]>([]);
+
+  const getExpensesData = async () => {
+    const trip = await TripModel.getById(+tripId);
+    if (trip) setTrip(trip);
+
+    const expenses = await ExpenseModel.getByTripId(+tripId);
+    if (expenses) setExpenses(expenses);
+
     if (expenseId) {
-      const expense = tripData.trips
-        .find(trip => trip.id === tripId)
-        ?.expenses?.find(exp => exp.id === expenseId);
-      if (expense) {
+      const expense: Expense | null = await ExpenseModel.getById(+expenseId);
+      if (expense)
         setExpenseInfo({
-          id: expense.id,
-          name: expense.name,
+          id: expense.id.toString(),
+          name: expense.desc,
           amount: expense.amount,
-          category: expense.category,
+          category: expense.categorie_id.toString(),
           date: expense.date,
         });
-      }
     }
+  };
+  useEffect(() => {
+    getExpensesData();
   }, [expenseId, tripId]);
 
+  const tripBudget = calculateTripBudget(expenses, trip?.budget || 0);
   const handleAddExpense = async () => {
-    if (expenseInfo.name && expenseInfo.amount && expenseInfo.category) {
-      const payload: Expense = {
-        amount: expenseInfo.amount,
-        categorie_id: +expenseInfo.category,
-        trip_id: +tripId,
-        desc: expenseInfo.name,
-        date: Date().toString(),
-      };
-      if (expenseId) {
-        dispatch(updateExpenseInTrip({tripId, expense: expenseInfo}));
-      } else {
-        await ExpenseModel.create(payload);
-      }
-      navigation.goBack();
-    } else {
+    if (!expenseInfo.name && !expenseInfo.amount && !expenseInfo.category) {
       Toast.show({
         type: 'error',
         text1: 'Missing Fields',
         text2: 'Please fill in all fields before submitting.',
         position: 'top',
       });
+      return;
     }
+
+    const payload: IExpense = {
+      amount: expenseInfo.amount,
+      categorie_id: +expenseInfo.category,
+      trip_id: +tripId,
+      desc: expenseInfo.name,
+      date: Date().toString(),
+    };
+    if (expenseId) {
+      await ExpenseModel.update(+expenseId, payload);
+    } else {
+      await ExpenseModel.create(payload);
+    }
+
+    const percentageSpent =
+      (tripBudget.totalExpenses / (trip?.budget || 1)) * 100;
+    pushNotificationService.triggerBudgetPushNotification(percentageSpent);
+
+    await saveNotifiedThresholds(thresholds);
+
+    navigation.goBack();
   };
 
   return (

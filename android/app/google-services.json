@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "493601361542",
+    "project_id": "airsavernotif",
+    "storage_bucket": "airsavernotif.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493601361542:android:188d967950aa8d5efb4b07",
+        "android_client_info": {
+          "package_name": "com.airsaver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNOyubJIdcTtuK5CWWFSONg7DTQ9a2A2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

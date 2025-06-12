@@ -113,11 +113,24 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.core:core:1.9.0'
+            eachDependency { DependencyResolveDetails details ->
+                if (details.requested.group == 'com.android.support') {
+                    details.useTarget group: 'androidx.core', name: 'core', version: '1.9.0'
+                }
+            }
+        }
+    }
 }
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    implementation project(':react-native-push-notification')
+
     // implementation project(':react-native-splash-screen')
 
     if (hermesEnabled.toBoolean()) {
@@ -126,3 +139,5 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
 import Header from '../components/Expenses/Header';
 import ExpenseItem from '../components/Expenses/ExpenseItem';
 import {useSelector} from 'react-redux';
@@ -14,6 +14,7 @@ import {RootState} from '../store';
 import {
   NavigationProp,
   RouteProp,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -73,15 +74,19 @@ const Expenses = () => {
     });
   };
 
-  useLayoutEffect(() => {
-    (async () => {
-      const expenses = await ExpenseModel.getByTripId(+tripId);
-      setExpenses(expenses);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchExpenses = async () => {
+        const expenses = await ExpenseModel.getByTripId(+tripId);
+        if (expenses) setExpenses(expenses);
 
-      const trip = await TripModel.getById(+tripId);
-      if (trip) setBudget(trip.budget);
-    })();
-  }, []);
+        const trip = await TripModel.getById(+tripId);
+        if (trip) setBudget(trip.budget);
+      };
+
+      fetchExpenses();
+    }, [tripId]),
+  );
 
   const renderDateHeader = (
     isToday: boolean,

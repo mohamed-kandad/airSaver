@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
   logoName: {
     fontSize: 40,
     textAlign: 'center',
-    fontWeight: 'bold',
     fontFamily: FONTS.ClashDisplay.Bold,
   },
   enterNameText: {

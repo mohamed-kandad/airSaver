@@ -1,9 +1,9 @@
 import {connectToDatabase} from '../';
 import {runQuery} from '../../helpers/excuteSql';
-import {Expense} from '../../types/expense';
+import {Expense, IExpense} from '../../types/expense';
 
 export class ExpenseModel {
-  static async create(expense: Expense): Promise<number> {
+  static async create(expense: IExpense): Promise<number> {
     try {
       const db = await connectToDatabase();
       const result = await runQuery(
@@ -54,7 +54,7 @@ export class ExpenseModel {
     }
   }
 
-  static async update(id: number, expense: Expense): Promise<boolean> {
+  static async update(id: number, expense: IExpense): Promise<boolean> {
     try {
       const db = await connectToDatabase();
       const result = await runQuery(
@@ -90,7 +90,7 @@ export class ExpenseModel {
     }
   }
 
-  static async getByTripId(trip_id: number): Promise<Expense[]> {
+  static async getByTripId(trip_id: number): Promise<Expense[] | null> {
     try {
       const db = await connectToDatabase();
       const result = await runQuery(

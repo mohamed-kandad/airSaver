@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   faUtensils,
   faBus,
@@ -53,3 +54,26 @@ export const categories = [
   {id: '9', name: 'Fuel', icon: faGasPump},
   {id: '10', name: 'Tips', icon: faMoneyBillAlt},
 ];
+
+// مفاتيح التخزين
+export const STORAGE_KEY = '@notified_thresholds';
+
+export const saveNotifiedThresholds = async (thresholds: number[]) => {
+  try {
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(thresholds));
+  } catch (e) {
+    console.log('Error saving notified thresholds', e);
+  }
+};
+
+export const loadNotifiedThresholds = async (): Promise<
+  {trip_id: number; threshold: number[]}[]
+> => {
+  try {
+    const json = await AsyncStorage.getItem(STORAGE_KEY);
+    return json != null ? JSON.parse(json) : [];
+  } catch (e) {
+    console.log('Error loading notified thresholds', e);
+    return [];
+  }
+};

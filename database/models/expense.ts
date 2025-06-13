@@ -110,4 +110,20 @@ export class ExpenseModel {
       throw error;
     }
   }
+
+  static async getLastExpensesAddByTripId(id: number): Promise<Expense | null> {
+    try {
+      const db = await connectToDatabase();
+      const result = await runQuery(
+        db,
+        `SELECT * FROM expenses WHERE trip_id = ? ORDER BY id DESC LIMIT 1;`,
+        [id],
+      );
+
+      return result.rows.length > 0 ? result.rows.item(0) : null;
+    } catch (error) {
+      console.error('ExpenseModel.getLastExpensesAddByTripId error:', error);
+      throw error;
+    }
+  }
 }

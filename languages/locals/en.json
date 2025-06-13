@@ -12,6 +12,9 @@
     "trips.add.trip.end": "Trip end",
     "trips.add.trip.budget": "Trip budget",
     "trips.add.trip.save": "Save trip",
+    "trips.not.start.yet": "Not Start Yet",
+
+    
     "expenses.total.expenses": "Total Expenses",
     "budget.still.available": "still available",
     "expenses.date.today": "Today",

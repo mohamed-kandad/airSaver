@@ -91,4 +91,29 @@ export class TripModel {
       throw error;
     }
   }
+
+  static async getActiveTrips(): Promise<Trip[]> {
+    try {
+      const db = await connectToDatabase();
+
+      // Get current date in YYYY-MM-DD format
+      const today = new Date().toISOString().split('T')[0];
+
+      const result = await runQuery(
+        db,
+        `SELECT * FROM trips WHERE date(?) BETWEEN date(start_date) AND date(end_date);`,
+        [today],
+      );
+
+      const trips: Trip[] = [];
+      for (let i = 0; i < result.rows.length; i++) {
+        trips.push(result.rows.item(i));
+      }
+
+      return trips;
+    } catch (error) {
+      Logger.error(`Failed to get active trips`, error);
+      throw error;
+    }
+  }
 }

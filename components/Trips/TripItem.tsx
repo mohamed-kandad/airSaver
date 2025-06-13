@@ -38,7 +38,7 @@ const TripItem: FC<Trip> = ({budget, end_date, id, name, start_date}) => {
     (async () => {
       if (id) {
         const expenses = await ExpenseModel.getByTripId(id);
-        setExpenses(expenses);
+        if (expenses) setExpenses(expenses);
       }
     })();
   }, []);
@@ -46,20 +46,55 @@ const TripItem: FC<Trip> = ({budget, end_date, id, name, start_date}) => {
   const totalExpenses = calculateTripBudget(expenses, budget).totalExpenses;
   const totalExpensesPercent = calculatePercentage(budget, totalExpenses) / 100;
 
+  const isTripStart = moment(start_date).isBefore(moment());
+
   return (
     <View style={[styles.tripItem, {borderColor: theme.PRIMARY}]}>
       <Pressable
         style={styles.tripItemDetails}
         onPress={() =>
+          isTripStart &&
           navigation.navigate('Expenses', {tripId: id.toString()})
         }>
         <View style={[styles.header, getFlexDirectionStyle(lang)]}>
           <Text style={[styles.tripItemBudget, {color: theme.PRIMARY}]}>
             {name.length > 25 ? `${name.slice(0, 35)}...` : name}
           </Text>
-          <Pressable>
-            <FontAwesomeIcon icon={faEllipsisVertical} color={theme.PRIMARY} />
-          </Pressable>
+          <View
+            style={{
+              gap: 10,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              ...getFlexDirectionStyle(lang),
+            }}>
+            {!isTripStart && (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: theme.orange,
+                  borderRadius: 20,
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                }}>
+                <Text
+                  style={{
+                    fontFamily: FONTS.ClashDisplay.Medium,
+                    fontSize: 10,
+                    color: theme.PRIMARY,
+                  }}>
+                  {t('trips.not.start.yet')}
+                </Text>
+              </View>
+            )}
+            <Pressable>
+              <FontAwesomeIcon
+                icon={faEllipsisVertical}
+                color={theme.PRIMARY}
+              />
+            </Pressable>
+          </View>
         </View>
 
         <View style={styles.body}>
@@ -128,6 +163,7 @@ const styles = StyleSheet.create({
   },
   tripItemDetails: {
     paddingVertical: 15,
+    paddingTop: 10,
     paddingBottom: 30,
     paddingHorizontal: 13,
     width: '100%',
@@ -138,7 +174,6 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.ClashDisplay.Bold,
     fontWeight: 'bold',
     borderRadius: 6,
-    paddingBottom: 10,
   },
   tripItemDate: {
     fontSize: 13,
@@ -148,6 +183,8 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderBottomWidth: 1,
     justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 10,
   },
   body: {
     paddingVertical: 10,

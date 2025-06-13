@@ -11,7 +11,6 @@ import {
   REGISTER,
 } from 'redux-persist';
 
-import tripReducer from './tripSlice';
 import nameSlice from './nameSlice';
 import langSlice from './langSlice';
 
@@ -21,7 +20,6 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  trips: tripReducer,
   name: nameSlice,
   lang: langSlice,
 });

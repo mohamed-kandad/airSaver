@@ -26,6 +26,8 @@ import Toast from 'react-native-toast-message';
 import {useTranslation} from 'react-i18next';
 import {getFlexDirectionStyle, getTextStyle} from '../languages/styles';
 import {TripModel} from '../database/models/trips';
+import tripNotificationService from '../services/tripNotification';
+import {ITrip} from '../types/trip';
 
 type Props = {};
 type TripNavigationProps = NavigationProp<RootStackParamList, 'AddTrip'>;
@@ -34,7 +36,6 @@ type TripRouteProps = RouteProp<RootStackParamList, 'AddTrip'>;
 const NewTrip = (props: Props) => {
   const navigation = useNavigation<TripNavigationProps>();
   const {tripId} = useRoute<TripRouteProps>().params;
-  const tripData = useSelector((state: RootState) => state.trips);
   const lang = useSelector((state: RootState) => state.lang.lang);
   const {theme} = useTheme();
   const {t} = useTranslation();
@@ -84,20 +85,15 @@ const NewTrip = (props: Props) => {
     }
 
     if (tripId === '') {
-      await TripModel.create({
+      const tripData: ITrip = {
         name: tripInfo.name,
         start_date: selectedRange.startDate,
         end_date: selectedRange.endDate!,
         budget: tripInfo.budget,
-      });
-    } else {
-      dispatch(
-        updateTrip({
-          ...tripInfo,
-          ...selectedRange,
-          id: tripId,
-        }),
-      );
+      };
+      await TripModel.create(tripData);
+
+      tripNotificationService.scheduleTripStartReminder(tripData);
     }
     navigation.goBack();
   };

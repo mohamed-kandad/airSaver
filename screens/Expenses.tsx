@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useCallback, useLayoutEffect, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import Header from '../components/Expenses/Header';
 import ExpenseItem from '../components/Expenses/ExpenseItem';
 import {useSelector} from 'react-redux';

@@ -17,6 +17,7 @@ import {useTheme} from '../providers/ThemeContext';
 import moment from 'moment';
 import {categories} from '../../helpers/utils';
 import {getFlexDirectionStyle, getTextStyle} from '../../languages/styles';
+import {ExpenseModel} from '../../database/models/expense';
 
 type Props = {
   id: string;
@@ -38,6 +39,10 @@ const ExpenseItem: FC<Props> = ({name, amount, id, category, date}) => {
 
   const Icon = categories.filter(cat => cat.id === category)[0].icon;
 
+  const handleDeleteTrip = async () => {
+    await ExpenseModel.delete(+id);
+  };
+
   return (
     <ContextMenu
       actions={[{title: 'Edit'}, {title: 'Delete'}]}
@@ -47,8 +52,7 @@ const ExpenseItem: FC<Props> = ({name, amount, id, category, date}) => {
           // The first item is nested in a submenu
           navigation.navigate('NewExpense', {tripId, expenseId: id});
         } else if (index == 1) {
-          dispatch(deleteExpenseFromTrip({tripId, expenseId: id}));
-          // handleDeleteTrip();
+          handleDeleteTrip();
         }
       }}>
       <View style={[styles.expenseItem, getFlexDirectionStyle(lang)]}>

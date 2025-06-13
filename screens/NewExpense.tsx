@@ -46,15 +46,10 @@ const NewExpense = () => {
 
   const {theme} = useTheme();
   const [trip, setTrip] = useState<Trip>();
-  const [expenses, setExpenses] = useState<any>([]);
-  const [thresholds, setThresholds] = useState<number[]>([]);
 
   const getExpensesData = async () => {
-    const trip = await TripModel.getById(+tripId);
-    if (trip) setTrip(trip);
-
-    const expenses = await ExpenseModel.getByTripId(+tripId);
-    if (expenses) setExpenses(expenses);
+    const tripData = await TripModel.getById(+tripId);
+    if (tripData) setTrip(tripData);
 
     if (expenseId) {
       const expense: Expense | null = await ExpenseModel.getById(+expenseId);
@@ -72,7 +67,6 @@ const NewExpense = () => {
     getExpensesData();
   }, [expenseId, tripId]);
 
-  const tripBudget = calculateTripBudget(expenses, trip?.budget || 0);
   const handleAddExpense = async () => {
     if (!expenseInfo.name && !expenseInfo.amount && !expenseInfo.category) {
       Toast.show({
@@ -97,11 +91,20 @@ const NewExpense = () => {
       await ExpenseModel.create(payload);
     }
 
-    const percentageSpent =
-      (tripBudget.totalExpenses / (trip?.budget || 1)) * 100;
-    pushNotificationService.triggerBudgetPushNotification(percentageSpent);
+    const updatedExpenses: Expense[] | null = await ExpenseModel.getByTripId(
+      +tripId,
+    );
 
-    await saveNotifiedThresholds(thresholds);
+    if (updatedExpenses) {
+      const updatedTripBudget = calculateTripBudget(
+        updatedExpenses,
+        trip?.budget || 0,
+      );
+
+      const percentageSpent =
+        (updatedTripBudget.totalExpenses / (trip?.budget || 1)) * 100;
+      pushNotificationService.triggerBudgetPushNotification(percentageSpent);
+    }
 
     navigation.goBack();
   };

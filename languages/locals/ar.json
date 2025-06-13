@@ -12,6 +12,8 @@
     "trips.add.trip.end": "نهاية الرحلة",
     "trips.add.trip.budget": "ميزانية الرحلة",
     "trips.add.trip.save": "حفظ الرحلة",
+    "trips.not.start.yet": "لم تبدأ بعد",
+
     "expenses.total.expenses": "مجموع المصروفات",
     "budget.still.available": "متبقى الميزانية",
     "expenses.date.today": "اليوم",

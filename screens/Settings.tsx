@@ -53,7 +53,17 @@ const Settings = (props: Props) => {
       <TopHeader showBack onBack={() => navigation.goBack()} />
 
       <View style={[styles.container]}>
-        <View style={[styles.row, getFlexDirectionStyle(lang)]}>
+        <View
+          style={[
+            styles.row,
+            {
+              borderColor: theme.PRIMARY,
+              borderWidth: 1,
+              paddingVertical: 10,
+              paddingHorizontal: 15,
+            },
+            getFlexDirectionStyle(lang),
+          ]}>
           <View style={[styles.row, getFlexDirectionStyle(lang)]}>
             <FontAwesomeIcon
               icon={!isDarkMode ? faSun : faMoon}
@@ -71,13 +81,24 @@ const Settings = (props: Props) => {
           <Switch
             value={isDarkMode}
             onValueChange={onToggleDarkMode}
-            trackColor={{false: '#767577', true: '#81b0ff'}}
-            thumbColor={isDarkMode ? '#f5dd4b' : '#f4f3f4'}
+            trackColor={{false: 'red', true: theme.orange}}
+            thumbColor={isDarkMode ? 'black' : '#f4f3f4'}
           />
         </View>
 
         <View
-          style={[styles.row, {marginTop: 24, ...getFlexDirectionStyle(lang)}]}>
+          style={[
+            styles.row,
+            {
+              marginTop: 24,
+
+              borderColor: theme.PRIMARY,
+              borderWidth: 1,
+              paddingVertical: 10,
+              paddingHorizontal: 15,
+              ...getFlexDirectionStyle(lang),
+            },
+          ]}>
           <View style={[styles.row, getFlexDirectionStyle(lang)]}>
             <FontAwesomeIcon icon={faGlobe} size={23} color={theme.PRIMARY} />
             <Text
@@ -91,8 +112,8 @@ const Settings = (props: Props) => {
           <Switch
             value={isArabic}
             onValueChange={onToggleLanguage}
-            trackColor={{false: '#767577', true: '#81b0ff'}}
-            thumbColor={isArabic ? '#f5dd4b' : '#f4f3f4'}
+            trackColor={{false: 'red', true: theme.orange}}
+            thumbColor={isArabic ? 'black' : '#f4f3f4'}
           />
         </View>
       </View>
@@ -113,6 +134,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    borderRadius: 20,
   },
   label: {
     fontSize: 18,

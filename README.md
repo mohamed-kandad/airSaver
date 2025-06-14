@@ -1,6 +1,6 @@
-# AirSaver - Travel Budget Manager 🚀
+# MoneySaver - Travel Budget Manager 🚀
 
-**AirSaver** is a mobile app designed to help travelers efficiently **manage their travel budgets**, track expenses, and stay financially organized on trips. Inspired by **Airbnb's clean UI**, AirSaver provides a seamless and user-friendly experience.
+**MoneySaver** is a mobile app designed to help travelers efficiently **manage their travel budgets**, track expenses, and stay financially organized on trips. Inspired by
 
 ## ✨ Features
 

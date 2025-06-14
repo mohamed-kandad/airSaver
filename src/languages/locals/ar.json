@@ -1,0 +1,26 @@
+{
+    "generale.enter.name": "أدخل اسمك",
+    "generale.name": "الاسم الرحلة",
+    "generale.save": "حفظ",
+    "generale.spent.from": "تم الإنفاق من",
+    "generale.to": "الى",
+    "trips.no.trips.found": "لا يوجد رحلات",
+    "trips.add.heading": "دعونا نضيف رحلتك!",
+    "trips.update.heading": "دعونا نعدل رحلتك!",
+    "trips.add.trip.name": "اسم الرحلة",
+    "trips.add.trip.start": "بدء الرحلة",
+    "trips.add.trip.end": "نهاية الرحلة",
+    "trips.add.trip.budget": "ميزانية الرحلة",
+    "trips.add.trip.save": "حفظ الرحلة",
+    "trips.not.start.yet": "لم تبدأ بعد",
+
+    "expenses.total.expenses": "مجموع المصروفات",
+    "budget.still.available": "متبقى الميزانية",
+    "expenses.date.today": "اليوم",
+    "expenses.new.heading": "دعونا نتوسع مصروفاتك!",
+    "expenses.new.button": "اضافة مصروف جديد",
+    "expenses.update.button": "تحديث المصروف",
+    "expenses.new.desc": "وصف المصروف",
+    "settings.dark.mode": "الوضع الداكن",
+    "settings.arabic.language": "اللغة العربية"
+}

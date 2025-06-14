@@ -1,0 +1,27 @@
+{
+    "generale.enter.name": "Enter your name",
+    "generale.name": "Trip Name",
+    "generale.save": "Save",
+    "generale.spent.from": "spent from",
+    "generale.to": "to",
+    "trips.no.trips.found": "No trips found",
+    "trips.add.heading": "Let`s add your trip!",
+    "trips.update.heading": "Let`s update your trip!",
+    "trips.add.trip.name": "Trip name",
+    "trips.add.trip.start": "Trip start",
+    "trips.add.trip.end": "Trip end",
+    "trips.add.trip.budget": "Trip budget",
+    "trips.add.trip.save": "Save trip",
+    "trips.not.start.yet": "Not Start Yet",
+
+    
+    "expenses.total.expenses": "Total Expenses",
+    "budget.still.available": "still available",
+    "expenses.date.today": "Today",
+    "expenses.new.heading": "Let's expand your expense!",
+    "expenses.update.button": "Update expense",
+    "expenses.new.button": "Add new expense",
+    "expenses.new.desc": "Expense description",
+    "settings.dark.mode": "Dark mode",
+    "settings.arabic.language": "Arabic language"
+}

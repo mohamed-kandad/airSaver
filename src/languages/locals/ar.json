@@ -22,5 +22,12 @@
     "expenses.update.button": "تحديث المصروف",
     "expenses.new.desc": "وصف المصروف",
     "settings.dark.mode": "الوضع الداكن",
-    "settings.arabic.language": "اللغة العربية"
+    "settings.arabic.language": "اللغة العربية",
+
+      "errors": {
+    "name": "الاسم مطلوب.",
+    "budget": "يجب أن يكون الميزانية رقماً صحيحاً.",
+    "startDate": "تاريخ البدء مطلوب.",
+    "endDate": "يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء."
+  }
 }

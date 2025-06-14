@@ -23,5 +23,12 @@
     "expenses.new.button": "Add new expense",
     "expenses.new.desc": "Expense description",
     "settings.dark.mode": "Dark mode",
-    "settings.arabic.language": "Arabic language"
+    "settings.arabic.language": "Arabic language",
+
+      "errors": {
+    "name": "Name is required.",
+    "budget": "Budget must be a valid number.",
+    "startDate": "Start date is required.",
+    "endDate": "End date must be after the start date."
+  }
 }

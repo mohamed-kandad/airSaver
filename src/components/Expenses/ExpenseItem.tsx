@@ -102,14 +102,12 @@ const styles = StyleSheet.create({
   expenseItemTitle: {
     fontSize: 14,
     fontFamily: FONTS.LotaGrotesque.Regular,
-    fontWeight: "700",
     marginBottom: 5,
   },
   expenseItemDate: {
     fontSize: 10,
   },
   expenseItemAmount: {
-    fontWeight: "600",
     fontSize: 18,
     fontFamily: FONTS.ClashDisplay.Bold,
   },

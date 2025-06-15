@@ -105,11 +105,10 @@ const styles = StyleSheet.create({
   row: { flexDirection: "row", alignItems: "center", gap: 8, width: "100%" },
   text: {
     fontSize: 15,
-    fontWeight: "600",
     fontFamily: FONTS.ClashDisplay.Medium,
   },
   subText: { fontSize: 13, marginTop: 4 },
-  actionText: { fontWeight: "600", marginLeft: 10 },
+  actionText: { marginLeft: 10 },
 
   light: { backgroundColor: "#fff" },
   dark: { backgroundColor: "#1f2937" },

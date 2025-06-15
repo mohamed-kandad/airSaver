@@ -1,11 +1,17 @@
 // src/components/common/Input.tsx
-import React from 'react';
-import {TextInput, View, Text, StyleSheet, TextInputProps} from 'react-native';
-import {FONTS} from '../../constant';
-import {useTheme} from '../providers/ThemeContext';
-import {RootState} from '../../store';
-import {useSelector} from 'react-redux';
-import {getTextStyle} from '../../languages/styles';
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+} from "react-native";
+import { useSelector } from "react-redux";
+import { FONTS } from "../../constant";
+import { getTextStyle } from "../../languages/styles";
+import { RootState } from "../../store";
+import { useTheme } from "../providers/ThemeContext";
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -25,7 +31,7 @@ const Input: React.FC<InputProps> = ({
   ...props
 }) => {
   const isError = error && touched;
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const lang = useSelector((state: RootState) => state.lang.lang);
 
   return (
@@ -35,10 +41,11 @@ const Input: React.FC<InputProps> = ({
           styles.inputContainer,
           isError && styles.errorInput,
           {
-            backgroundColor: 'transparent',
+            backgroundColor: "transparent",
             borderColor: theme.BUTTON_HEADER,
           },
-        ]}>
+        ]}
+      >
         {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
         <TextInput
           style={[
@@ -47,7 +54,7 @@ const Input: React.FC<InputProps> = ({
             {
               ...getTextStyle(lang),
               color: theme.BUTTON_HEADER,
-              fontFamily: 'LotaGrotesque-Regular',
+              fontFamily: FONTS.LotaGrotesque.Regular,
             },
           ]}
           placeholderTextColor={theme.BUTTON_HEADER}
@@ -64,12 +71,11 @@ const styles = StyleSheet.create({
   container: {},
   label: {
     fontSize: 14,
-    fontWeight: '500',
-    color: '#484848',
+    color: "#484848",
     marginBottom: 8,
   },
   inputContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     // alignItems: 'center',
     borderWidth: 1,
 
@@ -90,19 +96,19 @@ const styles = StyleSheet.create({
   },
   leftIcon: {
     paddingLeft: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   rightIcon: {
     paddingRight: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   errorInput: {
-    borderColor: '#FF5A5F',
+    borderColor: "#FF5A5F",
   },
   errorText: {
-    color: '#FF5A5F',
+    color: "#FF5A5F",
     fontSize: 12,
     marginTop: 4,
   },

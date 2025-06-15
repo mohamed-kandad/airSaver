@@ -1,3 +1,4 @@
+import { FONTS } from "@/constant";
 import { checkCondition } from "@/toastConfig";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -148,8 +149,7 @@ const styles = StyleSheet.create({
   heading: {
     marginTop: 20,
     fontSize: 35,
-    fontFamily: "ClashDisplay-SemiBold",
-    fontWeight: "bold",
+    fontFamily: FONTS.ClashDisplay.Bold,
   },
   absolute: {
     position: "absolute",

@@ -1,12 +1,12 @@
-import React, {FC, useMemo, useCallback} from 'react';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
-import moment from 'moment';
-import {useTheme} from '../providers/ThemeContext';
-import {FONTS} from '../../constant';
-import {useTranslation} from 'react-i18next';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../store';
-import {calendarAR, calendarEN} from '../../languages';
+import moment from "moment";
+import React, { FC, useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { Calendar, LocaleConfig } from "react-native-calendars";
+import { useSelector } from "react-redux";
+import { FONTS } from "../../constant";
+import { calendarAR, calendarEN } from "../../languages";
+import { RootState } from "../../store";
+import { useTheme } from "../providers/ThemeContext";
 
 interface DateRange {
   startDate: string;
@@ -25,75 +25,75 @@ const generateDatesBetween = (startDate: string, endDate: string): string[] => {
   currentDate.setDate(currentDate.getDate() + 1);
 
   while (currentDate < end) {
-    dates.push(currentDate.toISOString().split('T')[0]);
+    dates.push(currentDate.toISOString().split("T")[0]);
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
   return dates;
 };
 
-LocaleConfig.locales['en'] = calendarEN;
-LocaleConfig.locales['ar'] = calendarAR;
+LocaleConfig.locales["en"] = calendarEN;
+LocaleConfig.locales["ar"] = calendarAR;
 
 const DateRangeCalendar: FC<DateRangeCalendarProps> = ({
   selectedRange,
   onSelectedRangeChange,
 }) => {
-  const {theme} = useTheme();
-  const {t} = useTranslation();
+  const { theme } = useTheme();
+  const { t } = useTranslation();
   const lang = useSelector((state: RootState) => state.lang.lang);
 
   const calendarTheme = useMemo(
     () => ({
-      backgroundColor: 'transparent',
-      calendarBackground: 'transparent',
+      backgroundColor: "transparent",
+      calendarBackground: "transparent",
       textSectionTitleColor: theme.PRIMARY,
-      textSectionTitleDisabledColor: 'gray',
+      textSectionTitleDisabledColor: "gray",
       selectedDayBackgroundColor: theme.PRIMARY,
-      selectedDayTextColor: 'white',
+      selectedDayTextColor: "white",
       todayTextColor: theme.PRIMARY,
       dayTextColor: theme.PRIMARY,
-      textDisabledColor: 'gray',
+      textDisabledColor: "gray",
       dotColor: theme.PRIMARY,
-      selectedDotColor: 'gray',
+      selectedDotColor: "gray",
       arrowColor: theme.PRIMARY,
-      disabledArrowColor: 'gray',
+      disabledArrowColor: "gray",
       monthTextColor: theme.PRIMARY,
       indicatorColor: theme.PRIMARY,
-      textDayFontFamily: 'LotaGrotesque-Regular',
-      textDayFontWeight: '700',
-      textMonthFontFamily: 'LotaGrotesque-Regular',
-      textDayHeaderFontFamily: 'LotaGrotesque-Regular',
+      textDayFontFamily: FONTS.LotaGrotesque.Regular,
+      textDayFontWeight: "700",
+      textMonthFontFamily: FONTS.LotaGrotesque.Regular,
+      textDayHeaderFontFamily: FONTS.LotaGrotesque.Regular,
       textDayFontSize: 16,
       textMonthFontSize: 18,
       textDayHeaderFontSize: 14,
     }),
-    [theme],
+    [theme]
   );
 
   const handleDayPress = useCallback(
-    (day: {dateString: string}) => {
-      const {startDate, endDate} = selectedRange;
+    (day: { dateString: string }) => {
+      const { startDate, endDate } = selectedRange;
       const selectedDate = day.dateString;
 
       if (!startDate || (startDate && endDate)) {
-        onSelectedRangeChange({startDate: selectedDate, endDate: ''});
+        onSelectedRangeChange({ startDate: selectedDate, endDate: "" });
         return;
       }
 
       if (!endDate) {
         if (selectedDate > startDate) {
-          onSelectedRangeChange({startDate, endDate: selectedDate});
+          onSelectedRangeChange({ startDate, endDate: selectedDate });
         } else {
-          onSelectedRangeChange({startDate: selectedDate, endDate: ''});
+          onSelectedRangeChange({ startDate: selectedDate, endDate: "" });
         }
       }
     },
-    [selectedRange, onSelectedRangeChange],
+    [selectedRange, onSelectedRangeChange]
   );
 
   const markedDates = useMemo(() => {
-    const {startDate, endDate} = selectedRange;
+    const { startDate, endDate } = selectedRange;
     const marked: Record<string, any> = {};
 
     if (!startDate) return marked;
@@ -101,27 +101,27 @@ const DateRangeCalendar: FC<DateRangeCalendarProps> = ({
     marked[startDate] = {
       startingDay: true,
       color: theme.background,
-      textColor: 'red',
+      textColor: "red",
       customStyles: {
         container: {
-          backgroundColor: '#ff5a5f',
+          backgroundColor: "#ff5a5f",
           borderRadius: 50,
           borderWidth: 2,
           borderColor: theme.PRIMARY,
         },
-        text: {color: theme.background, fontWeight: 'bold'},
+        text: { color: theme.background, fontWeight: "bold" },
       },
     };
 
     if (endDate) {
       const datesBetween = generateDatesBetween(startDate, endDate);
-      datesBetween.forEach(date => {
+      datesBetween.forEach((date) => {
         marked[date] = {
-          color: '#2e2e2e',
-          textColor: 'white',
+          color: "#2e2e2e",
+          textColor: "white",
           customStyles: {
-            container: {backgroundColor: theme.PRIMARY},
-            text: {color: theme.background, fontWeight: 'bold'},
+            container: { backgroundColor: theme.PRIMARY },
+            text: { color: theme.background, fontWeight: "bold" },
           },
         };
       });
@@ -129,15 +129,15 @@ const DateRangeCalendar: FC<DateRangeCalendarProps> = ({
       marked[endDate] = {
         endingDay: true,
         color: theme.PRIMARY,
-        textColor: 'white',
+        textColor: "white",
         customStyles: {
           container: {
-            backgroundColor: '#ff5a5f',
+            backgroundColor: "#ff5a5f",
             borderRadius: 50,
             borderWidth: 2,
             borderColor: theme.PRIMARY,
           },
-          text: {color: theme.background, fontWeight: 'bold'},
+          text: { color: theme.background, fontWeight: "bold" },
         },
       };
     }
@@ -145,7 +145,7 @@ const DateRangeCalendar: FC<DateRangeCalendarProps> = ({
     return marked;
   }, [selectedRange, theme]);
 
-  const minDate = useMemo(() => moment().format('YYYY-MM-DD'), []);
+  const minDate = useMemo(() => moment().format("YYYY-MM-DD"), []);
 
   return (
     <Calendar

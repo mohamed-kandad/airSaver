@@ -66,6 +66,7 @@ export default Trips;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    paddingTop: 30,
   },
   container: {
     flex: 1,

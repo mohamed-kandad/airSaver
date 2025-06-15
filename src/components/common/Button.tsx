@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 import {
-  TouchableOpacity,
-  Text,
   StyleSheet,
-  ViewStyle,
+  Text,
   TextStyle,
-} from 'react-native';
-import {COLORS, FONTS} from '../../constant';
-import {useTheme} from '../providers/ThemeContext';
+  TouchableOpacity,
+  ViewStyle,
+} from "react-native";
+import { FONTS } from "../../constant";
+import { useTheme } from "../providers/ThemeContext";
 
 interface ButtonProps {
   title: string;
@@ -24,7 +24,7 @@ const Button: React.FC<ButtonProps> = ({
   textStyle,
   disabled = false,
 }) => {
-  const {theme, isDark, toggleTheme} = useTheme();
+  const { theme, isDark, toggleTheme } = useTheme();
 
   return (
     <TouchableOpacity
@@ -37,8 +37,9 @@ const Button: React.FC<ButtonProps> = ({
         style,
       ]}
       onPress={onPress}
-      disabled={disabled}>
-      <Text style={[styles.buttonText, textStyle, {color: theme.background}]}>
+      disabled={disabled}
+    >
+      <Text style={[styles.buttonText, textStyle, { color: theme.background }]}>
         {title}
       </Text>
     </TouchableOpacity>
@@ -51,17 +52,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     height: 60,
     borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     fontFamily: FONTS.LotaGrotesque.Regular,
   },
   disabledButton: {
     opacity: 0.5,
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: '600',
   },
 });
 

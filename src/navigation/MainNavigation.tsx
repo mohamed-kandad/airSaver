@@ -1,3 +1,4 @@
+import Chart from "@/screens/Chart";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { Image, Pressable } from "react-native";
@@ -13,6 +14,7 @@ type Props = {};
 export type RootStackParamList = {
   Trips: undefined;
   AddTrip: { tripId: string };
+  Chart: { tripId: string };
   NewExpense: { tripId: string; expenseId: string };
   Expenses: { tripId: string };
   Entername: undefined;
@@ -29,6 +31,11 @@ const MainNavigation = (props: Props) => {
         options={{ headerShown: false }}
         name="Trips"
         component={Trips}
+      />
+      <Main.Screen
+        options={{ headerShown: false }}
+        name="Chart"
+        component={Chart}
       />
       <Main.Screen
         name="Expenses"

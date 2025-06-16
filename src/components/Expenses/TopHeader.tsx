@@ -1,7 +1,6 @@
 import {
   faArrowLeft,
   faArrowRight,
-  faPieChart,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -21,6 +20,8 @@ type HeaderProps = {
   showClose?: boolean;
   showChartButton?: boolean;
   onClickShowChartButton?: () => void;
+  showMapButton?: boolean;
+  onClickMapButton?: () => void;
   onClose?: () => void;
 };
 
@@ -34,6 +35,8 @@ const TopHeader = ({
   onClose,
   onClickShowChartButton,
   showChartButton,
+  onClickMapButton,
+  showMapButton,
 }: HeaderProps) => {
   const { theme, toggleTheme } = useTheme();
   const lang = useSelector((state: RootState) => state.lang.lang);
@@ -66,18 +69,6 @@ const TopHeader = ({
           getFlexDirectionStyle(lang),
         ]}
       >
-        {showChartButton && (
-          <Pressable
-            onPress={onClickShowChartButton}
-            style={[styles.addButton, { borderColor: theme.PRIMARY }]}
-          >
-            <FontAwesomeIcon
-              icon={faPieChart}
-              size={23}
-              color={theme.PRIMARY}
-            />
-          </Pressable>
-        )}
         {showAdd && onAdd && (
           <Pressable
             onPress={onAdd}

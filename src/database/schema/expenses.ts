@@ -5,10 +5,11 @@ export const create_expenses_table = {
             desc TEXT NOT NULL,
             amount INTEGER NOT NULL,
             trip_id INTEGER NOT NULL,
+            date TIMESTAMP DEFAULT (datetime('now')),
             categorie_id INTEGER NOT NULL,
             FOREIGN KEY (trip_id) REFERENCES trips (id),
             FOREIGN KEY (categorie_id) REFERENCES categories (id)
         );
     `,
-  migration: 'migrations_create_expenses_table',
+  migration: "migrations_create_expenses_table",
 };

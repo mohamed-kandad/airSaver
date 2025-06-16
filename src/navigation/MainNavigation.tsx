@@ -9,6 +9,7 @@ import NewExpense from "../screens/NewExpense";
 import NewTrip from "../screens/NewTrip";
 import Settings from "../screens/Settings";
 import Trips from "../screens/Trips";
+import TabNavigation from "./TabNavigation";
 
 type Props = {};
 export type RootStackParamList = {
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   Expenses: { tripId: string };
   Entername: undefined;
   Settings: undefined;
+  Tab: { tripId: string };
 };
 
 const Main = createStackNavigator<RootStackParamList>();
@@ -77,6 +79,11 @@ const MainNavigation = (props: Props) => {
       <Main.Screen
         name="Settings"
         component={Settings}
+        options={{ headerShown: false }}
+      />
+      <Main.Screen
+        name="Tab"
+        component={TabNavigation}
         options={{ headerShown: false }}
       />
     </Main.Navigator>

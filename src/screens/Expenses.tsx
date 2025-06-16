@@ -1,3 +1,5 @@
+import { RootStackParamList } from "@/navigation/MainNavigation";
+import { ITabNavigation } from "@/navigation/TabNavigation";
 import {
   NavigationProp,
   RouteProp,
@@ -8,7 +10,7 @@ import {
 import moment from "moment";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import NotFound from "../components/common/NotFound";
 import ExpenseItem from "../components/Expenses/ExpenseItem";
@@ -19,7 +21,6 @@ import { FONTS } from "../constant";
 import { ExpenseModel } from "../database/models/expense";
 import { TripModel } from "../database/models/trips";
 import { getFlexDirectionStyle } from "../languages/styles";
-import { RootStackParamList } from "../navigation/MainNavigation";
 import { RootState } from "../store";
 import { Expense } from "../types/expense";
 
@@ -29,16 +30,16 @@ type GroupedExpense = {
   total: number;
 };
 
-type ExpensesScreenRouteProp = RouteProp<RootStackParamList, "Expenses">;
+type ExpensesScreenRouteProp = RouteProp<ITabNavigation, "Expenses">;
 type ExpensesScreenNavigationProp = NavigationProp<
   RootStackParamList,
-  "Expenses"
+  "NewExpense"
 >;
 
 const Expenses = () => {
   const { navigate, goBack } = useNavigation<ExpensesScreenNavigationProp>();
   const { t } = useTranslation();
-  const { tripId } = useRoute<ExpensesScreenRouteProp>().params;
+  const { trip_id } = useRoute<ExpensesScreenRouteProp>().params;
 
   const { theme } = useTheme();
   const lang = useSelector((state: RootState) => state.lang.lang);
@@ -70,15 +71,16 @@ const Expenses = () => {
   useFocusEffect(
     useCallback(() => {
       const fetchExpenses = async () => {
-        const expenses = await ExpenseModel.getByTripId(+tripId);
+        const expenses = await ExpenseModel.getByTripId(+trip_id);
+        console.log("🚀 ~ fetchExpenses ~ expenses:", expenses);
         if (expenses) setExpenses(expenses);
 
-        const trip = await TripModel.getById(+tripId);
+        const trip = await TripModel.getById(+trip_id);
         if (trip) setBudget(trip.budget);
       };
 
       fetchExpenses();
-    }, [tripId])
+    }, [trip_id])
   );
 
   const renderDateHeader = (
@@ -104,11 +106,12 @@ const Expenses = () => {
     >
       <TopHeader
         showChartButton
-        onClickShowChartButton={() => navigate("Chart", { tripId })}
-        onBack={() => goBack()}
-        onAdd={() => navigate("NewExpense", { tripId, expenseId: "" })}
+        showMapButton
+        onClickShowChartButton={() => navigate("Chart", { tripId: trip_id })}
+        onBack={() => navigate("Trips")}
+        onAdd={() => navigate("NewExpense", { tripId: trip_id, expenseId: "" })}
       />
-      <View style={styles.content}>
+      <ScrollView style={styles.content}>
         <Header expenses={expenses} budget={budget} />
         {expenses && expenses.length ? (
           transformExpenses(expenses).map((trip) => {
@@ -137,7 +140,7 @@ const Expenses = () => {
             <NotFound text="No Expense Found" />
           </View>
         )}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

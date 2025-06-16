@@ -53,8 +53,7 @@ const TripItem: FC<Trip> = ({ budget, end_date, id, name, start_date }) => {
       <Pressable
         style={styles.tripItemDetails}
         onPress={() =>
-          isTripStart &&
-          navigation.navigate("Expenses", { tripId: id.toString() })
+          isTripStart && navigation.navigate("Tab", { tripId: id.toString() })
         }
       >
         <View style={[styles.header, getFlexDirectionStyle(lang)]}>

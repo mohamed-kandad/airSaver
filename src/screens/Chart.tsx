@@ -11,6 +11,7 @@ import {
 } from "@/helpers/chart";
 import { getJustifyStyle } from "@/languages/styles";
 import { RootStackParamList } from "@/navigation/MainNavigation";
+import { ITabNavigation } from "@/navigation/TabNavigation";
 import { RootState } from "@/store";
 import { Expense } from "@/types/expense";
 import { Trip } from "@/types/trip";
@@ -26,11 +27,11 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 
 type Props = {};
-type ChartScreenRouteProp = RouteProp<RootStackParamList, "Chart">;
+type ChartScreenRouteProp = RouteProp<ITabNavigation, "Chart">;
 type ChartScreenNavigationProp = NavigationProp<RootStackParamList, "Chart">;
 
 const Chart = (props: Props) => {
-  const { tripId } = useRoute<ChartScreenRouteProp>().params;
+  const { trip_id } = useRoute<ChartScreenRouteProp>().params;
   const navigation = useNavigation<ChartScreenNavigationProp>();
   const lang = useSelector((state: RootState) => state.lang.lang);
 
@@ -42,18 +43,18 @@ const Chart = (props: Props) => {
   useFocusEffect(
     useCallback(() => {
       const getTripInfo = async () => {
-        if (tripId) {
-          const trip: Trip | null = await TripModel.getById(+tripId);
+        if (trip_id) {
+          const trip: Trip | null = await TripModel.getById(+trip_id);
           if (trip) setTripInfo(trip);
 
           const expenses: Expense[] | null = await ExpenseModel.getByTripId(
-            +tripId
+            +trip_id
           );
           if (expenses) setTripExpenses(expenses);
         }
       };
       getTripInfo();
-    }, [tripId])
+    }, [trip_id])
   );
 
   const chartSegments = groupExpensesForChart(tripExpenses || []);
@@ -65,7 +66,7 @@ const Chart = (props: Props) => {
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: theme.background }]}
     >
-      <TopHeader onBack={() => navigation.goBack()} />
+      <TopHeader onBack={() => navigation.navigate("Trips")} />
       <View style={styles.content}>
         <CircularSegmentedChart
           trip_budget={tripInfo?.budget || 0}
@@ -91,6 +92,7 @@ const Chart = (props: Props) => {
                 flexDirection: "row",
                 gap: 5,
               }}
+              key={index}
             >
               <Text
                 style={{

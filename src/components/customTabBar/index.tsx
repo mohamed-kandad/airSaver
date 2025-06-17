@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 12,
     margin: 5,
-    borderRadius: 50,
+    borderRadius: 25,
     position: "absolute",
     bottom: Platform.OS === "ios" ? 10 : 15,
     left: 10,

@@ -1,5 +1,6 @@
 import CustomTabBar from "@/components/customTabBar";
 import Chart from "@/screens/Chart";
+import CheckList from "@/screens/CheckList";
 import Expenses from "@/screens/Expenses";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { RouteProp, useRoute } from "@react-navigation/native";
@@ -44,7 +45,7 @@ const TabNavigation = (props: Props) => {
       />
       <Tab.Screen
         name="Checklist"
-        component={() => <Text>dsdsd</Text>}
+        component={CheckList}
         initialParams={{ trip_id: params.tripId }}
       />
     </Tab.Navigator>

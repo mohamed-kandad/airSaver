@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   expenseItemTitle: {
     fontSize: 14,
-    fontFamily: FONTS.LotaGrotesque.Regular,
+    fontFamily: FONTS.LotaGrotesque.SemiBold,
     marginBottom: 5,
   },
   expenseItemDate: {
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   expenseItemAmount: {
     fontSize: 18,
-    fontFamily: FONTS.ClashDisplay.Bold,
+    fontFamily: FONTS.LotaGrotesque.Bold,
   },
   IconContainer: {
     padding: 6,

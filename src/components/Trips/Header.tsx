@@ -1,19 +1,19 @@
-import {StyleSheet, Text, View, Pressable, Image} from 'react-native';
-import React from 'react';
-import {COLORS, FONTS, ICONS} from '../../constant';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from '../../navigation/MainNavigation';
-import {useTheme} from '../providers/ThemeContext';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faGear, faPlus, faSadCry} from '@fortawesome/free-solid-svg-icons';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../store';
-import {getFlexDirectionStyle} from '../../languages/styles';
+import { faGear, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import React from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
+import { COLORS } from "../../constant";
+import { getFlexDirectionStyle } from "../../languages/styles";
+import { RootStackParamList } from "../../navigation/MainNavigation";
+import { RootState } from "../../store";
+import { useTheme } from "../providers/ThemeContext";
 
-type HeaderNavigationProp = NavigationProp<RootStackParamList, 'Trips'>;
+type HeaderNavigationProp = NavigationProp<RootStackParamList, "Trips">;
 
 const Header = () => {
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const lang = useSelector((state: RootState) => state.lang.lang);
   const navigate = useNavigation<HeaderNavigationProp>();
 
@@ -21,8 +21,9 @@ const Header = () => {
     <View style={[styles.headerContainer, getFlexDirectionStyle(lang)]}>
       <View style={styles.iconContainer}>
         <Pressable
-          onPress={() => navigate.navigate('Settings')}
-          style={[styles.iconButton, {borderColor: theme.PRIMARY}]}>
+          onPress={() => navigate.navigate("Settings")}
+          style={[styles.iconButton, { borderColor: theme.PRIMARY }]}
+        >
           <FontAwesomeIcon icon={faGear} size={23} color={theme.PRIMARY} />
         </Pressable>
       </View>
@@ -30,9 +31,10 @@ const Header = () => {
       <Pressable
         style={[
           styles.addTripButton,
-          {borderColor: theme.button_border, backgroundColor: '#ff5a5f'},
+          { borderColor: theme.button_border, backgroundColor: "#ff5a5f" },
         ]}
-        onPress={() => navigate.navigate('AddTrip', {tripId: ''})}>
+        onPress={() => navigate.navigate("AddTrip", { tripId: "" })}
+      >
         <FontAwesomeIcon icon={faPlus} color={theme.button_border} />
       </Pressable>
     </View>
@@ -46,42 +48,40 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: 'white',
-    backgroundColor: 'transparent',
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+    backgroundColor: "transparent",
     borderWidth: 2,
   },
   headerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   headerWelcome: {},
   welcomeText: {
     fontSize: 12,
-    fontFamily: 'Figtree-Regular',
+    fontFamily: "Figtree-Regular",
   },
   nameText: {
     fontSize: 18,
-    fontFamily: 'DelaRegular',
+    fontFamily: "DelaRegular",
     color: COLORS.light.PRIMARY,
   },
 
-  iconContainer: {
-    width: 50,
-  },
+  iconContainer: {},
   alignEnd: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
   iconButton: {
     padding: 8,
     width: 40,
     height: 40,
     borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 1,
   },
 });

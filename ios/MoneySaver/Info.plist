@@ -33,6 +33,13 @@
 			<key>NSAllowsLocalNetworking</key>
 			<true />
 		</dict>
+
+		<!-- ✅ Add these lines -->
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>We need your location to show your position on the map.</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>We use your location even in the background to improve your experience.</string>
+
 		<key>UILaunchStoryboardName</key>
 		<string>SplashScreen</string>
 		<key>UIRequiredDeviceCapabilities</key>

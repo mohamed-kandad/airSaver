@@ -2,10 +2,11 @@ import CustomTabBar from "@/components/customTabBar";
 import Chart from "@/screens/Chart";
 import CheckList from "@/screens/CheckList";
 import Expenses from "@/screens/Expenses";
+import Maps from "@/screens/Maps";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import { RootStackParamList } from "./MainNavigation";
 
 type Props = {};
@@ -30,7 +31,7 @@ const TabNavigation = (props: Props) => {
     >
       <Tab.Screen
         name="Map"
-        component={() => <Text>dsdsd</Text>}
+        component={Maps}
         initialParams={{ trip_id: params.tripId }}
       />
       <Tab.Screen

@@ -19,6 +19,7 @@ type HeaderProps = {
   onAdd?: () => void;
   showClose?: boolean;
   showChartButton?: boolean;
+  isTransparent?: boolean;
   onClickShowChartButton?: () => void;
   showMapButton?: boolean;
   onClickMapButton?: () => void;
@@ -37,6 +38,7 @@ const TopHeader = ({
   showChartButton,
   onClickMapButton,
   showMapButton,
+  isTransparent,
 }: HeaderProps) => {
   const { theme, toggleTheme } = useTheme();
   const lang = useSelector((state: RootState) => state.lang.lang);
@@ -46,7 +48,10 @@ const TopHeader = ({
     <View
       style={[
         styles.container,
-        { backgroundColor: theme.background, ...getFlexDirectionStyle(lang) },
+        {
+          backgroundColor: isTransparent ? "transparent" : theme.background,
+          ...getFlexDirectionStyle(lang),
+        },
       ]}
     >
       <View style={styles.iconContainer}>

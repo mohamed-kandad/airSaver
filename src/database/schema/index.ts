@@ -1,3 +1,4 @@
+import { alter_expenses_add_location } from "./add-location-to-expense";
 import { create_categories_table } from "./categories";
 import { create_checklist_table } from "./checklist";
 import { create_expenses_table } from "./expenses";
@@ -10,4 +11,5 @@ export const migrations = [
   create_categories_table,
   create_expenses_table,
   create_checklist_table,
+  alter_expenses_add_location,
 ];

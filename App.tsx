@@ -10,6 +10,7 @@ import {
   NavigationContainer,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
+import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
 import React, { useEffect } from "react";
 import { I18nextProvider } from "react-i18next";
@@ -92,6 +93,19 @@ const App = (props: Props) => {
       // await BootSplash.hide({fade: true});
       console.log("BootSplash has been hidden successfully");
     });
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        // setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      const currentLocation = await Location.getCurrentPositionAsync({});
+      console.log(currentLocation);
+    })();
   }, []);
 
   if (!fontsLoaded) {

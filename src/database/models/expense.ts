@@ -1,6 +1,6 @@
-import {connectToDatabase} from '../';
-import {runQuery} from '../../helpers/excuteSql';
-import {Expense, IExpense} from '../../types/expense';
+import { connectToDatabase } from "../";
+import { runQuery } from "../../helpers/excuteSql";
+import { Expense, IExpense } from "../../types/expense";
 
 export class ExpenseModel {
   static async create(expense: IExpense): Promise<number> {
@@ -8,12 +8,19 @@ export class ExpenseModel {
       const db = await connectToDatabase();
       const result = await runQuery(
         db,
-        `INSERT INTO expenses (desc, amount, trip_id, categorie_id) VALUES (?, ?, ?, ?);`,
-        [expense.desc, expense.amount, expense.trip_id, expense.categorie_id],
+        `INSERT INTO expenses (desc, amount, trip_id, categorie_id, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?);`,
+        [
+          expense.desc,
+          expense.amount,
+          expense.trip_id,
+          expense.categorie_id,
+          expense.latitude,
+          expense.longitude,
+        ]
       );
       return result.insertId!;
     } catch (error) {
-      console.error('ExpenseModel.create error:', error);
+      console.error("ExpenseModel.create error:", error);
       throw error;
     }
   }
@@ -24,12 +31,12 @@ export class ExpenseModel {
       const result = await runQuery(
         db,
         `SELECT * FROM expenses WHERE id = ?;`,
-        [id],
+        [id]
       );
 
       return result.rows.length > 0 ? result.rows.item(0) : null;
     } catch (error) {
-      console.error('ExpenseModel.getById error:', error);
+      console.error("ExpenseModel.getById error:", error);
       throw error;
     }
   }
@@ -39,7 +46,7 @@ export class ExpenseModel {
       const db = await connectToDatabase();
       const result = await runQuery(
         db,
-        `SELECT * FROM expenses ORDER BY id DESC;`,
+        `SELECT * FROM expenses ORDER BY id DESC;`
       );
 
       const expenses: Expense[] = [];
@@ -49,7 +56,7 @@ export class ExpenseModel {
 
       return expenses;
     } catch (error) {
-      console.error('ExpenseModel.getAll error:', error);
+      console.error("ExpenseModel.getAll error:", error);
       throw error;
     }
   }
@@ -66,12 +73,12 @@ export class ExpenseModel {
           expense.trip_id,
           expense.categorie_id,
           id,
-        ],
+        ]
       );
 
       return result.rowsAffected > 0;
     } catch (error) {
-      console.error('ExpenseModel.update error:', error);
+      console.error("ExpenseModel.update error:", error);
       throw error;
     }
   }
@@ -85,7 +92,7 @@ export class ExpenseModel {
 
       return result.rowsAffected > 0;
     } catch (error) {
-      console.error('ExpenseModel.delete error:', error);
+      console.error("ExpenseModel.delete error:", error);
       throw error;
     }
   }
@@ -96,7 +103,7 @@ export class ExpenseModel {
       const result = await runQuery(
         db,
         `SELECT * FROM expenses WHERE trip_id = ? ORDER BY id DESC;`,
-        [trip_id],
+        [trip_id]
       );
 
       const expenses: Expense[] = [];
@@ -106,7 +113,7 @@ export class ExpenseModel {
 
       return expenses;
     } catch (error) {
-      console.error('ExpenseModel.getByTripId error:', error);
+      console.error("ExpenseModel.getByTripId error:", error);
       throw error;
     }
   }
@@ -117,12 +124,12 @@ export class ExpenseModel {
       const result = await runQuery(
         db,
         `SELECT * FROM expenses WHERE trip_id = ? ORDER BY id DESC LIMIT 1;`,
-        [id],
+        [id]
       );
 
       return result.rows.length > 0 ? result.rows.item(0) : null;
     } catch (error) {
-      console.error('ExpenseModel.getLastExpensesAddByTripId error:', error);
+      console.error("ExpenseModel.getLastExpensesAddByTripId error:", error);
       throw error;
     }
   }

@@ -5,6 +5,8 @@ export interface Expense {
   trip_id: number;
   categorie_id: number;
   date: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface IExpense {
@@ -14,4 +16,6 @@ export interface IExpense {
   trip_id: number;
   categorie_id: number;
   date: string;
+  latitude: number;
+  longitude: number;
 }

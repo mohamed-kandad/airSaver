@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import * as Location from "expo-location";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -20,7 +21,6 @@ import { TripModel } from "../database/models/trips";
 import { calculateTripBudget, categories } from "../helpers/utils";
 import { getTextStyle } from "../languages/styles";
 import { RootStackParamList } from "../navigation/MainNavigation";
-import pushNotificationService from "../services/LocalNotificationService";
 import { RootState } from "../store";
 import { Expense, IExpense } from "../types/expense";
 import { Trip } from "../types/trip";
@@ -43,6 +43,11 @@ const NewExpense = () => {
   const lang = useSelector((state: RootState) => state.lang.lang);
   const [trip, setTrip] = useState<Trip>();
 
+  const [location, setLocation] = useState<Location.LocationObject | null>(
+    null
+  );
+  console.log("🚀 ~ NewExpense ~ location:", location);
+
   const getExpensesData = async () => {
     const tripData = await TripModel.getById(+tripId);
     if (tripData) setTrip(tripData);
@@ -63,6 +68,18 @@ const NewExpense = () => {
     getExpensesData();
   }, [expenseId, tripId]);
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        return;
+      }
+
+      const loc = await Location.getCurrentPositionAsync({});
+      setLocation(loc);
+    })();
+  }, []);
+
   const handleAddExpense = async () => {
     if (!expenseInfo.name && !expenseInfo.amount && !expenseInfo.category) {
       Toast.show({
@@ -80,6 +97,8 @@ const NewExpense = () => {
       trip_id: +tripId,
       desc: expenseInfo.name,
       date: Date().toString(),
+      latitude: location?.coords.latitude || 0,
+      longitude: location?.coords.longitude || 0,
     };
     if (expenseId) {
       await ExpenseModel.update(+expenseId, payload);
@@ -99,7 +118,7 @@ const NewExpense = () => {
 
       const percentageSpent =
         (updatedTripBudget.totalExpenses / (trip?.budget || 1)) * 100;
-      pushNotificationService.triggerBudgetPushNotification(percentageSpent);
+      // pushNotificationService.triggerBudgetPushNotification(percentageSpent);
     }
 
     navigation.goBack();

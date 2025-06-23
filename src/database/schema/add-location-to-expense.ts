@@ -1,7 +1,6 @@
-export const alter_expenses_add_location = {
+export const alter_expenses_add_latitude = {
   sql: `
     ALTER TABLE expenses ADD COLUMN latitude REAL;
-    ALTER TABLE expenses ADD COLUMN longitude REAL;
   `,
-  migration: "migrations_add_location_to_expenses",
+  migration: "migrations_add_latitude_to_expenses",
 };

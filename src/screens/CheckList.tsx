@@ -80,33 +80,31 @@ const CheckList = (props: Props) => {
       />
       <View style={styles.content}>
         <FlatList
-          data={checkList}
+          data={[...checkList]}
           keyExtractor={(item) => item.id.toString()}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 150 }}
           renderItem={({ item, index }) => {
-            if (checkList.length - 1 !== index) {
-              return (
-                <ChecklistItem
-                  key={item.id}
-                  isSlected={item.is_selected}
-                  label={item.name}
-                  onDelete={handleDeleteChecklist}
-                  onSelect={() =>
-                    handleUpdateChecklistSelectd(item.id, !item.is_selected)
-                  }
-                  id={item.id}
-                />
-              );
-            }
             return (
-              <AddCheckList
-                addCheckListItem={handleAddCheckList}
-                checkListItem={checkListItem}
-                setCheckListItem={setCheckListItem}
+              <ChecklistItem
+                key={item.id}
+                isSlected={item.is_selected}
+                label={item.name}
+                onDelete={handleDeleteChecklist}
+                onSelect={() =>
+                  handleUpdateChecklistSelectd(item.id, !item.is_selected)
+                }
+                id={item.id}
               />
             );
           }}
+          ListFooterComponent={
+            <AddCheckList
+              addCheckListItem={handleAddCheckList}
+              checkListItem={checkListItem}
+              setCheckListItem={setCheckListItem}
+            />
+          }
         />
       </View>
     </SafeAreaView>

@@ -3,12 +3,15 @@ name: EAS Android Build
 on:
   push:
     branches:
-      - production # غيّره لفرع آخر مثل release إذا كنت تعمل بنظام فروع
-  workflow_dispatch: # يسمح بتشغيل البناء يدويًا من GitHub
+      - production
+  workflow_dispatch:
 
 jobs:
   eas-android-build:
     runs-on: ubuntu-latest
+
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_BUILD_TOKEN }}
 
     steps:
       - name: 📦 تحميل الكود من GitHub
@@ -22,15 +25,11 @@ jobs:
       - name: 🚀 تثبيت EAS CLI
         run: npm install -g eas-cli
 
-      - name: 🔐 تسجيل الدخول إلى Expo باستخدام التوكن
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_BUILD_TOKEN }}
+      - name: 🔐 تسجيل الدخول إلى Expo
         run: eas whoami || echo "✅ تم تسجيل الدخول"
 
       - name: 📦 تثبيت الحزم
         run: npm ci
 
       - name: 🤖 تنفيذ البناء لأندرويد
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_BUILD_TOKEN }}
         run: eas build --platform android --profile production --non-interactive

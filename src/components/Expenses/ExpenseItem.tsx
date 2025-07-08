@@ -101,17 +101,15 @@ const styles = StyleSheet.create({
   },
   expenseItemTitle: {
     fontSize: 14,
-    fontFamily: FONTS.LotaGrotesque.Regular,
-    fontWeight: "700",
+    fontFamily: FONTS.LotaGrotesque.SemiBold,
     marginBottom: 5,
   },
   expenseItemDate: {
     fontSize: 10,
   },
   expenseItemAmount: {
-    fontWeight: "600",
     fontSize: 18,
-    fontFamily: FONTS.ClashDisplay.Bold,
+    fontFamily: FONTS.LotaGrotesque.Bold,
   },
   IconContainer: {
     padding: 6,

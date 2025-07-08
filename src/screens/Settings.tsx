@@ -1,37 +1,37 @@
-import {SafeAreaView, StyleSheet, Text, View, Switch} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import TopHeader from '../components/Expenses/TopHeader';
-import {useTheme} from '../components/providers/ThemeContext';
-import {useNavigation} from '@react-navigation/native';
-import {AppDispatch, RootState} from '../store';
-import {useDispatch, useSelector} from 'react-redux';
-import i18next from 'i18next';
-import {setLang} from '../store/langSlice';
-import {FONTS} from '../constant';
-import {getFlexDirectionStyle} from '../languages/styles';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faGlobe, faMoon, faSun} from '@fortawesome/free-solid-svg-icons';
-import {useTranslation} from 'react-i18next';
+import { faGlobe, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { useNavigation } from "@react-navigation/native";
+import i18next from "i18next";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { SafeAreaView, StyleSheet, Switch, Text, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import TopHeader from "../components/Expenses/TopHeader";
+import { useTheme } from "../components/providers/ThemeContext";
+import { FONTS } from "../constant";
+import { getFlexDirectionStyle } from "../languages/styles";
+import { AppDispatch, RootState } from "../store";
+import { setLang } from "../store/langSlice";
 
 type Props = {};
 
 const Settings = (props: Props) => {
-  const {theme, toggleTheme, isDark} = useTheme();
+  const { theme, toggleTheme, isDark } = useTheme();
   const navigation = useNavigation();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const lang = useSelector((state: RootState) => state.lang.lang);
   const dispatch: AppDispatch = useDispatch();
 
   const [isDarkMode, setIsDarkMode] = useState(isDark);
-  const [isArabic, setIsArabic] = useState(i18next.language === 'ar');
+  const [isArabic, setIsArabic] = useState(i18next.language === "ar");
 
   useEffect(() => {
     setIsDarkMode(isDark);
   }, [isDark]);
 
   useEffect(() => {
-    setIsArabic(i18next.language === 'ar');
+    setIsArabic(i18next.language === "ar");
   }, [i18next.language]);
 
   const onToggleDarkMode = (value: boolean) => {
@@ -42,14 +42,15 @@ const Settings = (props: Props) => {
 
   const onToggleLanguage = (value: boolean) => {
     setIsArabic(value);
-    const newLang = value ? 'ar' : 'en';
+    const newLang = value ? "ar" : "en";
     i18next.changeLanguage(newLang);
     dispatch(setLang(newLang));
   };
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, {backgroundColor: theme.background}]}>
+      style={[styles.safeArea, { backgroundColor: theme.background }]}
+    >
       <TopHeader showBack onBack={() => navigation.goBack()} />
 
       <View style={[styles.container]}>
@@ -63,7 +64,8 @@ const Settings = (props: Props) => {
               paddingHorizontal: 15,
             },
             getFlexDirectionStyle(lang),
-          ]}>
+          ]}
+        >
           <View style={[styles.row, getFlexDirectionStyle(lang)]}>
             <FontAwesomeIcon
               icon={!isDarkMode ? faSun : faMoon}
@@ -73,16 +75,17 @@ const Settings = (props: Props) => {
             <Text
               style={[
                 styles.label,
-                {color: theme.PRIMARY, marginHorizontal: 10},
-              ]}>
-              {t('settings.dark.mode')}
+                { color: theme.PRIMARY, marginHorizontal: 10 },
+              ]}
+            >
+              {t("settings.dark.mode")}
             </Text>
           </View>
           <Switch
             value={isDarkMode}
             onValueChange={onToggleDarkMode}
-            trackColor={{false: 'red', true: theme.orange}}
-            thumbColor={isDarkMode ? 'black' : '#f4f3f4'}
+            trackColor={{ false: "red", true: theme.orange }}
+            thumbColor={isDarkMode ? "black" : "#f4f3f4"}
           />
         </View>
 
@@ -98,22 +101,24 @@ const Settings = (props: Props) => {
               paddingHorizontal: 15,
               ...getFlexDirectionStyle(lang),
             },
-          ]}>
+          ]}
+        >
           <View style={[styles.row, getFlexDirectionStyle(lang)]}>
             <FontAwesomeIcon icon={faGlobe} size={23} color={theme.PRIMARY} />
             <Text
               style={[
                 styles.label,
-                {color: theme.PRIMARY, marginHorizontal: 10},
-              ]}>
-              {t('settings.arabic.language')}
+                { color: theme.PRIMARY, marginHorizontal: 10 },
+              ]}
+            >
+              {t("settings.arabic.language")}
             </Text>
           </View>
           <Switch
             value={isArabic}
             onValueChange={onToggleLanguage}
-            trackColor={{false: 'red', true: theme.orange}}
-            thumbColor={isArabic ? 'black' : '#f4f3f4'}
+            trackColor={{ false: "red", true: theme.orange }}
+            thumbColor={isArabic ? "black" : "#f4f3f4"}
           />
         </View>
       </View>
@@ -131,9 +136,9 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderRadius: 20,
   },
   label: {

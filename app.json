@@ -10,7 +10,15 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mohamedkanded.MoneySaver"
+      "bundleIdentifier": "com.mohamedkanded.MoneySaver",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBVi_MFohfw2iEyH8_zVAWHB8poXI7PTIc"
+      },
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs location access to provide location-based features.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs location access to provide location-based features even when running in the background.",
+        "NSLocationAlwaysUsageDescription": "This app needs location access to provide location-based features."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -20,6 +28,7 @@
       "edgeToEdgeEnabled": true,
       "package": "com.mohamedkanded.MoneySaver"
     },
+
     "plugins": [
       [
         "expo-splash-screen",
@@ -30,7 +39,22 @@
           "backgroundColor": "#ffffff"
         }
       ],
+       [
+    "react-native-maps",
+    {
+      "ios": {
+        "config": {
+          "googleMapsApiKey": "AIzaSyBVi_MFohfw2iEyH8_zVAWHB8poXI7PTIc"
+        }
+      }
+    }
+  ],
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "19831e79-a69c-417e-a56c-572d65556cec"
+      }
+    }
   }
 }

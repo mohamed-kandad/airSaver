@@ -19,6 +19,7 @@ interface InputProps extends TextInputProps {
   touched?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  ref?: any;
 }
 
 const Input: React.FC<InputProps> = ({

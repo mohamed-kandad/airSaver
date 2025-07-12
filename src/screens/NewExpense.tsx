@@ -1,13 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import Toast from "react-native-toast-message";
@@ -37,16 +41,19 @@ const NewExpense = () => {
     category: "",
     date: Date().toString(),
   });
+  const [focusedInput, setFocusedInput] = useState<number>(-1);
   const { t } = useTranslation();
-
   const { theme } = useTheme();
   const lang = useSelector((state: RootState) => state.lang.lang);
   const [trip, setTrip] = useState<Trip>();
 
+  // Create refs for input fields
+  const amountInputRef = useRef<any>(null);
+  const descriptionInputRef = useRef<any>(null);
+
   const getExpensesData = async () => {
     const tripData = await TripModel.getById(+tripId);
     if (tripData) setTrip(tripData);
-
     if (expenseId) {
       const expense: Expense | null = await ExpenseModel.getById(+expenseId);
       if (expense)
@@ -59,6 +66,7 @@ const NewExpense = () => {
         });
     }
   };
+
   useEffect(() => {
     getExpensesData();
   }, [expenseId, tripId]);
@@ -81,6 +89,7 @@ const NewExpense = () => {
       desc: expenseInfo.name,
       date: Date().toString(),
     };
+
     if (expenseId) {
       await ExpenseModel.update(+expenseId, payload);
     } else {
@@ -90,102 +99,156 @@ const NewExpense = () => {
     const updatedExpenses: Expense[] | null = await ExpenseModel.getByTripId(
       +tripId
     );
-
     if (updatedExpenses) {
       const updatedTripBudget = calculateTripBudget(
         updatedExpenses,
         trip?.budget || 0
       );
-
       const percentageSpent =
         (updatedTripBudget.totalExpenses / (trip?.budget || 1)) * 100;
       pushNotificationService.triggerBudgetPushNotification(percentageSpent);
     }
-
     navigation.goBack();
   };
+
+  // Keyboard handling functions
+  const dismissKeyboard = useCallback(() => {
+    Keyboard.dismiss();
+    setFocusedInput(-1);
+  }, []);
+
+  const handleInputFocus = useCallback((inputIndex: number) => {
+    setFocusedInput(inputIndex);
+  }, []);
+
+  const handleInputBlur = useCallback(() => {
+    setFocusedInput(-1);
+  }, []);
+
+  const handleAmountSubmit = useCallback(() => {
+    setFocusedInput(1);
+    descriptionInputRef.current?.focus();
+  }, []);
+
+  const handleDescriptionSubmit = useCallback(() => {
+    setFocusedInput(-1);
+    Keyboard.dismiss();
+  }, []);
+
+  const handleAmountChange = useCallback((text: string) => {
+    if (/^\d*$/.test(text)) {
+      setExpenseInfo((prev) => ({ ...prev, amount: +text }));
+    }
+  }, []);
+
+  const handleNameChange = useCallback((text: string) => {
+    setExpenseInfo((prev) => ({ ...prev, name: text }));
+  }, []);
 
   return (
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: theme.background }]}
     >
       <TopHeader showBack onBack={() => navigation.goBack()} />
-      <View
-        style={[styles.formContainer, { backgroundColor: theme.background }]}
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoidingView}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
       >
-        <View>
-          <Text
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+          <View
             style={[
-              styles.heading,
-              getTextStyle(lang),
-              { color: theme.PRIMARY },
+              styles.formContainer,
+              { backgroundColor: theme.background },
             ]}
           >
-            {t("expenses.new.heading")}
-          </Text>
+            <View>
+              <Text
+                style={[
+                  styles.heading,
+                  getTextStyle(lang),
+                  { color: theme.PRIMARY },
+                ]}
+              >
+                {t("expenses.new.heading")}
+              </Text>
 
-          <FlatList
-            data={categories}
-            renderItem={({ item }) => {
-              const isSelected = item.id === expenseInfo.category;
-              return (
-                <Pressable
+              <FlatList
+                data={categories}
+                renderItem={({ item }) => {
+                  const isSelected = item.id === expenseInfo.category;
+                  return (
+                    <Pressable
+                      style={[
+                        styles.categoryButton,
+                        isSelected && {
+                          backgroundColor: theme.orange,
+                          borderWidth: 2,
+                          borderColor: theme.PRIMARY,
+                        },
+                      ]}
+                      onPress={() =>
+                        setExpenseInfo({ ...expenseInfo, category: item.id })
+                      }
+                    >
+                      <FontAwesomeIcon
+                        icon={item.icon}
+                        size={20}
+                        color={isSelected ? "white" : theme.TEXT1}
+                      />
+                    </Pressable>
+                  );
+                }}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.categoryList}
+              />
+
+              <View style={styles.inputGroup}>
+                <Input
+                  ref={amountInputRef}
+                  placeholder="Enter budget"
+                  value={expenseInfo.amount.toString()}
+                  keyboardType="numeric"
+                  onChangeText={handleAmountChange}
+                  onFocus={() => handleInputFocus(0)}
+                  onBlur={handleInputBlur}
+                  onSubmitEditing={handleAmountSubmit}
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                  style={[focusedInput === 0 && styles.inputFocused]}
+                />
+                <Input
+                  ref={descriptionInputRef}
+                  placeholder={t("expenses.new.desc")}
+                  onChangeText={handleNameChange}
+                  value={expenseInfo.name}
+                  numberOfLines={10}
                   style={[
-                    styles.categoryButton,
-                    isSelected && {
-                      backgroundColor: theme.orange,
-                      borderWidth: 2,
-                      borderColor: theme.PRIMARY,
-                    },
+                    styles.descriptionInput,
+                    focusedInput === 1 && styles.inputFocused,
                   ]}
-                  onPress={() =>
-                    setExpenseInfo({ ...expenseInfo, category: item.id })
-                  }
-                >
-                  <FontAwesomeIcon
-                    icon={item.icon}
-                    size={20}
-                    color={isSelected ? "white" : theme.TEXT1}
-                  />
-                </Pressable>
-              );
-            }}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.categoryList}
-          />
+                  textAlignVertical="top"
+                  multiline={true}
+                  onFocus={() => handleInputFocus(1)}
+                  onBlur={handleInputBlur}
+                  onSubmitEditing={handleDescriptionSubmit}
+                  returnKeyType="done"
+                />
+              </View>
+            </View>
 
-          <View style={styles.inputGroup}>
-            <Input
-              placeholder="Enter budget"
-              value={expenseInfo.amount.toString()}
-              keyboardType="numeric"
-              onChangeText={(text) => {
-                if (/^\d*$/.test(text))
-                  setExpenseInfo({ ...expenseInfo, amount: +text });
-              }}
-            />
-            <Input
-              placeholder={t("expenses.new.desc")}
-              onChangeText={(text) =>
-                setExpenseInfo({ ...expenseInfo, name: text })
+            <Button
+              title={
+                expenseId
+                  ? t("expenses.update.button")
+                  : t("expenses.new.button")
               }
-              value={expenseInfo.name}
-              numberOfLines={10}
-              style={styles.descriptionInput}
-              textAlignVertical="top"
-              multiline={true}
+              onPress={handleAddExpense}
             />
           </View>
-        </View>
-
-        <Button
-          title={
-            expenseId ? t("expenses.update.button") : t("expenses.new.button")
-          }
-          onPress={handleAddExpense}
-        />
-      </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -194,6 +257,9 @@ export default NewExpense;
 
 const styles = StyleSheet.create({
   safeArea: {
+    flex: 1,
+  },
+  keyboardAvoidingView: {
     flex: 1,
   },
   formContainer: {
@@ -226,6 +292,10 @@ const styles = StyleSheet.create({
   inputGroup: {
     marginTop: 40,
     gap: 20,
+  },
+  inputFocused: {
+    borderWidth: 2,
+    borderColor: "#007AFF",
   },
   descriptionInput: {
     height: 200,

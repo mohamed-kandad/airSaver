@@ -1,9 +1,3 @@
-import { ThemeProvider, useTheme } from "@/components/providers/ThemeContext";
-import { initializeDataBase } from "@/database";
-import i18next from "@/languages";
-import Navigation from "@/navigation";
-import store, { persistor } from "@/store";
-import { toastConfig } from "@/toastConfig";
 import {
   DarkTheme,
   DefaultTheme,
@@ -12,40 +6,34 @@ import {
 import { useFonts } from "expo-font";
 import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
-import React, { useEffect } from "react";
+import * as SplashScreen from "expo-splash-screen"; // ✅ import splash screen
+import React, { useEffect, useState } from "react";
 import { I18nextProvider } from "react-i18next";
-import {
-  Linking,
-  PermissionsAndroid,
-  Platform,
-  StyleSheet,
-} from "react-native";
 import Toast from "react-native-toast-message";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
-type Props = {};
+import { ThemeProvider, useTheme } from "@/components/providers/ThemeContext";
+import { initializeDataBase } from "@/database";
+import i18next from "@/languages";
+import Navigation from "@/navigation";
+import store, { persistor } from "@/store";
+import { toastConfig } from "@/toastConfig";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
+// ✅ Prevent splash auto-hide before anything else
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
-const App = (props: Props) => {
+const App = () => {
   const { isDark } = useTheme();
+  const [appIsReady, setAppIsReady] = useState(false);
+
   const [fontsLoaded] = useFonts({
-    // ClashDisplay fonts
     "ClashDisplay-Bold": require("@/assets/fonts/ClashDisplay-Bold.otf"),
     "ClashDisplay-Extralight": require("@/assets/fonts/ClashDisplay-Extralight.otf"),
     "ClashDisplay-Light": require("@/assets/fonts/ClashDisplay-Light.otf"),
     "ClashDisplay-Medium": require("@/assets/fonts/ClashDisplay-Medium.otf"),
     "ClashDisplay-Regular": require("@/assets/fonts/ClashDisplay-Regular.otf"),
     "ClashDisplay-Semibold": require("@/assets/fonts/ClashDisplay-Semibold.otf"),
-
-    // LotaGrotesque fonts
     "LotaGrotesque-Bold": require("@/assets/fonts/LotaGrotesque-Bold.otf"),
     "LotaGrotesque-ExtraLight": require("@/assets/fonts/LotaGrotesque-ExtraLight.otf"),
     "LotaGrotesque-ExtraLightItalic": require("@/assets/fonts/LotaGrotesque-ExtraLightItalic.otf"),
@@ -53,65 +41,37 @@ const App = (props: Props) => {
     "LotaGrotesque-SemiBold": require("@/assets/fonts/LotaGrotesque-SemiBold.otf"),
   });
 
-  const requestNotificationPermission = async () => {
-    if (Platform.OS === "android") {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-      );
-      console.log("🚀 ~ requestNotificationPermission ~ granted:", granted);
-
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("Notification permission granted");
-      } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-        console.log("Notification permission denied");
-        Linking.openSettings();
-      }
-    }
-  };
-
-  const getPermissions = async () => {
-    console.log("sds");
-    const { status } = await Notifications.requestPermissionsAsync();
-    console.log("🚀 ~ getPermissions ~ status:", status);
-    if (status !== "granted") {
-      alert("Permission for notifications not granted");
-    }
-  };
-
   useEffect(() => {
-    (async () => {
-      await initializeDataBase();
-    })();
-    const init = async () => {
-      // …do multiple sync or async tasks
+    const prepareApp = async () => {
+      try {
+        await initializeDataBase();
+        await Notifications.requestPermissionsAsync();
+        const locationPermission =
+          await Location.requestForegroundPermissionsAsync();
+        if (locationPermission.status !== "granted") return;
+
+        await Location.getCurrentPositionAsync({});
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
     };
-    getPermissions();
 
-    // requestNotificationPermission();
-
-    init().finally(async () => {
-      // await BootSplash.hide({fade: true});
-      console.log("BootSplash has been hidden successfully");
-    });
+    prepareApp();
   }, []);
 
+  // ✅ Hide splash screen when ready
   useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        // setErrorMsg('Permission to access location was denied');
-        return;
-      }
+    if (appIsReady && fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [appIsReady, fontsLoaded]);
 
-      const currentLocation = await Location.getCurrentPositionAsync({});
-      console.log(currentLocation);
-    })();
-  }, []);
-
-  if (!fontsLoaded) {
-    // return <AppLoading />;
-    return null;
+  if (!fontsLoaded || !appIsReady) {
+    return null; // Splash screen stays visible
   }
+
   return (
     <ThemeProvider>
       <Provider store={store}>
@@ -129,5 +89,3 @@ const App = (props: Props) => {
 };
 
 export default App;
-
-const styles = StyleSheet.create({});

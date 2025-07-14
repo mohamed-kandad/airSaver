@@ -9,12 +9,19 @@ import {
 import { FONTS } from "../../constant";
 import { useTheme } from "../providers/ThemeContext";
 
+export enum ButtonTypes {
+  PRIMARY = "PRIMARY",
+  SECONDARY = "SECONDARY",
+  TERTIARY = "TERTIARY",
+}
+
 interface ButtonProps {
   title: string;
   onPress: () => void;
   style?: ViewStyle;
   textStyle?: TextStyle;
   disabled?: boolean;
+  type?: ButtonTypes;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -23,6 +30,7 @@ const Button: React.FC<ButtonProps> = ({
   style,
   textStyle,
   disabled = false,
+  type = ButtonTypes.PRIMARY,
 }) => {
   const { theme, isDark, toggleTheme } = useTheme();
 
@@ -32,7 +40,11 @@ const Button: React.FC<ButtonProps> = ({
         styles.button,
         disabled && styles.disabledButton,
         {
-          backgroundColor: theme.PRIMARY,
+          backgroundColor:
+            type === ButtonTypes.PRIMARY ? theme.PRIMARY : theme.orange,
+          borderWidth: 2,
+          borderColor:
+            type === ButtonTypes.PRIMARY ? theme.PRIMARY : theme.button_border,
         },
         style,
       ]}
@@ -62,6 +74,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 18,
+    fontWeight: "600",
+    fontFamily: FONTS.ClashDisplay.Medium,
   },
 });
 

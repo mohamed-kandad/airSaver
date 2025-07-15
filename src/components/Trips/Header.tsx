@@ -1,8 +1,9 @@
 import { faGear, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { BlurView } from "expo-blur"; // ✅ updated import
+import React, { useEffect, useState } from "react";
+import { Animated, Pressable, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import { COLORS } from "../../constant";
 import { getFlexDirectionStyle } from "../../languages/styles";
@@ -12,13 +13,49 @@ import { useTheme } from "../providers/ThemeContext";
 
 type HeaderNavigationProp = NavigationProp<RootStackParamList, "Trips">;
 
-const Header = () => {
+type HeaderProps = {
+  scrollY?: Animated.Value;
+  isTransparent?: boolean;
+};
+
+const Header = ({ scrollY, isTransparent = false }: HeaderProps) => {
   const { theme } = useTheme();
   const lang = useSelector((state: RootState) => state.lang.lang);
   const navigate = useNavigation<HeaderNavigationProp>();
+  const [isBlurred, setIsBlurred] = useState(false);
+
+  useEffect(() => {
+    if (scrollY) {
+      const listener = scrollY.addListener(({ value }) => {
+        setIsBlurred(value > 10);
+      });
+      return () => {
+        scrollY.removeListener(listener);
+      };
+    }
+  }, [scrollY]);
 
   return (
-    <View style={[styles.headerContainer, getFlexDirectionStyle(lang)]}>
+    <View
+      style={[
+        styles.headerContainer,
+        getFlexDirectionStyle(lang),
+        { backgroundColor: "transparent" },
+      ]}
+    >
+      {(isBlurred || isTransparent) && (
+        <BlurView intensity={70} tint="light" style={StyleSheet.absoluteFill} />
+      )}
+
+      {!isBlurred && !isTransparent && (
+        <View
+          style={[
+            StyleSheet.absoluteFillObject,
+            { backgroundColor: theme.background },
+          ]}
+        />
+      )}
+
       <View style={styles.iconContainer}>
         <Pressable
           onPress={() => navigate.navigate("Settings")}
@@ -59,6 +96,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    paddingTop: 45,
+    position: "absolute",
+
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+    elevation: 5,
   },
   headerWelcome: {},
   welcomeText: {
@@ -70,7 +117,6 @@ const styles = StyleSheet.create({
     fontFamily: "DelaRegular",
     color: COLORS.light.PRIMARY,
   },
-
   iconContainer: {},
   alignEnd: {
     alignItems: "flex-end",

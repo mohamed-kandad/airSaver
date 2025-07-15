@@ -1,3 +1,4 @@
+import { categories } from "@/helpers/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   NavigationProp,
@@ -11,7 +12,6 @@ import { StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { FONTS } from "../../constant";
 import { ExpenseModel } from "../../database/models/expense";
-import { categories } from "../../helpers/utils";
 import { getFlexDirectionStyle, getTextStyle } from "../../languages/styles";
 import { RootStackParamList } from "../../navigation/MainNavigation";
 import { AppDispatch, RootState } from "../../store";
@@ -28,6 +28,7 @@ type ExpenseItemProps = NavigationProp<RootStackParamList, "Expenses">;
 type ExpenseRouteItemProps = RouteProp<RootStackParamList, "Expenses">;
 
 const ExpenseItem: FC<Props> = ({ name, amount, id, category, date }) => {
+  console.log("🚀 ~ category:", category);
   const navigation = useNavigation<ExpenseItemProps>();
   const { tripId } = useRoute<ExpenseRouteItemProps>().params;
   const dispatch: AppDispatch = useDispatch();
@@ -35,7 +36,9 @@ const ExpenseItem: FC<Props> = ({ name, amount, id, category, date }) => {
 
   const lang = useSelector((state: RootState) => state.lang.lang);
 
-  const Icon = categories.filter((cat) => cat.id === category)[0].icon;
+  const Icon = categories.filter(
+    (cat) => cat.id === (category === "0" ? "1" : category)
+  )[0].icon;
 
   const handleDeleteTrip = async () => {
     await ExpenseModel.delete(+id);

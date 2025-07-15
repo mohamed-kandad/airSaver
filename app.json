@@ -8,6 +8,9 @@
     "scheme": "moneysaver",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "black"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mohamedkanded.MoneySaver",
@@ -28,27 +31,17 @@
       "edgeToEdgeEnabled": true,
       "package": "com.mohamedkanded.MoneySaver"
     },
-
     "plugins": [
       [
-        "expo-splash-screen",
+        "react-native-maps",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "ios": {
+            "config": {
+              "googleMapsApiKey": "AIzaSyBVi_MFohfw2iEyH8_zVAWHB8poXI7PTIc"
+            }
+          }
         }
       ],
-       [
-    "react-native-maps",
-    {
-      "ios": {
-        "config": {
-          "googleMapsApiKey": "AIzaSyBVi_MFohfw2iEyH8_zVAWHB8poXI7PTIc"
-        }
-      }
-    }
-  ],
       "expo-font"
     ],
     "extra": {

@@ -1,7 +1,7 @@
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, SafeAreaView, StyleSheet, View } from "react-native";
+import { Animated, StyleSheet, View } from "react-native";
 import Header from "../components/Trips/Header";
 import TripItem from "../components/Trips/TripItem";
 import NotFound from "../components/common/NotFound";
@@ -13,11 +13,11 @@ const Trips = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const [trips, setTrips] = useState<Trip[]>([]);
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-
       const fetchTrips = async () => {
         try {
           const trips = await TripModel.getAll();
@@ -25,39 +25,40 @@ const Trips = () => {
             setTrips(trips);
           }
         } catch (e) {
-          // handle error if needed
           console.error(e);
         }
       };
-
       fetchTrips();
-
       return () => {
-        isActive = false; // cleanup to prevent setting state after unmount
+        isActive = false;
       };
     }, [])
   );
 
   return (
-    <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: theme.background }]}
-    >
-      <View style={styles.container}>
-        <Header />
-        <View style={styles.listWrapper}>
-          <FlatList
-            data={trips}
-            renderItem={({ item }) => <TripItem {...item} />}
-            contentContainerStyle={styles.flatListContent}
-            ListEmptyComponent={() => (
-              <View style={styles.emptyContainer}>
-                <NotFound text={t("trips.no.trips.found")} />
-              </View>
-            )}
-          />
-        </View>
-      </View>
-    </SafeAreaView>
+    <View style={[styles.safeArea, { backgroundColor: theme.background }]}>
+      {/* ✅ Header is fixed and outside FlatList */}
+      <Header scrollY={scrollY} />
+
+      {/* ✅ Scrollable content passes under Header */}
+      <Animated.FlatList
+        showsVerticalScrollIndicator={false}
+        data={trips}
+        renderItem={({ item }) => <TripItem {...item} />}
+        contentContainerStyle={styles.flatListContent}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false }
+        )}
+        scrollEventThrottle={16}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyContainer}>
+            <NotFound text={t("trips.no.trips.found")} />
+          </View>
+        )}
+        style={styles.list}
+      />
+    </View>
   );
 };
 
@@ -66,25 +67,21 @@ export default Trips;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    paddingTop: 30,
-  },
-  container: {
-    flex: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 24,
-  },
-  listWrapper: {
-    marginTop: 35,
-    flex: 1,
-    flexDirection: "column",
-    gap: 20,
+    paddingTop: 0,
   },
   flatListContent: {
     gap: 25,
+    paddingBottom: 20,
+  },
+  list: {
+    flex: 1,
+    paddingTop: 100, // match Header height
+    paddingHorizontal: 24,
   },
   emptyContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    minHeight: 400,
   },
 });

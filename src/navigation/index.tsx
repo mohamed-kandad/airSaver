@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import i18next from "i18next";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import AuthNavigation from "./AuthNavigation";

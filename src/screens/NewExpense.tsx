@@ -1,16 +1,21 @@
+import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import * as ImagePicker from "expo-image-picker";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FlatList,
+  Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -24,7 +29,6 @@ import { TripModel } from "../database/models/trips";
 import { calculateTripBudget, categories } from "../helpers/utils";
 import { getTextStyle } from "../languages/styles";
 import { RootStackParamList } from "../navigation/MainNavigation";
-import pushNotificationService from "../services/LocalNotificationService";
 import { RootState } from "../store";
 import { Expense, IExpense } from "../types/expense";
 import { Trip } from "../types/trip";
@@ -40,6 +44,7 @@ const NewExpense = () => {
     amount: 0,
     category: "",
     date: Date().toString(),
+    images: [] as string[],
   });
   const [focusedInput, setFocusedInput] = useState<number>(-1);
   const { t } = useTranslation();
@@ -47,7 +52,6 @@ const NewExpense = () => {
   const lang = useSelector((state: RootState) => state.lang.lang);
   const [trip, setTrip] = useState<Trip>();
 
-  // Create refs for input fields
   const amountInputRef = useRef<any>(null);
   const descriptionInputRef = useRef<any>(null);
 
@@ -57,19 +61,36 @@ const NewExpense = () => {
     if (expenseId) {
       const expense: Expense | null = await ExpenseModel.getById(+expenseId);
       if (expense)
-        setExpenseInfo({
+        setExpenseInfo((prev) => ({
+          ...prev,
           id: expense.id.toString(),
           name: expense.desc,
           amount: expense.amount,
           category: expense.categorie_id.toString(),
           date: expense.date,
-        });
+          images: expense.images || [],
+        }));
     }
   };
 
   useEffect(() => {
     getExpensesData();
   }, [expenseId, tripId]);
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      quality: 0.7,
+    });
+    if (!result.canceled) {
+      const uris = result.assets.map((asset) => asset.uri);
+      setExpenseInfo((prev) => ({
+        ...prev,
+        images: [...prev.images, ...uris],
+      }));
+    }
+  };
 
   const handleAddExpense = async () => {
     if (!expenseInfo.name && !expenseInfo.amount && !expenseInfo.category) {
@@ -88,6 +109,7 @@ const NewExpense = () => {
       trip_id: +tripId,
       desc: expenseInfo.name,
       date: Date().toString(),
+      images: expenseInfo.images,
     };
 
     if (expenseId) {
@@ -106,12 +128,11 @@ const NewExpense = () => {
       );
       const percentageSpent =
         (updatedTripBudget.totalExpenses / (trip?.budget || 1)) * 100;
-      pushNotificationService.triggerBudgetPushNotification(percentageSpent);
+      // pushNotificationService.triggerBudgetPushNotification(percentageSpent);
     }
     navigation.goBack();
   };
 
-  // Keyboard handling functions
   const dismissKeyboard = useCallback(() => {
     Keyboard.dismiss();
     setFocusedInput(-1);
@@ -150,105 +171,141 @@ const NewExpense = () => {
       style={[styles.safeArea, { backgroundColor: theme.background }]}
     >
       <TopHeader showBack onBack={() => navigation.goBack()} />
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoidingView}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
-      >
-        <TouchableWithoutFeedback onPress={dismissKeyboard}>
-          <View
-            style={[
-              styles.formContainer,
-              { backgroundColor: theme.background },
-            ]}
-          >
-            <View>
-              <Text
-                style={[
-                  styles.heading,
-                  getTextStyle(lang),
-                  { color: theme.PRIMARY },
-                ]}
-              >
-                {t("expenses.new.heading")}
-              </Text>
-
-              <FlatList
-                data={categories}
-                renderItem={({ item }) => {
-                  const isSelected = item.id === expenseInfo.category;
-                  return (
-                    <Pressable
-                      style={[
-                        styles.categoryButton,
-                        isSelected && {
-                          backgroundColor: theme.orange,
-                          borderWidth: 2,
-                          borderColor: theme.PRIMARY,
-                        },
-                      ]}
-                      onPress={() =>
-                        setExpenseInfo({ ...expenseInfo, category: item.id })
-                      }
-                    >
-                      <FontAwesomeIcon
-                        icon={item.icon}
-                        size={20}
-                        color={isSelected ? "white" : theme.TEXT1}
-                      />
-                    </Pressable>
-                  );
-                }}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.categoryList}
-              />
-
-              <View style={styles.inputGroup}>
-                <Input
-                  ref={amountInputRef}
-                  placeholder="Enter budget"
-                  value={expenseInfo.amount.toString()}
-                  keyboardType="numeric"
-                  onChangeText={handleAmountChange}
-                  onFocus={() => handleInputFocus(0)}
-                  onBlur={handleInputBlur}
-                  onSubmitEditing={handleAmountSubmit}
-                  returnKeyType="next"
-                  blurOnSubmit={false}
-                  style={[focusedInput === 0 && styles.inputFocused]}
-                />
-                <Input
-                  ref={descriptionInputRef}
-                  placeholder={t("expenses.new.desc")}
-                  onChangeText={handleNameChange}
-                  value={expenseInfo.name}
-                  numberOfLines={10}
+      <ScrollView>
+        <KeyboardAvoidingView
+          style={styles.keyboardAvoidingView}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+        >
+          <TouchableWithoutFeedback onPress={dismissKeyboard}>
+            <View
+              style={[
+                styles.formContainer,
+                { backgroundColor: theme.background },
+              ]}
+            >
+              <View>
+                <Text
                   style={[
-                    styles.descriptionInput,
-                    focusedInput === 1 && styles.inputFocused,
+                    styles.heading,
+                    getTextStyle(lang),
+                    { color: theme.PRIMARY },
                   ]}
-                  textAlignVertical="top"
-                  multiline={true}
-                  onFocus={() => handleInputFocus(1)}
-                  onBlur={handleInputBlur}
-                  onSubmitEditing={handleDescriptionSubmit}
-                  returnKeyType="done"
-                />
-              </View>
-            </View>
+                >
+                  {t("expenses.new.heading")}
+                </Text>
 
-            <Button
-              title={
-                expenseId
-                  ? t("expenses.update.button")
-                  : t("expenses.new.button")
-              }
-              onPress={handleAddExpense}
-            />
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+                {/* Categories */}
+                <FlatList
+                  data={categories}
+                  renderItem={({ item }) => {
+                    const isSelected = item.id === expenseInfo.category;
+                    return (
+                      <Pressable
+                        style={[
+                          styles.categoryButton,
+                          isSelected && {
+                            backgroundColor: theme.orange,
+                            borderWidth: 2,
+                            borderColor: theme.PRIMARY,
+                          },
+                        ]}
+                        onPress={() =>
+                          setExpenseInfo({ ...expenseInfo, category: item.id })
+                        }
+                      >
+                        <FontAwesomeIcon
+                          icon={item.icon}
+                          size={20}
+                          color={isSelected ? "white" : theme.TEXT1}
+                        />
+                      </Pressable>
+                    );
+                  }}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.categoryList}
+                />
+
+                {/* Inputs */}
+                <View style={styles.inputGroup}>
+                  <Input
+                    ref={amountInputRef}
+                    placeholder="Enter budget"
+                    value={expenseInfo.amount.toString()}
+                    keyboardType="numeric"
+                    onChangeText={handleAmountChange}
+                    onFocus={() => handleInputFocus(0)}
+                    onBlur={handleInputBlur}
+                    onSubmitEditing={handleAmountSubmit}
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                    style={[focusedInput === 0 && styles.inputFocused]}
+                  />
+                  <Input
+                    ref={descriptionInputRef}
+                    placeholder={t("expenses.new.desc")}
+                    onChangeText={handleNameChange}
+                    value={expenseInfo.name}
+                    numberOfLines={10}
+                    style={[
+                      styles.descriptionInput,
+                      focusedInput === 1 && styles.inputFocused,
+                    ]}
+                    textAlignVertical="top"
+                    multiline={true}
+                    onFocus={() => handleInputFocus(1)}
+                    onBlur={handleInputBlur}
+                    onSubmitEditing={handleDescriptionSubmit}
+                    returnKeyType="done"
+                  />
+                </View>
+                {/* Images */}
+                <View style={styles.imagesWrapper}>
+                  {[...expenseInfo.images, "add"].map((item, index) =>
+                    item === "add" ? (
+                      <TouchableOpacity
+                        key={index}
+                        style={[
+                          styles.imageBox,
+                          {
+                            borderColor: theme.PRIMARY,
+                            borderWidth: 1,
+                            borderStyle: "dashed",
+                          },
+                        ]}
+                        onPress={pickImage}
+                      >
+                        <FontAwesomeIcon
+                          icon={faImage}
+                          size={24}
+                          color={theme.PRIMARY}
+                        />
+                      </TouchableOpacity>
+                    ) : (
+                      <Image
+                        key={index}
+                        source={{ uri: item }}
+                        style={styles.imageBox}
+                        resizeMode="cover"
+                      />
+                    )
+                  )}
+                </View>
+              </View>
+
+              <Button
+                title={
+                  expenseId
+                    ? t("expenses.update.button")
+                    : t("expenses.new.button")
+                }
+                onPress={handleAddExpense}
+              />
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -256,12 +313,8 @@ const NewExpense = () => {
 export default NewExpense;
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  keyboardAvoidingView: {
-    flex: 1,
-  },
+  safeArea: { flex: 1 },
+  keyboardAvoidingView: { flex: 1 },
   formContainer: {
     minHeight: "88%",
     width: "100%",
@@ -275,11 +328,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     fontFamily: "ClashDisplay-Bold",
   },
-  categoryList: {
-    gap: 20,
-    height: 40,
-    marginTop: 20,
-  },
+  categoryList: { gap: 20, height: 40, marginTop: 20 },
   categoryButton: {
     justifyContent: "center",
     alignItems: "center",
@@ -289,16 +338,20 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
-  inputGroup: {
-    marginTop: 40,
-    gap: 20,
+  imagesWrapper: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    marginVertical: 10,
   },
-  inputFocused: {
-    borderWidth: 2,
-    borderColor: "#007AFF",
+  imageBox: {
+    width: 70,
+    height: 70,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  descriptionInput: {
-    height: 200,
-    paddingVertical: 20,
-  },
+  inputGroup: { marginTop: 20, gap: 20 },
+  inputFocused: { borderWidth: 2, borderColor: "#007AFF" },
+  descriptionInput: { height: 200, paddingVertical: 20 },
 });

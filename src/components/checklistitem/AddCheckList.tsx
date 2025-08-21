@@ -2,26 +2,28 @@ import { getFlexDirectionStyle, getTextStyle } from "@/languages/styles";
 import { RootState } from "@/store";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { FC } from "react";
+import { FC, memo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTheme } from "../providers/ThemeContext";
 
 type AddCheckListProps = {
-  checkListItem: string;
-  addCheckListItem: () => void;
-  setCheckListItem: (item: string) => void;
+  addCheckListItem: (item: string) => void;
 };
 
-const AddCheckList: FC<AddCheckListProps> = ({
-  addCheckListItem,
-  checkListItem,
-  setCheckListItem,
-}) => {
+const AddCheckList: FC<AddCheckListProps> = ({ addCheckListItem }) => {
   const { theme } = useTheme();
   const lang = useSelector((state: RootState) => state.lang.lang);
   const { t } = useTranslation();
+
+  const [localItem, setLocalItem] = useState("");
+
+  const handleAdd = () => {
+    if (!localItem.trim()) return;
+    addCheckListItem(localItem.trim());
+    setLocalItem("");
+  };
 
   return (
     <View
@@ -30,12 +32,12 @@ const AddCheckList: FC<AddCheckListProps> = ({
         { borderColor: theme.PRIMARY, ...getFlexDirectionStyle(lang) },
       ]}
     >
-      <TouchableOpacity onPress={addCheckListItem}>
+      <TouchableOpacity onPress={handleAdd}>
         <FontAwesomeIcon icon={faPlus} size={18} color={theme.PRIMARY} />
       </TouchableOpacity>
       <TextInput
-        value={checkListItem}
-        onChangeText={setCheckListItem}
+        value={localItem}
+        onChangeText={setLocalItem}
         placeholder={t("checklist.item.name")}
         placeholderTextColor={theme.PRIMARY}
         style={[
@@ -66,4 +68,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddCheckList;
+export default memo(AddCheckList);

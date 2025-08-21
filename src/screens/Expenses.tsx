@@ -8,7 +8,7 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import moment from "moment";
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
@@ -118,7 +118,7 @@ const Expenses = () => {
             const isToday = moment(trip.date).isSame(moment(), "day");
 
             return (
-              <View key={trip.date}>
+              <View key={trip.date} style={{ marginBottom: 20 }}>
                 {renderDateHeader(isToday, trip.date, trip.total)}
                 <View style={styles.expenseGroup}>
                   {trip.expenses.map((t: Expense) => (
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
   },
   dateHeader: {
     justifyContent: "space-between",

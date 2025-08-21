@@ -5,7 +5,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import React, { FC, useLayoutEffect, useState } from "react";
+import { FC, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import * as Progress from "react-native-progress";
@@ -75,7 +75,7 @@ const TripItem: FC<Trip> = ({ budget, end_date, id, name, start_date }) => {
                   justifyContent: "center",
                   alignItems: "center",
                   backgroundColor: theme.orange,
-                  borderRadius: 20,
+                  borderRadius: 10,
                   paddingHorizontal: 10,
                   paddingVertical: 5,
                 }}
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   tripItem: {
     height: 170,
     width: "100%",
-    borderRadius: 20,
+    borderRadius: 10,
     borderWidth: 1,
   },
   tripItemDetails: {

@@ -3,13 +3,12 @@ import {
   faArrowRight,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getFlexDirectionStyle } from "../../languages/styles";
 import { AppDispatch, RootState } from "../../store";
 import { useTheme } from "../providers/ThemeContext";
+import ButtonRounded from "../ui/ButtonRounded";
 
 type HeaderProps = {
   title?: string;
@@ -55,16 +54,10 @@ const TopHeader = ({
       ]}
     >
       <View style={styles.iconContainer}>
-        <Pressable
+        <ButtonRounded
+          icon={lang === "ar" ? faArrowRight : faArrowLeft}
           onPress={onBack}
-          style={[styles.iconButton, { borderColor: theme.PRIMARY }]}
-        >
-          <FontAwesomeIcon
-            icon={lang === "en" ? faArrowLeft : faArrowRight}
-            size={23}
-            color={theme.PRIMARY}
-          />
-        </Pressable>
+        />
       </View>
 
       <View
@@ -75,12 +68,7 @@ const TopHeader = ({
         ]}
       >
         {showAdd && onAdd && (
-          <Pressable
-            onPress={onAdd}
-            style={[styles.addButton, { borderColor: theme.PRIMARY }]}
-          >
-            <FontAwesomeIcon icon={faPlus} color={theme.PRIMARY} />
-          </Pressable>
+          <ButtonRounded icon={faPlus} onPress={onAdd} variant="filled" />
         )}
       </View>
     </View>

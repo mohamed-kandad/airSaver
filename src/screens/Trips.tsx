@@ -1,5 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Animated, StyleSheet, View } from "react-native";
 import Header from "../components/Trips/Header";
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
     paddingTop: 100, // match Header height
-    paddingHorizontal: 24,
+    paddingHorizontal: 15,
   },
   emptyContainer: {
     flex: 1,

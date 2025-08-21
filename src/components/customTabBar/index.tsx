@@ -6,7 +6,7 @@ import {
   faPieChart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import React, { FC } from "react";
+import { FC } from "react";
 import {
   Dimensions,
   Platform,
@@ -57,7 +57,7 @@ const CustomTabBar: FC<CustomTabBarProps> = ({
           },
         ]}
       >
-        {state.routes.map((route, index) => {
+        {state.routes.map((route: any, index: any) => {
           const { options } = descriptors[route.key];
           const label = route.name;
 
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 12,
     margin: 5,
-    borderRadius: 25,
+    borderRadius: 10,
     position: "absolute",
     bottom: Platform.OS === "ios" ? 10 : 15,
     left: 10,

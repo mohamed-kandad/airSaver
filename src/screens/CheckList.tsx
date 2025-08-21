@@ -16,9 +16,8 @@ import {
 } from "@react-navigation/native";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, SafeAreaView, StyleSheet, View } from "react-native";
-
-type Props = {};
+import { SafeAreaView, StyleSheet, View } from "react-native";
+import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
 type ExpensesScreenRouteProp = RouteProp<ITabNavigation, "Expenses">;
 type ExpensesScreenNavigationProp = NavigationProp<
@@ -26,18 +25,18 @@ type ExpensesScreenNavigationProp = NavigationProp<
   "NewExpense"
 >;
 
-const CheckList = (props: Props) => {
-  const { navigate, goBack } = useNavigation<ExpensesScreenNavigationProp>();
+const CheckList = () => {
+  const { navigate } = useNavigation<ExpensesScreenNavigationProp>();
   const { t } = useTranslation();
   const { trip_id } = useRoute<ExpensesScreenRouteProp>().params;
   const { theme } = useTheme();
-  const [checkListItem, setCheckListItem] = useState("");
+
   const [checkList, setCheckList] = useState<Checklist[]>([]);
 
-  const handleAddCheckList = async () => {
-    if (checkCondition(checkListItem === "", t("errors.name"))) return;
+  const handleAddCheckList = async (item: string) => {
+    if (checkCondition(item === "", t("errors.name"))) return;
     await ChecklistModel.create({
-      name: checkListItem,
+      name: item,
       trip_id: +trip_id,
       is_selected: false,
     });
@@ -48,7 +47,6 @@ const CheckList = (props: Props) => {
     id: number,
     is_selected: boolean
   ) => {
-    console.log(is_selected);
     await ChecklistModel.updateSelected(id, is_selected);
     fetchCheckList();
   };
@@ -62,6 +60,7 @@ const CheckList = (props: Props) => {
     const checkList: Checklist[] = await ChecklistModel.getByTripId(+trip_id);
     if (checkList) setCheckList(checkList);
   };
+
   useFocusEffect(
     React.useCallback(() => {
       fetchCheckList();
@@ -78,35 +77,30 @@ const CheckList = (props: Props) => {
         onClickShowChartButton={() => navigate("Chart", { tripId: trip_id })}
         onBack={() => navigate("Trips")}
       />
+
       <View style={styles.content}>
-        <FlatList
+        <KeyboardAwareFlatList
           data={checkList}
           keyExtractor={(item) => item.id.toString()}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 150 }}
-          renderItem={({ item, index }) => {
-            if (checkList.length - 1 !== index) {
-              return (
-                <ChecklistItem
-                  key={item.id}
-                  isSlected={item.is_selected}
-                  label={item.name}
-                  onDelete={handleDeleteChecklist}
-                  onSelect={() =>
-                    handleUpdateChecklistSelectd(item.id, !item.is_selected)
-                  }
-                  id={item.id}
-                />
-              );
-            }
-            return (
-              <AddCheckList
-                addCheckListItem={handleAddCheckList}
-                checkListItem={checkListItem}
-                setCheckListItem={setCheckListItem}
-              />
-            );
-          }}
+          renderItem={({ item }) => (
+            <ChecklistItem
+              key={item.id}
+              isSlected={item.is_selected}
+              label={item.name}
+              onDelete={handleDeleteChecklist}
+              onSelect={() =>
+                handleUpdateChecklistSelectd(item.id, !item.is_selected)
+              }
+              id={item.id}
+            />
+          )}
+          ListFooterComponent={() => (
+            <AddCheckList addCheckListItem={handleAddCheckList} />
+          )}
+          enableOnAndroid={true}
+          extraScrollHeight={60} // lifts list when keyboard opens
         />
       </View>
     </SafeAreaView>
@@ -120,6 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
+    flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 20,
   },

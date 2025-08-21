@@ -1,16 +1,16 @@
+import ButtonRounded from "@/components/ui/ButtonRounded";
 import { FONTS } from "@/constant";
 import { checkCondition } from "@/toastConfig";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   NavigationProp,
   RouteProp,
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import NewTripFrom from "../components/NewTrip/NewTripFrom";
 import { useTheme } from "../components/providers/ThemeContext";
@@ -88,22 +88,11 @@ const NewTrip = (props: Props) => {
     >
       <View style={styles.container}>
         <View style={[styles.backButtonContainer, getFlexDirectionStyle(lang)]}>
-          <Pressable
-            style={[
-              styles.backButton,
-              {
-                backgroundColor: theme.orange,
-                borderColor: theme.PRIMARY,
-              },
-            ]}
+          <ButtonRounded
+            icon={lang === "ar" ? faArrowRight : faArrowLeft}
             onPress={() => navigation.goBack()}
-          >
-            <FontAwesomeIcon
-              icon={lang === "ar" ? faArrowRight : faArrowLeft}
-              color={theme.PRIMARY}
-              size={21}
-            />
-          </Pressable>
+            variant="filled"
+          />
         </View>
         <Text
           style={[styles.heading, { color: theme.PRIMARY }, getTextStyle(lang)]}

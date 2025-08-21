@@ -1,15 +1,15 @@
 import { faGear, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { BlurView } from "expo-blur"; // ✅ updated import
-import React, { useEffect, useState } from "react";
-import { Animated, Pressable, StyleSheet, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Animated, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import { COLORS } from "../../constant";
 import { getFlexDirectionStyle } from "../../languages/styles";
 import { RootStackParamList } from "../../navigation/MainNavigation";
 import { RootState } from "../../store";
 import { useTheme } from "../providers/ThemeContext";
+import ButtonRounded from "../ui/ButtonRounded";
 
 type HeaderNavigationProp = NavigationProp<RootStackParamList, "Trips">;
 
@@ -57,23 +57,20 @@ const Header = ({ scrollY, isTransparent = false }: HeaderProps) => {
       )}
 
       <View style={styles.iconContainer}>
-        <Pressable
+        <ButtonRounded
+          borderColor={theme.PRIMARY}
+          color={theme.PRIMARY}
+          icon={faGear}
           onPress={() => navigate.navigate("Settings")}
-          style={[styles.iconButton, { borderColor: theme.PRIMARY }]}
-        >
-          <FontAwesomeIcon icon={faGear} size={23} color={theme.PRIMARY} />
-        </Pressable>
+        />
       </View>
-
-      <Pressable
-        style={[
-          styles.addTripButton,
-          { borderColor: theme.button_border, backgroundColor: "#ff5a5f" },
-        ]}
+      <ButtonRounded
+        color={theme.PRIMARY}
+        borderColor={theme.PRIMARY}
+        icon={faPlus}
         onPress={() => navigate.navigate("AddTrip", { tripId: "" })}
-      >
-        <FontAwesomeIcon icon={faPlus} color={theme.button_border} />
-      </Pressable>
+        variant="filled"
+      />
     </View>
   );
 };
